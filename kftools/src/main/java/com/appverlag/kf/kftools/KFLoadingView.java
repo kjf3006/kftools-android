@@ -1,0 +1,72 @@
+package com.appverlag.kf.kftools;
+
+import android.app.Activity;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
+/**
+ * Copyright (C) Kevin Flachsmann - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Created by kevinflachsmann on 02.03.17.
+ */
+public class KFLoadingView extends FrameLayout {
+
+    private KFLoadingViewErrorListener listener;
+
+    public KFLoadingView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initView(context);
+    }
+
+    public KFLoadingView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView(context);
+    }
+
+    public KFLoadingView(Context context) {
+        super(context);
+        initView(context);
+    }
+
+    private void initView(Context context) {
+        View.inflate(context, R.layout.kftools_loading_container, this);
+        findViewById(R.id.errorButton).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findViewById(R.id.errorView).setVisibility(GONE);
+                findViewById(R.id.progressBar).setVisibility(VISIBLE);
+                if (listener != null) listener.onClick();
+            }
+        });
+        setVisibility(GONE);
+    }
+
+
+    public void showProgress() {
+        setVisibility(VISIBLE);
+        findViewById(R.id.errorView).setVisibility(GONE);
+        findViewById(R.id.progressBar).setVisibility(VISIBLE);
+    }
+
+    public void hide() {
+        setVisibility(GONE);
+    }
+
+    public void showError() {
+        findViewById(R.id.errorView).setVisibility(VISIBLE);
+        findViewById(R.id.progressBar).setVisibility(GONE);
+    }
+
+    public void setListener(KFLoadingViewErrorListener listener) {
+        this.listener = listener;
+    }
+
+    public interface KFLoadingViewErrorListener {
+        void onClick();
+    }
+
+}

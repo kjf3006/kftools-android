@@ -1,0 +1,39 @@
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.appverlag.kf' // CREATE A GROUP ID FOR YOUR LIBRARY
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                groupId 'com.appverlag.kf' // CREATE A GROUP ID FOR YOUR LIBRARY
+                artifactId 'kftools' // THE NAME OF YOUR MODULE
+
+                name 'kftools' // YOUR LIBRARY NAME
+                description '' // YOUR LIBRARY DESCRIPTION
+                url 'https://bitbucket.org/kevin_flachsmann/kftools-android' // YOUR SITE
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'kevin-flachsmann' //YOUR ID
+                        name 'Kevin Flachsmann' //YOUR NAME
+                        email 'k.flachsmann@appverlag.com' //YOUR EMAIL
+                    }
+                }
+                scm {
+                    connection 'https://bitbucket.org/kevin_flachsmann/kftools-android' // YOUR GIT REPO
+                    developerConnection 'https://bitbucket.org/kevin_flachsmann/kftools-android' // YOUR GIT REPO
+                    url 'https://bitbucket.org/kevin_flachsmann/kftools-android' // YOUR SITE
+
+                }
+            }
+        }
+    }
+}
