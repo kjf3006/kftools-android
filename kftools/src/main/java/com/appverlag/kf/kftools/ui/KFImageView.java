@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools;
+package com.appverlag.kf.kftools.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+
+import com.appverlag.kf.kftools.network.KFImageManager;
 
 
 /**

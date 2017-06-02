@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools;
+package com.appverlag.kf.kftools.network;
 
 import android.content.Context;
 import android.graphics.Bitmap;

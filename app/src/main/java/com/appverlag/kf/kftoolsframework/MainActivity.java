@@ -3,11 +3,7 @@ package com.appverlag.kf.kftoolsframework;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.appverlag.kf.kftools.KFExceptionHandler;
-import com.appverlag.kf.kftools.KFLoadingView;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.appverlag.kf.kftools.other.KFExceptionHandler;
 
 public class MainActivity extends AppCompatActivity {
 

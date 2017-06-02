@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools;
+package com.appverlag.kf.kftools.ui;
 
 import android.app.Activity;
 import android.content.Context;

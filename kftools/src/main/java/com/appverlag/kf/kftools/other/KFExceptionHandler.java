@@ -1,7 +1,9 @@
-package com.appverlag.kf.kftools;
+package com.appverlag.kf.kftools.other;
 
 import android.os.Build;
 import android.util.Log;
+
+import com.appverlag.kf.kftools.network.KFConnectionManager;
 
 import org.json.JSONObject;
 

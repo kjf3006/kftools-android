@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools;
+package com.appverlag.kf.kftools.ui;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

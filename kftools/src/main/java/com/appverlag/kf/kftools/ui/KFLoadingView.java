@@ -1,9 +1,11 @@
-package com.appverlag.kf.kftools;
+package com.appverlag.kf.kftools.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.appverlag.kf.kftools.R;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved

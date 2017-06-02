@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools;
+package com.appverlag.kf.kftools.other;
 
 import java.util.Hashtable;
 
