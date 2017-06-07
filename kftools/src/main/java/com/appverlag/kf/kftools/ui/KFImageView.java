@@ -2,8 +2,10 @@ package com.appverlag.kf.kftools.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
@@ -53,8 +55,27 @@ public class KFImageView extends AppCompatImageView {
     }
 
     public void setMapSnapshotForOptions(final double latitude, final double longitude, final Integer placeholder) {
-        String url = GOOGLE_MAPS_URL + "?center=" + latitude + "," + longitude + "&zoom=18&size=640x640";
-        setImageWithURL(url, placeholder);
+        setMapSnapshotForOptions(latitude, longitude, 0, placeholder);
+    }
+
+    public void setMapSnapshotForOptions(final double latitude, final double longitude, final Integer annotationImage, final Integer placeholder) {
+        if (placeholder == 0) {
+            setImageBitmap(getPlaceholderImage());
+        }
+        else setImageResource(placeholder);
+
+        final String identifier = "ms_" + latitude + "-" + longitude + "_" + annotationImage;
+        savedURL = identifier;
+
+        Bitmap annotationPin = BitmapFactory.decodeResource(getResources(), annotationImage);
+
+        KFImageManager.getInstance(getContext()).mapSnapshotForOptions(latitude, longitude, annotationPin, new KFImageManager.KFImageManagerCompletionHandler() {
+            @Override
+            public void onComplete(Bitmap bitmap) {
+                if (!identifier.equals(savedURL) || bitmap == null) return;
+                setImageBitmap(bitmap);
+            }
+        });
     }
 
     public void setImageWithYoutubeID(final String youtubeID, final Integer placeholder) {
