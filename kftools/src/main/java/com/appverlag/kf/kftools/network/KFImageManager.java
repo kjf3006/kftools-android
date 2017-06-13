@@ -336,7 +336,7 @@ public class KFImageManager {
                 BufferedOutputStream ostream = null;
                 try {
                     ostream = new BufferedOutputStream(new FileOutputStream(new File(diskCachePath, imageName)), 2*1024);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
                 }
                 catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -381,7 +381,7 @@ public class KFImageManager {
         });
     }
 
-    private void reset() {
+    public void reset() {
         serialIOQueue.execute(new Runnable() {
             @Override
             public void run() {
