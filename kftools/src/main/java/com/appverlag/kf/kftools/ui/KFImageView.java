@@ -18,8 +18,6 @@ import com.appverlag.kf.kftools.network.KFImageManager;
  */
 public class KFImageView extends AppCompatImageView {
 
-    private static final String GOOGLE_MAPS_URL = "https://maps.googleapis.com/maps/api/staticmap";
-
     private String savedURL;
     private float aspectRatio = 0;
 
@@ -36,6 +34,9 @@ public class KFImageView extends AppCompatImageView {
     }
 
 
+    /*
+    URL
+     */
     public void setImageWithURL(final String url, final Integer placeholder) {
         if (placeholder == 0) {
             setImageBitmap(getPlaceholderImage());
@@ -54,6 +55,28 @@ public class KFImageView extends AppCompatImageView {
 
     }
 
+    public void setImageWithURL(final String url, final Bitmap placeholder) {
+        if (placeholder == null) {
+            setImageBitmap(getPlaceholderImage());
+        }
+        else setImageBitmap(placeholder);
+
+        savedURL = url;
+
+        KFImageManager.getInstance(getContext()).imageForURL(url, new KFImageManager.KFImageManagerCompletionHandler() {
+            @Override
+            public void onComplete(Bitmap bitmap) {
+                if (url == null || !url.equals(savedURL) || bitmap == null) return;
+                setImageBitmap(bitmap);
+            }
+        });
+
+    }
+
+
+    /*
+    MAP
+     */
     public void setMapSnapshotForOptions(final double latitude, final double longitude, final Integer placeholder) {
         setMapSnapshotForOptions(latitude, longitude, 0, placeholder);
     }
@@ -78,10 +101,18 @@ public class KFImageView extends AppCompatImageView {
         });
     }
 
+    /*
+    YOUTUBE
+     */
     public void setImageWithYoutubeID(final String youtubeID, final Integer placeholder) {
         String url = "https://img.youtube.com/vi/" + youtubeID + "/hqdefault.jpg";
         setImageWithURL(url, placeholder);
     }
+    public void setImageWithYoutubeID(final String youtubeID, final Bitmap placeholder) {
+        String url = "https://img.youtube.com/vi/" + youtubeID + "/hqdefault.jpg";
+        setImageWithURL(url, placeholder);
+    }
+
 
 
     @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
