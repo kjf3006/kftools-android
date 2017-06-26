@@ -1,5 +1,8 @@
 package com.appverlag.kf.kftools.other;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +20,7 @@ public class KFNotificationCenter {
     private static KFNotificationCenter instance;
 
     private HashMap<String, List<WeakReference<KFNotificationCenterListener>>> registredObjects;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     private KFNotificationCenter(){
         registredObjects = new HashMap<>();
@@ -38,14 +42,21 @@ public class KFNotificationCenter {
         list.add(new WeakReference<>(listener));
     }
 
-    public synchronized void postNotification(String notificationName){
+    public synchronized void postNotification(final String notificationName){
         List<WeakReference<KFNotificationCenterListener>> list = registredObjects.get(notificationName);
         if(list != null) {
             Iterator<WeakReference<KFNotificationCenterListener>> iterator = list.iterator();
             while (iterator.hasNext()) {
-                KFNotificationCenterListener listener = iterator.next().get();
+                final KFNotificationCenterListener listener = iterator.next().get();
                 if (listener == null) iterator.remove();
-                else listener.didReceiveNotification(notificationName);
+                else {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.didReceiveNotification(notificationName);
+                        }
+                    });
+                }
             }
         }
     }
