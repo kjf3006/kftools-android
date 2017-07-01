@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.appverlag.kf.kftools.network.KFImageManager;
 
@@ -45,7 +46,8 @@ public class KFImageView extends AppCompatImageView {
 
         savedURL = url;
 
-        KFImageManager.getInstance(getContext()).imageForURL(url, getWidth(), getHeight(), new KFImageManager.KFImageManagerCompletionHandler() {
+        measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
+        KFImageManager.getInstance(getContext()).imageForURL(url, getMeasuredWidth(), getMeasuredHeight(), new KFImageManager.KFImageManagerCompletionHandler() {
             @Override
             public void onComplete(Bitmap bitmap) {
                 if (url == null || !url.equals(savedURL) || bitmap == null) return;
@@ -63,6 +65,7 @@ public class KFImageView extends AppCompatImageView {
 
         savedURL = url;
 
+        measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
         KFImageManager.getInstance(getContext()).imageForURL(url, getWidth(), getHeight(), new KFImageManager.KFImageManagerCompletionHandler() {
             @Override
             public void onComplete(Bitmap bitmap) {

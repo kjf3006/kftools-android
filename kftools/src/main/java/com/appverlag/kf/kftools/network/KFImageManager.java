@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.Handler;
+import android.util.Log;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -125,10 +127,28 @@ public class KFImageManager {
                     conn.setConnectTimeout(5000);
                     conn.setReadTimeout(10000);
 
+                    InputStream is  = ((InputStream) conn.getContent());
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    while (true) {
+                        int r = is.read(buffer);
+                        if (r == -1) break;
+                        out.write(buffer, 0, r);
+                    }
+
+                    byte[] data = out.toByteArray();
+
+
                     BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+                    options.inSampleSize = calculateInSampleSize(options.outWidth, options.outHeight, 1024, 1024);
+                    options.inJustDecodeBounds = false;
                     options.inPreferredConfig = Bitmap.Config.RGB_565;
 
-                    bitmap = BitmapFactory.decodeStream((InputStream) conn.getContent(), null, options);
+                    bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -142,12 +162,10 @@ public class KFImageManager {
                     });
                 }
                 else {
-                    imageCache.putImage(imageName, bitmap, desiredWidth, desiredHeight);
 
                     System.out.println("Downloading image completed...");
 
-                    int sampleSize = calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), desiredWidth, desiredHeight);
-                    final Bitmap b = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()*sampleSize, bitmap.getHeight()*sampleSize, true);
+                    final Bitmap b = imageCache.putImage(imageName, bitmap, desiredWidth, desiredHeight);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -204,6 +222,7 @@ public class KFImageManager {
                     conn.setReadTimeout(10000);
 
                     BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = false;
                     options.inPreferredConfig = Bitmap.Config.RGB_565;
 
                     bitmap = BitmapFactory.decodeStream((InputStream) conn.getContent(), null, options);
@@ -309,6 +328,8 @@ public class KFImageManager {
     }
 
     private int calculateInSampleSize(final int width, final int height, final int desiredWidth, final int desiredHeight) {
+
+        if (desiredWidth <= 0 && desiredHeight <= 0) return 1;
 
         int inSampleSize = 1;
 

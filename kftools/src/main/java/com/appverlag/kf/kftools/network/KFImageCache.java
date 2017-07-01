@@ -1,8 +1,11 @@
 package com.appverlag.kf.kftools.network;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
+import android.util.LruCache;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -25,7 +28,7 @@ public class KFImageCache {
 
     private static final int MAX_CACHE_AGE = 60 * 60 * 24 * 7 * 3; // 3 weeks
     private static final String DISK_CACHE_PATH = "/image_cache/";
-    private Map<String, Bitmap> imageCache;
+    private LruCache<String, Bitmap> imageCache;
     private String diskCachePath;
     private ExecutorService serialIOQueue;
 
@@ -33,14 +36,14 @@ public class KFImageCache {
     public KFImageCache(Context context) {
 
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        final int cacheSize = maxMemory / 7 / 1000;
+        final int cacheSize = maxMemory / 8;
 
-        imageCache = Collections.synchronizedMap(new LinkedHashMap<String, Bitmap>(cacheSize, .75F, true) {
+        imageCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
-            protected boolean removeEldestEntry(Entry eldest) {
-                return size() > cacheSize;
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
             }
-        });
+        };
 
         Context appContext = context.getApplicationContext();
         diskCachePath = appContext.getCacheDir().getAbsolutePath() + DISK_CACHE_PATH;
@@ -84,9 +87,9 @@ public class KFImageCache {
             return;
         }
 
-        final String imageCacheName = key + "-" + desiredWidth + "-" + desiredHeight;
+        final String imageCacheName = createImageCacheName(key, desiredWidth, desiredHeight);
 
-        if(imageCache.containsKey(imageCacheName)){
+        if(imageCache.get(imageCacheName) != null){
             Bitmap bitmap = imageCache.get(imageCacheName);
             if (completionHandler != null) completionHandler.onComplete(bitmap);
             return;
@@ -117,11 +120,11 @@ public class KFImageCache {
         });
     }
 
-    public void putImage(final String key, final Bitmap bitmap, final int desiredWidth, final int desiredHeight) {
+    public Bitmap putImage(final String key, final Bitmap bitmap, final int desiredWidth, final int desiredHeight) {
 
         String imageCacheName = createImageCacheName(key, desiredWidth, desiredHeight);
 
-        double sampleSize = 1/calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), desiredWidth, desiredHeight);
+        double sampleSize = 1.0/calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), desiredWidth, desiredHeight);
         Bitmap b = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth()*sampleSize), (int) (bitmap.getHeight()*sampleSize), true);
         imageCache.put(imageCacheName, b);
 
@@ -149,6 +152,8 @@ public class KFImageCache {
                 }
             }
         });
+
+        return bitmap;
     }
 
     public boolean hasImage(final String key) {
@@ -162,7 +167,6 @@ public class KFImageCache {
         serialIOQueue.execute(new Runnable() {
             @Override
             public void run() {
-                imageCache.remove(key);
 
                 File f = new File(diskCachePath, key);
                 if (f.exists() && f.isFile()) {
@@ -173,7 +177,7 @@ public class KFImageCache {
     }
 
     public void reset() {
-        imageCache.clear();
+        imageCache.evictAll();
         serialIOQueue.execute(new Runnable() {
             @Override
             public void run() {
