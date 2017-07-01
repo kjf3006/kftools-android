@@ -45,7 +45,7 @@ public class KFImageView extends AppCompatImageView {
 
         savedURL = url;
 
-        KFImageManager.getInstance(getContext()).imageForURL(url, new KFImageManager.KFImageManagerCompletionHandler() {
+        KFImageManager.getInstance(getContext()).imageForURL(url, getWidth(), getHeight(), new KFImageManager.KFImageManagerCompletionHandler() {
             @Override
             public void onComplete(Bitmap bitmap) {
                 if (url == null || !url.equals(savedURL) || bitmap == null) return;
@@ -63,7 +63,7 @@ public class KFImageView extends AppCompatImageView {
 
         savedURL = url;
 
-        KFImageManager.getInstance(getContext()).imageForURL(url, new KFImageManager.KFImageManagerCompletionHandler() {
+        KFImageManager.getInstance(getContext()).imageForURL(url, getWidth(), getHeight(), new KFImageManager.KFImageManagerCompletionHandler() {
             @Override
             public void onComplete(Bitmap bitmap) {
                 if (url == null || !url.equals(savedURL) || bitmap == null) return;

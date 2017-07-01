@@ -28,15 +28,12 @@ import java.util.concurrent.Executors;
  */
 public class KFImageManager {
 
-    private static final int MAX_CACHE_AGE = 60 * 60 * 24 * 7 * 3; // 3 weeks
-    private static final String DISK_CACHE_PATH = "/image_cache/";
+
     private static KFImageManager instance;
-    private Map<String, Bitmap> imageCache;
     private ConcurrentHashMap<String, ArrayList<KFImageManagerCompletionHandler>> completionHandlerStore;
-    private String diskCachePath;
-    private ExecutorService serialIOQueue;
     private ExecutorService downloadQueue;
     private final Handler handler;
+    private KFImageCache imageCache;
 
 
     /*
@@ -44,27 +41,16 @@ public class KFImageManager {
      */
 
     private KFImageManager (Context context) {
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        final int cacheSize = maxMemory / 7 / 1000;
 
-        imageCache = Collections.synchronizedMap(new LinkedHashMap<String, Bitmap>(cacheSize, .75F, true) {
-            @Override
-            protected boolean removeEldestEntry(Entry eldest) {
-                return size() > cacheSize;
-            }
-        });
+        imageCache = new KFImageCache(context);
 
         completionHandlerStore = new ConcurrentHashMap<>();
 
         Context appContext = context.getApplicationContext();
         handler = new Handler(appContext.getMainLooper());
-        diskCachePath = appContext.getCacheDir().getAbsolutePath() + DISK_CACHE_PATH;
 
-        serialIOQueue = Executors.newSingleThreadExecutor();
         downloadQueue = Executors.newFixedThreadPool(4);
 
-        initImageFolder();
-        cleanDisk();
     }
 
     public static KFImageManager getInstance (Context context) {
@@ -75,78 +61,39 @@ public class KFImageManager {
     }
 
 
-    private void initImageFolder() {
-        serialIOQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                File outFile = new File(diskCachePath);
-                if (!outFile.exists()) {
-                    outFile.mkdir();
-                }
-            }
-        });
-    }
-
-    private void cleanDisk() {
-        serialIOQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                File folder = new File(diskCachePath);
-                long expiration = System.currentTimeMillis()/1000 - MAX_CACHE_AGE;
-                for (File image : folder.listFiles()) {
-                    long lastModified = image.lastModified()/1000;
-                    if (lastModified < expiration) image.delete();
-                }
-            }
-        });
-    }
 
     /*
     *** image processing ***
      */
 
-    public void imageForURL(final String url, final KFImageManagerCompletionHandler completionHandler) {
+    public void imageForURL(final String url, final int desiredWidth, final int desiredHeight, final KFImageManagerCompletionHandler completionHandler) {
         if (url == null || url.equals("")) {
             if (completionHandler != null) completionHandler.onComplete(null);
             return;
         }
+
         final String imageName = createImageName(url);
 
-        if(imageCache.containsKey(imageName)){
-            Bitmap bitmap = imageCache.get(imageName);
-            if (completionHandler != null) completionHandler.onComplete(bitmap);
-            return;
-        }
-
-        diskImageWithName(imageName, new KFImageManagerCompletionHandler() {
+        imageCache.getImage(imageName, desiredWidth, desiredHeight, new KFImageCache.KFImageCacheCompletionHandler() {
             @Override
-            public void onComplete(Bitmap bitmap) {
+            public void onComplete(final Bitmap bitmap) {
                 if (bitmap != null) {
-                    if (completionHandler != null) completionHandler.onComplete(bitmap);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (completionHandler != null) completionHandler.onComplete(bitmap);
+                        }
+                    });
                 }
                 else  {
-                    loadImageForURL(url, completionHandler);
+                    loadImageForURL(url, desiredWidth, desiredHeight, completionHandler);
                 }
             }
         });
     }
 
     public void deleteImageForURL(final String url) {
-        if (url == null || url.equals("")) return;
-
-        final String imageName = createImageName(url);
-
-        serialIOQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                imageCache.remove(imageName);
-
-                File f = new File(diskCachePath, imageName);
-                if (f.exists() && f.isFile()) {
-                    f.delete();
-                }
-            }
-        });
+        imageCache.removeImage(createImageName(url));
     }
 
     public void prefetchImageForURL(final String url) {
@@ -154,17 +101,12 @@ public class KFImageManager {
 
         final String imageName = createImageName(url);
 
-        if(imageCache.containsKey(imageName)) return;
+        if (!imageCache.hasImage(imageName)) loadImageForURL(url, 0, 0, null);
 
-        String filePath = diskCachePath + imageName;
-        File file = new File(filePath);
-        if(file.exists()) return;
-
-        loadImageForURL(url, null);
     }
 
 
-    private void loadImageForURL(final String url, final KFImageManagerCompletionHandler completionHandler) {
+    private void loadImageForURL(final String url, final int desiredWidth, final int desiredHeight, final KFImageManagerCompletionHandler completionHandler) {
         if (url == null || url.equals("")) {
             if (completionHandler != null) completionHandler.onComplete(null);
             return;
@@ -200,18 +142,19 @@ public class KFImageManager {
                     });
                 }
                 else {
-                    imageCache.put(imageName, bitmap);
+                    imageCache.putImage(imageName, bitmap, desiredWidth, desiredHeight);
 
                     System.out.println("Downloading image completed...");
-                    final Bitmap bitmapCopy = bitmap;
+
+                    int sampleSize = calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), desiredWidth, desiredHeight);
+                    final Bitmap b = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()*sampleSize, bitmap.getHeight()*sampleSize, true);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            runCompletionBlocks(bitmapCopy, imageName);
+                            runCompletionBlocks(b, imageName);
                         }
                     });
 
-                    saveImageWithName(imageName, bitmap);
                 }
             }
         });
@@ -225,17 +168,16 @@ public class KFImageManager {
 
         final String imageName = createMapSnapshotName(latitude, longitude, annotationImage);
 
-        if(imageCache.containsKey(imageName)){
-            Bitmap bitmap = imageCache.get(imageName);
-            if (completionHandler != null) completionHandler.onComplete(bitmap);
-            return;
-        }
-
-        diskImageWithName(imageName, new KFImageManagerCompletionHandler() {
+        imageCache.getImage(imageName, 0, 0, new KFImageCache.KFImageCacheCompletionHandler() {
             @Override
-            public void onComplete(Bitmap bitmap) {
+            public void onComplete(final Bitmap bitmap) {
                 if (bitmap != null) {
-                    if (completionHandler != null) completionHandler.onComplete(bitmap);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (completionHandler != null) completionHandler.onComplete(bitmap);
+                        }
+                    });
                 }
                 else  {
                     loadMapSnapshotForOptions(latitude, longitude, annotationImage, completionHandler);
@@ -280,7 +222,7 @@ public class KFImageManager {
                 else {
                     if (annotationImage != null) bitmap = addAnnotationToMapSnapthot(bitmap, annotationImage);
 
-                    imageCache.put(imageName, bitmap);
+                    imageCache.putImage(imageName, bitmap, 0, 0);
 
                     System.out.println("Downloading map snapshot completed...");
                     final Bitmap bitmapCopy = bitmap;
@@ -290,8 +232,6 @@ public class KFImageManager {
                             runCompletionBlocks(bitmapCopy, imageName);
                         }
                     });
-
-                    saveImageWithName(imageName, bitmap);
                 }
             }
         });
@@ -320,7 +260,7 @@ public class KFImageManager {
      */
 
     private String createImageName(String url) {
-        return Integer.toString(url.hashCode()) + ".jpg";
+        return Integer.toString(url.hashCode());
     }
 
     private String createMapSnapshotName(double latitude, double longitude, Bitmap annotationImage) {
@@ -329,74 +269,14 @@ public class KFImageManager {
         return Integer.toString(name.hashCode()) + ".jpg";
     }
 
-    private void saveImageWithName(final String imageName, final Bitmap bitmap) {
-        serialIOQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                BufferedOutputStream ostream = null;
-                try {
-                    ostream = new BufferedOutputStream(new FileOutputStream(new File(diskCachePath, imageName)), 2*1024);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-                }
-                catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                finally {
-                    try {
-                        if(ostream != null) {
-                            ostream.flush();
-                            ostream.close();
-                        }
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    private void diskImageWithName(final String imageName, final KFImageManagerCompletionHandler completionHandler) {
-        serialIOQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                String filePath = diskCachePath + imageName;
-                File file = new File(filePath);
-                Bitmap bitmap = null;
-                if(file.exists()) {
-                    bitmap = BitmapFactory.decodeFile(filePath);
-                    imageCache.put(imageName, bitmap);
-                }
-
-                final Bitmap bitmapCopy = bitmap;
-                if (completionHandler != null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            completionHandler.onComplete(bitmapCopy);
-                        }
-                    });
-                }
-            }
-        });
-    }
 
     public void reset() {
-        serialIOQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                File folder = new File(diskCachePath);
-                for (File image : folder.listFiles()) {
-                    image.delete();
-                }
-            }
-        });
+        imageCache.reset();
     }
 
     public File fileForImage(final String url) {
         String imageName = createImageName(url);
-        String filePath = diskCachePath + imageName;
-        return new File(filePath);
+        return imageCache.fileForImage(imageName);
     }
 
     /*
@@ -426,6 +306,26 @@ public class KFImageManager {
 
     private void runOnUiThread(Runnable r) {
         handler.post(r);
+    }
+
+    private int calculateInSampleSize(final int width, final int height, final int desiredWidth, final int desiredHeight) {
+
+        int inSampleSize = 1;
+
+        if (height > desiredHeight || width > desiredWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= desiredHeight
+                    && (halfWidth / inSampleSize) >= desiredWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
 
