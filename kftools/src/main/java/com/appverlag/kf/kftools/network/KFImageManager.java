@@ -207,6 +207,11 @@ public class KFImageManager {
 
     public void loadMapSnapshotForOptions(final double latitude, final double longitude, final Bitmap annotationImage, final KFImageManagerCompletionHandler completionHandler) {
 
+        loadMapSnapshotForOptions(latitude, longitude, false, annotationImage, completionHandler);
+    }
+
+    public void loadMapSnapshotForOptions(final double latitude, final double longitude, final boolean satellite, final Bitmap annotationImage, final KFImageManagerCompletionHandler completionHandler) {
+
         final String imageName = createMapSnapshotName(latitude, longitude, annotationImage);
         addCompletionBlockToStore(completionHandler, imageName);
 
@@ -215,6 +220,7 @@ public class KFImageManager {
             public void run() {
                 Bitmap bitmap = null;
                 String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=18&size=640x640&scale=2";
+                if (satellite) url += "&maptype=hybrid";
                 System.out.println("Downloading map snapshot...");
                 try {
                     URLConnection conn = new URL(url).openConnection();
