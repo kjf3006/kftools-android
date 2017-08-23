@@ -182,9 +182,9 @@ public class KFImageManager {
     *** map snapshot processing ***
      */
 
-    public void mapSnapshotForOptions(final double latitude, final double longitude, final Bitmap annotationImage, final KFImageManagerCompletionHandler completionHandler) {
+    public void mapSnapshotForOptions(final double latitude, final double longitude, final boolean satellite, final Bitmap annotationImage, final KFImageManagerCompletionHandler completionHandler) {
 
-        final String imageName = createMapSnapshotName(latitude, longitude, annotationImage);
+        final String imageName = createMapSnapshotName(latitude, longitude, satellite, annotationImage);
 
         imageCache.getImage(imageName, 0, 0, new KFImageCache.KFImageCacheCompletionHandler() {
             @Override
@@ -198,21 +198,16 @@ public class KFImageManager {
                     });
                 }
                 else  {
-                    loadMapSnapshotForOptions(latitude, longitude, annotationImage, completionHandler);
+                    loadMapSnapshotForOptions(latitude, longitude, satellite, annotationImage, completionHandler);
                 }
             }
         });
     }
 
 
-    public void loadMapSnapshotForOptions(final double latitude, final double longitude, final Bitmap annotationImage, final KFImageManagerCompletionHandler completionHandler) {
-
-        loadMapSnapshotForOptions(latitude, longitude, false, annotationImage, completionHandler);
-    }
-
     public void loadMapSnapshotForOptions(final double latitude, final double longitude, final boolean satellite, final Bitmap annotationImage, final KFImageManagerCompletionHandler completionHandler) {
 
-        final String imageName = createMapSnapshotName(latitude, longitude, annotationImage);
+        final String imageName = createMapSnapshotName(latitude, longitude, satellite, annotationImage);
         addCompletionBlockToStore(completionHandler, imageName);
 
         downloadQueue.execute(new Runnable() {
@@ -288,8 +283,8 @@ public class KFImageManager {
         return Integer.toString(url.hashCode());
     }
 
-    private String createMapSnapshotName(double latitude, double longitude, Bitmap annotationImage) {
-        String name = "ms_" + latitude + "-" + longitude + "_0";
+    private String createMapSnapshotName(double latitude, double longitude, boolean sattelite, Bitmap annotationImage) {
+        String name = "ms_" + latitude + "-" + longitude + "-" + sattelite + "_0";
         if (annotationImage != null) name += "1";
         return Integer.toString(name.hashCode()) + ".jpg";
     }

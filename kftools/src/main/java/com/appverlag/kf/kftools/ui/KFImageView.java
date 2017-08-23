@@ -81,10 +81,14 @@ public class KFImageView extends AppCompatImageView {
     MAP
      */
     public void setMapSnapshotForOptions(final double latitude, final double longitude, final Integer placeholder) {
-        setMapSnapshotForOptions(latitude, longitude, 0, placeholder);
+        setMapSnapshotForOptions(latitude, longitude, false, 0, placeholder);
     }
 
     public void setMapSnapshotForOptions(final double latitude, final double longitude, final Integer annotationImage, final Integer placeholder) {
+        setMapSnapshotForOptions(latitude, longitude, false, annotationImage, placeholder);
+    }
+
+    public void setMapSnapshotForOptions(final double latitude, final double longitude, boolean satellite, final Integer annotationImage, final Integer placeholder) {
         if (placeholder == 0) {
             setImageBitmap(getPlaceholderImage());
         }
@@ -95,7 +99,7 @@ public class KFImageView extends AppCompatImageView {
 
         Bitmap annotationPin = BitmapFactory.decodeResource(getResources(), annotationImage);
 
-        KFImageManager.getInstance(getContext()).mapSnapshotForOptions(latitude, longitude, annotationPin, new KFImageManager.KFImageManagerCompletionHandler() {
+        KFImageManager.getInstance(getContext()).mapSnapshotForOptions(latitude, longitude, satellite, annotationPin, new KFImageManager.KFImageManagerCompletionHandler() {
             @Override
             public void onComplete(Bitmap bitmap) {
                 if (!identifier.equals(savedURL) || bitmap == null) return;
