@@ -214,7 +214,7 @@ public class KFImageManager {
             @Override
             public void run() {
                 Bitmap bitmap = null;
-                String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=18&size=640x640&scale=2";
+                String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=18&size=640x640&scale=2&format=jpg";
                 if (satellite) url += "&maptype=hybrid";
                 System.out.println("Downloading map snapshot...");
                 try {

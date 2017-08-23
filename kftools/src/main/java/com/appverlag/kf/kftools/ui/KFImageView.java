@@ -94,7 +94,7 @@ public class KFImageView extends AppCompatImageView {
         }
         else setImageResource(placeholder);
 
-        final String identifier = "ms_" + latitude + "-" + longitude + "_" + annotationImage;
+        final String identifier = "ms_" + latitude + "-" + longitude + "_" + annotationImage + "_" + satellite;
         savedURL = identifier;
 
         Bitmap annotationPin = BitmapFactory.decodeResource(getResources(), annotationImage);

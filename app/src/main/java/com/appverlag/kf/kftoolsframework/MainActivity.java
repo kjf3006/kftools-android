@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.appverlag.kf.kftools.other.KFExceptionHandler;
+import com.appverlag.kf.kftools.ui.KFImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,5 +26,8 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(intent);
             }
         });
+
+        KFImageView imageView = (KFImageView) findViewById(R.id.imageView);
+        imageView.setMapSnapshotForOptions(47.2, 10.7, true, 0, 0);
     }
 }
