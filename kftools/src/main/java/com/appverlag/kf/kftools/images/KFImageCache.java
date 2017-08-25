@@ -1,7 +1,5 @@
-package com.appverlag.kf.kftools.network;
+package com.appverlag.kf.kftools.images;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -12,9 +10,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,17 +21,20 @@ import java.util.concurrent.Executors;
  */
 public class KFImageCache {
 
-    private static final int MAX_CACHE_AGE = 60 * 60 * 24 * 7 * 3; // 3 weeks
-    private static final String DISK_CACHE_PATH = "/image_cache/";
+    private int maxCacheAge;
     private LruCache<String, Bitmap> imageCache;
     private String diskCachePath;
     private ExecutorService serialIOQueue;
 
 
-    public KFImageCache(Context context) {
+    /*
+    initialise
+     */
+
+    public KFImageCache(String diskCachePath, int maxCacheAge) {
 
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        final int cacheSize = maxMemory / 8;
+        final int cacheSize = maxMemory / 4;
 
         imageCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
@@ -45,8 +43,8 @@ public class KFImageCache {
             }
         };
 
-        Context appContext = context.getApplicationContext();
-        diskCachePath = appContext.getCacheDir().getAbsolutePath() + DISK_CACHE_PATH;
+        this.diskCachePath = diskCachePath;
+        this.maxCacheAge = maxCacheAge;
 
         serialIOQueue = Executors.newSingleThreadExecutor();
 
@@ -68,11 +66,12 @@ public class KFImageCache {
     }
 
     private void cleanDisk() {
+        if (maxCacheAge == 0) return;
         serialIOQueue.execute(new Runnable() {
             @Override
             public void run() {
                 File folder = new File(diskCachePath);
-                long expiration = System.currentTimeMillis()/1000 - MAX_CACHE_AGE;
+                long expiration = System.currentTimeMillis()/1000 - maxCacheAge;
                 for (File image : folder.listFiles()) {
                     long lastModified = image.lastModified()/1000;
                     if (lastModified < expiration) image.delete();
@@ -81,7 +80,11 @@ public class KFImageCache {
         });
     }
 
-    public void getImage(final String key, final int desiredWidth, final int desiredHeight, final KFImageCacheCompletionHandler completionHandler) {
+    /*
+    user functions
+     */
+
+    public void getImage(final String key, final int desiredWidth, final int desiredHeight, final KFImageManagerCompletionHandler completionHandler) {
         if (key == null || key.isEmpty()) {
             if (completionHandler != null) completionHandler.onComplete(null);
             return;
@@ -122,6 +125,10 @@ public class KFImageCache {
 
     public Bitmap putImage(final String key, final Bitmap bitmap, final int desiredWidth, final int desiredHeight) {
 
+        if (key.equals("2000890704")) {
+            Log.d("TEST", "start");
+        }
+
         String imageCacheName = createImageCacheName(key, desiredWidth, desiredHeight);
 
         double sampleSize = 1.0/calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), desiredWidth, desiredHeight);
@@ -153,7 +160,34 @@ public class KFImageCache {
             }
         });
 
-        return bitmap;
+        return b;
+    }
+
+    public void saveImage(final String key, final Bitmap bitmap) {
+        serialIOQueue.execute(new Runnable() {
+            @Override
+            public void run() {
+                BufferedOutputStream ostream = null;
+                try {
+                    ostream = new BufferedOutputStream(new FileOutputStream(new File(diskCachePath, key)), 2*1024);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+                }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    try {
+                        if(ostream != null) {
+                            ostream.flush();
+                            ostream.close();
+                        }
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     public boolean hasImage(final String key) {
@@ -224,14 +258,5 @@ public class KFImageCache {
         }
 
         return inSampleSize;
-    }
-
-
-    /*
-    *** completion handler ***
-     */
-
-    public interface KFImageCacheCompletionHandler {
-        void onComplete(Bitmap bitmap);
     }
 }

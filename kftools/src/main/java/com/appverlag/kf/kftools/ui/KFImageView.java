@@ -5,13 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.util.Log;
 
-import com.appverlag.kf.kftools.network.KFImageManager;
+import com.appverlag.kf.kftools.images.KFImageManager;
+import com.appverlag.kf.kftools.images.KFImageManagerCompletionHandler;
 
 
 /**
@@ -39,25 +38,22 @@ public class KFImageView extends AppCompatImageView {
     URL
      */
     public void setImageWithURL(final String url, final Integer placeholder) {
-        if (placeholder == 0) {
-            setImageBitmap(getPlaceholderImage());
-        }
-        else setImageResource(placeholder);
-
-        savedURL = url;
-
-        measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
-        KFImageManager.getInstance(getContext()).imageForURL(url, getMeasuredWidth(), getMeasuredHeight(), new KFImageManager.KFImageManagerCompletionHandler() {
-            @Override
-            public void onComplete(Bitmap bitmap) {
-                if (url == null || !url.equals(savedURL) || bitmap == null) return;
-                setImageBitmap(bitmap);
-            }
-        });
-
+        setImageWithURL(url, 0, 0, placeholder);
     }
 
     public void setImageWithURL(final String url, final Bitmap placeholder) {
+        setImageWithURL(url, 0, 0, placeholder);
+    }
+
+    public void setImageWithURL(final String url, final int desiredWidth, final int desiredHeight, final Integer placeholder) {
+        Bitmap placeholderBitmap = null;
+        if (placeholder != 0) {
+            placeholderBitmap = BitmapFactory.decodeResource(getResources(), placeholder);
+        }
+        setImageWithURL(url, desiredWidth, desiredHeight, placeholderBitmap);
+    }
+
+    public void setImageWithURL(final String url, final int desiredWidth, final int desiredHeight, final Bitmap placeholder) {
         if (placeholder == null) {
             setImageBitmap(getPlaceholderImage());
         }
@@ -65,8 +61,7 @@ public class KFImageView extends AppCompatImageView {
 
         savedURL = url;
 
-        measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
-        KFImageManager.getInstance(getContext()).imageForURL(url, getWidth(), getHeight(), new KFImageManager.KFImageManagerCompletionHandler() {
+        KFImageManager.getInstance(getContext()).imageForURL(url, desiredWidth, desiredHeight, new KFImageManagerCompletionHandler() {
             @Override
             public void onComplete(Bitmap bitmap) {
                 if (url == null || !url.equals(savedURL) || bitmap == null) return;
@@ -97,9 +92,12 @@ public class KFImageView extends AppCompatImageView {
         final String identifier = "ms_" + latitude + "-" + longitude + "_" + annotationImage + "_" + satellite;
         savedURL = identifier;
 
-        Bitmap annotationPin = BitmapFactory.decodeResource(getResources(), annotationImage);
+        Bitmap annotationPin = null;
+        if (annotationImage != 0) {
+            annotationPin = BitmapFactory.decodeResource(getResources(), annotationImage);
+        }
 
-        KFImageManager.getInstance(getContext()).mapSnapshotForOptions(latitude, longitude, satellite, annotationPin, new KFImageManager.KFImageManagerCompletionHandler() {
+        KFImageManager.getInstance(getContext()).mapSnapshotForOptions(latitude, longitude, satellite, annotationPin, new KFImageManagerCompletionHandler() {
             @Override
             public void onComplete(Bitmap bitmap) {
                 if (!identifier.equals(savedURL) || bitmap == null) return;
@@ -118,6 +116,46 @@ public class KFImageView extends AppCompatImageView {
     public void setImageWithYoutubeID(final String youtubeID, final Bitmap placeholder) {
         String url = "https://img.youtube.com/vi/" + youtubeID + "/hqdefault.jpg";
         setImageWithURL(url, placeholder);
+    }
+
+
+    /*
+    LOCAL
+     */
+
+    public void setImageWithKey(final String key, final Integer placeholder) {
+        setImageWithURL(key, 0, 0, placeholder);
+    }
+
+    public void setImageWithKey(final String key, final Bitmap placeholder) {
+        setImageWithURL(key, 0, 0, placeholder);
+    }
+
+    public void setImageWithKey(final String key, final int desiredWidth, final int desiredHeight, final Integer placeholder) {
+        Bitmap placeholderBitmap = null;
+        if (placeholder != 0) {
+            placeholderBitmap = BitmapFactory.decodeResource(getResources(), placeholder);
+        }
+        setImageWithURL(key, desiredWidth, desiredHeight, placeholderBitmap);
+    }
+
+
+    public void setImageWithKey(final String key, final int desiredWidth, final int desiredHeight, final Bitmap placeholder) {
+        if (placeholder == null) {
+            setImageBitmap(getPlaceholderImage());
+        }
+        else setImageBitmap(placeholder);
+
+        savedURL = key;
+
+        KFImageManager.getInstance(getContext()).getImage(key, desiredWidth, desiredHeight, new KFImageManagerCompletionHandler() {
+            @Override
+            public void onComplete(Bitmap bitmap) {
+                if (key == null || !key.equals(savedURL) || bitmap == null) return;
+                setImageBitmap(bitmap);
+            }
+        });
+
     }
 
 

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.appverlag.kf.kftools.images.KFImageManager;
 import com.appverlag.kf.kftools.ui.KFImageView;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ public class KFGalleryOverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gallery_overview_activity);
 
+
+        KFImageManager.getInstance(getApplicationContext()).reset();
 
         //setup toolbar
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -130,7 +133,7 @@ public class KFGalleryOverviewActivity extends AppCompatActivity {
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
             ViewHolder holderDefault = (ViewHolder) holder;
 
-            holderDefault.imageView.setImageWithURL(images.get(position), 0);
+            holderDefault.imageView.setImageWithURL(images.get(position), 300, 200, 0);
 
         }
 

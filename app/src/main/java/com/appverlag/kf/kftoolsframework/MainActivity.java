@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.appverlag.kf.kftools.other.KFExceptionHandler;
 import com.appverlag.kf.kftools.ui.KFImageView;
 
 public class MainActivity extends AppCompatActivity {
