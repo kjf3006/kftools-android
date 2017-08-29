@@ -56,7 +56,9 @@ public class KFDiskImageCache {
             public void run() {
                 File folder = new File(diskCachePath);
                 long expiration = System.currentTimeMillis()/1000 - maxCacheAge;
-                for (File image : folder.listFiles()) {
+                File[] files = folder.listFiles();
+                if (files == null) return;
+                for (File image : files) {
                     long lastModified = image.lastModified()/1000;
                     if (lastModified < expiration) image.delete();
                 }

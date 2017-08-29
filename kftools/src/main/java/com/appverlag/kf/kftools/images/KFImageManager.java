@@ -32,7 +32,7 @@ public class KFImageManager {
 
 
         String diskCachePath = appContext.getCacheDir().getAbsolutePath() + "/image-cache/";
-        String localDiskCachePath = appContext.getCacheDir().getAbsolutePath() + "/local-image-cache/";
+        String localDiskCachePath = appContext.getFilesDir().getAbsolutePath() + "/local-image-cache/";
         int cacheAge = 60 * 60 * 24 * 7 * 3; //3 weeks
         diskImageCache = new KFDiskImageCache(diskCachePath, cacheAge);
         localDiskImageCache = new KFDiskImageCache(localDiskCachePath, 0);
