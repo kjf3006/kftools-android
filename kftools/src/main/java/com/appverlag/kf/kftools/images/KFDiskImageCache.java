@@ -7,8 +7,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved
@@ -20,7 +23,8 @@ public class KFDiskImageCache {
 
     private int maxCacheAge;
     private String diskCachePath;
-    private ExecutorService serialIOQueue;
+    private ExecutorService ioQueue;
+    private List<String> lockedFiles;
 
     /*
     initialisation
@@ -31,14 +35,15 @@ public class KFDiskImageCache {
         this.diskCachePath = diskCachePath;
         this.maxCacheAge = maxCacheAge;
 
-        serialIOQueue = Executors.newCachedThreadPool();
+        ioQueue = Executors.newCachedThreadPool();
+        lockedFiles = new ArrayList<>();
 
         initImageFolder();
         cleanDisk();
     }
 
     private void initImageFolder() {
-        serialIOQueue.execute(new Runnable() {
+        ioQueue.execute(new Runnable() {
             @Override
             public void run() {
                 File outFile = new File(diskCachePath);
@@ -51,7 +56,7 @@ public class KFDiskImageCache {
 
     private void cleanDisk() {
         if (maxCacheAge == 0) return;
-        serialIOQueue.execute(new Runnable() {
+        ioQueue.execute(new Runnable() {
             @Override
             public void run() {
                 File folder = new File(diskCachePath);
@@ -76,9 +81,19 @@ public class KFDiskImageCache {
             return;
         }
 
-        serialIOQueue.execute(new Runnable() {
+        ioQueue.execute(new Runnable() {
             @Override
             public void run() {
+
+                while (lockedFiles.contains(key)) {
+                    try {
+                        Thread.sleep(200);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 String filePath = diskCachePath + key;
                 File file = new File(filePath);
                 Bitmap bitmap = null;
@@ -102,14 +117,14 @@ public class KFDiskImageCache {
 
     public void putImage(final String key, final Bitmap bitmap) {
 
+        if (lockedFiles.contains(key)) return;
 
-        if (hasImage(key)) {
-            return;
-        }
-
-        serialIOQueue.execute(new Runnable() {
+        ioQueue.execute(new Runnable() {
             @Override
             public void run() {
+
+                lockedFiles.add(key);
+
                 BufferedOutputStream ostream = null;
                 try {
                     ostream = new BufferedOutputStream(new FileOutputStream(new File(diskCachePath, key)), 2*1024);
@@ -131,6 +146,7 @@ public class KFDiskImageCache {
                         e.printStackTrace();
                     }
                 }
+                lockedFiles.remove(key);
             }
         });
 
@@ -139,7 +155,7 @@ public class KFDiskImageCache {
     public void removeImage(final String key) {
         if (key == null || key.equals("")) return;
 
-        serialIOQueue.execute(new Runnable() {
+        ioQueue.execute(new Runnable() {
             @Override
             public void run() {
 
@@ -157,7 +173,7 @@ public class KFDiskImageCache {
     }
 
     public void clear() {
-        serialIOQueue.execute(new Runnable() {
+        ioQueue.execute(new Runnable() {
             @Override
             public void run() {
                 File folder = new File(diskCachePath);

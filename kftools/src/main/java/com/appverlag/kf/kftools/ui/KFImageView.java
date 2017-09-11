@@ -124,11 +124,11 @@ public class KFImageView extends AppCompatImageView {
      */
 
     public void setImageWithKey(final String key, final Integer placeholder) {
-        setImageWithURL(key, 0, 0, placeholder);
+        setImageWithKey(key, 0, 0, placeholder);
     }
 
     public void setImageWithKey(final String key, final Bitmap placeholder) {
-        setImageWithURL(key, 0, 0, placeholder);
+        setImageWithKey(key, 0, 0, placeholder);
     }
 
     public void setImageWithKey(final String key, final int desiredWidth, final int desiredHeight, final Integer placeholder) {
@@ -136,7 +136,7 @@ public class KFImageView extends AppCompatImageView {
         if (placeholder != 0) {
             placeholderBitmap = BitmapFactory.decodeResource(getResources(), placeholder);
         }
-        setImageWithURL(key, desiredWidth, desiredHeight, placeholderBitmap);
+        setImageWithKey(key, desiredWidth, desiredHeight, placeholderBitmap);
     }
 
 
