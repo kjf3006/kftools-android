@@ -90,7 +90,7 @@ public class KFImageManager {
                             diskImageCache.putImage(imageName, bitmap);
                             double sampleSize = 1.0/calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), desiredWidth, desiredHeight);
                             final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth()*sampleSize), (int) (bitmap.getHeight()*sampleSize), true);
-                            //memoryImageCache.putImage(memoryImageName, resizedBitmap);
+                            memoryImageCache.putImage(memoryImageName, resizedBitmap);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -210,7 +210,7 @@ public class KFImageManager {
      }
 
      public void putImage(String key, Bitmap bitmap) {
-         if (key == null || key.equals("")) return;
+         if (key == null || key.equals("") || bitmap == null) return;
 
          final String imageName = createImageName(key);
 

@@ -117,7 +117,7 @@ public class KFDiskImageCache {
 
     public void putImage(final String key, final Bitmap bitmap) {
 
-        if (lockedFiles.contains(key)) return;
+        if (key == null || key.isEmpty() || bitmap == null || lockedFiles.contains(key)) return;
 
         ioQueue.execute(new Runnable() {
             @Override

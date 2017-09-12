@@ -40,6 +40,7 @@ public class KFMemoryImageCache {
     }
 
     public void putImage(String key, Bitmap image) {
+        if (key == null || key.isEmpty() || image == null) return;
         imageCache.put(key, image);
     }
 
