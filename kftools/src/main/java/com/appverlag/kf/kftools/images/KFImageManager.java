@@ -87,6 +87,10 @@ public class KFImageManager {
                     imageLoader.getImageForUrl(url, new KFImageManagerCompletionHandler() {
                         @Override
                         public void onComplete(Bitmap bitmap) {
+                            if (bitmap == null) {
+                                if (completionHandler != null) completionHandler.onComplete(null);
+                                return;
+                            }
                             diskImageCache.putImage(imageName, bitmap);
                             double sampleSize = 1.0/calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), desiredWidth, desiredHeight);
                             final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth()*sampleSize), (int) (bitmap.getHeight()*sampleSize), true);

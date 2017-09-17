@@ -225,7 +225,7 @@ public class KFImageCache {
 
 
     public File fileForImage(final String key) {
-        String filePath = diskCachePath + key;
+        String filePath = diskCachePath + key + ".png";
         return new File(filePath);
     }
 

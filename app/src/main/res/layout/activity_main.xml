@@ -14,6 +14,12 @@
         android:layout_height="wrap_content"
         android:text="Gallerie" />
 
+    <Button
+        android:id="@+id/buttonBilling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="billing" />
+
     <com.appverlag.kf.kftools.ui.KFImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
