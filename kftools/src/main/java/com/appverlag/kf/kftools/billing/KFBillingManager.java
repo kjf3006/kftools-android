@@ -2,6 +2,7 @@ package com.appverlag.kf.kftools.billing;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.android.billingclient.api.BillingClient;
@@ -14,8 +15,10 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +37,9 @@ public class KFBillingManager {
     private final String encodedKey;
     private boolean isServiceConnected;
 
+    private final Handler handler;
+    private final ArrayList<WeakReference<KFBillingManagerUpdater>> observer = new ArrayList<>();
+
     private final List<Purchase> purchases = new ArrayList<>();
     private Set<String> tokensToBeConsumed;
 
@@ -49,6 +55,7 @@ public class KFBillingManager {
 
         this.encodedKey = encodedKey;
         billingClient = new BillingClient.Builder(appContext).setListener(purchasesUpdatedListener).build();
+        handler = new Handler(appContext.getMainLooper());
 
         startServiceConnection(new Runnable() {
             @Override
@@ -132,6 +139,13 @@ public class KFBillingManager {
         return false;
     }
 
+    public Purchase getPurchaseWithSkuID(String skuID) {
+        for (Purchase purchase : purchases) {
+            if (purchase.getSku().equals(skuID)) return purchase;
+        }
+        return null;
+    }
+
     public void consumeAsync(final String purchaseToken) {
         if (tokensToBeConsumed == null) {
             tokensToBeConsumed = new HashSet<>();
@@ -190,6 +204,7 @@ public class KFBillingManager {
             } else {
                 Log.w(LOG_TAG, "onPurchasesUpdated() got unknown resultCode: " + responseCode);
             }
+            notifyDataChange();
         }
     };
 
@@ -262,5 +277,40 @@ public class KFBillingManager {
             Log.e(LOG_TAG, "Got an exception trying to validate a purchase: " + e);
             return false;
         }
+    }
+
+
+    /*
+    *** observer ***
+     */
+
+    public interface KFBillingManagerUpdater {
+        void billingsDidUpdate();
+    }
+
+    public static void addObserver(KFBillingManagerUpdater obj) {
+        instance.observer.add(new WeakReference<>(obj));
+    }
+
+    private void notifyDataChange () {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Iterator<WeakReference<KFBillingManagerUpdater>> iterator = observer.iterator();
+                while (iterator.hasNext()) {
+                    KFBillingManagerUpdater updater = iterator.next().get();
+                    if (updater == null) iterator.remove();
+                    else updater.billingsDidUpdate();
+                }
+            }
+        });
+    }
+
+    /*
+    *** helper ***
+     */
+
+    private void runOnUiThread(Runnable r) {
+        handler.post(r);
     }
 }
