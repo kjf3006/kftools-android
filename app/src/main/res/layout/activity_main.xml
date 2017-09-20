@@ -20,6 +20,12 @@
         android:layout_height="wrap_content"
         android:text="billing" />
 
+    <Button
+        android:id="@+id/buttonPickImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick Image" />
+
     <com.appverlag.kf.kftools.ui.KFImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"

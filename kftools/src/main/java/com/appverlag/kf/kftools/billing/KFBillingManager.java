@@ -146,7 +146,9 @@ public class KFBillingManager {
         return null;
     }
 
-    public void consumeAsync(final String purchaseToken) {
+
+    public void consumeAsync(final Purchase purchase) {
+        final String purchaseToken = purchase.getPurchaseToken();
         if (tokensToBeConsumed == null) {
             tokensToBeConsumed = new HashSet<>();
         }
@@ -162,9 +164,13 @@ public class KFBillingManager {
             public void run() {
                 billingClient.consumeAsync(purchaseToken, new ConsumeResponseListener() {
                     @Override
-                    public void onConsumeResponse(String purchaseToken, int resultCode) {
+                    public void onConsumeResponse(String purchaseToken, @BillingClient.BillingResponse int resultCode) {
                         Log.d(LOG_TAG, "Consumption finished. result code: " + resultCode + ". purchase token: " + purchaseToken);
                         tokensToBeConsumed.remove(purchaseToken);
+                        if (resultCode == BillingClient.BillingResponse.OK) {
+                            purchases.remove(purchase);
+                            notifyDataChange();
+                        }
                     }
                 });
             }

@@ -1,8 +1,9 @@
-package com.appverlag.kf.kftools.ui;
+package com.appverlag.kf.kftools.other;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
@@ -11,14 +12,23 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
+
+import com.appverlag.kf.kftools.BuildConfig;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved
@@ -34,19 +44,24 @@ public class KFImagePicker {
     public static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
 
 
+    @RequiresPermission(allOf = {CAMERA})
     public static Intent getPickImageIntent(Context context) {
 
         Intent chooserIntent = null;
 
         List<Intent> intentList = new ArrayList<>();
 
-        Intent pickIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePhotoIntent.putExtra("return-data", true);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(context)));
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intentList = addIntentsToList(context, intentList, pickIntent);
-        intentList = addIntentsToList(context, intentList, takePhotoIntent);
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePhotoIntent.resolveActivity(context.getPackageManager()) != null) {
+            Uri photoUri = FileProvider.getUriForFile(context, context.getPackageName() + ".kftools.fileprovider", getTempFile(context));
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            takePhotoIntent.putExtra("return-data", true);
+            intentList = addIntentsToList(context, intentList, takePhotoIntent);
+        }
+
 
         if (intentList.size() > 0) {
             chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
@@ -76,9 +91,7 @@ public class KFImagePicker {
         File imageFile = getTempFile(context);
         if (resultCode == Activity.RESULT_OK) {
             Uri selectedImage;
-            boolean isCamera = (imageReturnedIntent == null ||
-                    imageReturnedIntent.getData() == null  ||
-                    imageReturnedIntent.getData().toString().contains(imageFile.toString()));
+            boolean isCamera = (imageReturnedIntent == null || imageReturnedIntent.getData() == null  || imageReturnedIntent.getData().toString().contains(imageFile.toString()));
             if (isCamera) {     /** CAMERA **/
                 selectedImage = Uri.fromFile(imageFile);
             } else {            /** ALBUM **/
@@ -91,11 +104,27 @@ public class KFImagePicker {
             bm = rotate(bm, rotation);
         }
         return bm;
+
+//        Bitmap bm = null;
+//        File imageFile = getTempFile(context);
+//        if (resultCode == Activity.RESULT_OK && imageReturnedIntent != null) {
+//            Uri selectedImage;
+//            if (imageReturnedIntent.getExtras() != null) {     /** CAMERA **/
+//                bm = (Bitmap) imageReturnedIntent.getExtras().get("data");
+//            } else if (imageReturnedIntent.getData() != null) {            /** ALBUM **/
+//                selectedImage = imageReturnedIntent.getData();
+//                bm = getImageResized(context, selectedImage);
+//                int rotation = getRotation(context, selectedImage, isCamera);
+//            }
+//
+//            bm = rotate(bm, rotation);
+//        }
+//        return bm;
     }
 
 
     private static File getTempFile(Context context) {
-        File imageFile = new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
+        File imageFile = new File(context.getCacheDir().getAbsolutePath() + "/image-cache/", TEMP_IMAGE_NAME);
         imageFile.getParentFile().mkdirs();
         return imageFile;
     }
@@ -203,5 +232,14 @@ public class KFImagePicker {
             return bmOut;
         }
         return bm;
+    }
+
+
+    private static void grantWritePermission(@NonNull Context context, Intent intent, Uri uri) {
+        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
     }
 }

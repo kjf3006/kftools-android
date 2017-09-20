@@ -94,7 +94,7 @@ public class KFDiskImageCache {
                     }
                 }
 
-                String filePath = diskCachePath + key;
+                String filePath = getFilePath(key);
                 File file = new File(filePath);
                 Bitmap bitmap = null;
                 if(file.exists()) {
@@ -127,7 +127,7 @@ public class KFDiskImageCache {
 
                 BufferedOutputStream ostream = null;
                 try {
-                    ostream = new BufferedOutputStream(new FileOutputStream(new File(diskCachePath, key)), 2*1024);
+                    ostream = new BufferedOutputStream(new FileOutputStream(new File(getFilePath(key))), 2*1024);
                     //FileLock lock = ostream.getChannel().lock();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
                     //lock.release();
@@ -159,7 +159,7 @@ public class KFDiskImageCache {
             @Override
             public void run() {
 
-                File f = new File(diskCachePath, key);
+                File f = new File(getFilePath(key));
                 if (f.exists() && f.isFile()) {
                     f.delete();
                 }
@@ -168,7 +168,7 @@ public class KFDiskImageCache {
     }
 
     public boolean hasImage(final String key) {
-        File f = new File(diskCachePath, key);
+        File f = new File(getFilePath(key));
         return f.exists() && f.isFile();
     }
 
@@ -186,14 +186,17 @@ public class KFDiskImageCache {
 
 
     public File fileForImage(final String key) {
-        String filePath = diskCachePath + key;
-        return new File(filePath);
+        return new File(getFilePath(key));
     }
 
 
     /*
     helper
      */
+
+    private String getFilePath(final String key) {
+        return diskCachePath + key + ".png";
+    }
 
     private int calculateInSampleSize(final int width, final int height, final int desiredWidth, final int desiredHeight) {
 

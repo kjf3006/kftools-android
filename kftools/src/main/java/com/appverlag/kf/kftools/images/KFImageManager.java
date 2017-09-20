@@ -2,7 +2,9 @@ package com.appverlag.kf.kftools.images;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
@@ -261,6 +263,16 @@ public class KFImageManager {
     public File fileForImageWithKey(final String key) {
         String imageName = createImageName(key);
         return localDiskImageCache.fileForImage(imageName);
+    }
+
+    public Uri getUriForImagwWithURL(Context context, final String url) {
+        String imageName = createImageName(url);
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".kftools.fileprovider", diskImageCache.fileForImage(imageName));
+    }
+
+    public Uri getUriForImagwWithKey(Context context, final String key) {
+        String imageName = createImageName(key);
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".kftools.fileprovider", localDiskImageCache.fileForImage(imageName));
     }
 
 
