@@ -19,13 +19,13 @@ import java.util.concurrent.Executors;
  * Proprietary and confidential
  * Created by kevinflachsmann on 24.08.17.
  */
-public class KFImageMapLoader {
+public class KFImageManagerImageMapLoader {
 
-    private static final String LOG_TAG = "KFImageLoader";
+    private static final String LOG_TAG = "KFImageManagerImageLoader";
     private ExecutorService downloadQueue;
     private ConcurrentHashMap<String, ArrayList<KFImageManagerCompletionHandler>> completionHandlerStore;
 
-    public KFImageMapLoader() {
+    public KFImageManagerImageMapLoader() {
         completionHandlerStore = new ConcurrentHashMap<>();
         downloadQueue = Executors.newFixedThreadPool(5);
     }
@@ -43,7 +43,7 @@ public class KFImageMapLoader {
             @Override
             public void run() {
                 Bitmap bitmap = null;
-                String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=18&size=640x640&scale=2&format=jpg";
+                String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=18&size=512x512&scale=2&format=jpg";
                 if (satellite) url += "&maptype=hybrid";
                 System.out.println("Downloading map snapshot...");
                 try {
@@ -61,7 +61,7 @@ public class KFImageMapLoader {
                 }
 
 
-                if (annotationImage != null) {
+                if (annotationImage != null && bitmap != null) {
                     bitmap = addAnnotationToMapSnapthot(bitmap, annotationImage);
                 }
 

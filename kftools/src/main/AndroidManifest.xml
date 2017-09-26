@@ -17,6 +17,9 @@
                 />
         </provider>
 
+        <activity
+            android:name=".permission.KFRunntimePermissionManagerActivity"
+            android:theme="@style/kftools.Theme.Transparent"/>
 
     </application>
 

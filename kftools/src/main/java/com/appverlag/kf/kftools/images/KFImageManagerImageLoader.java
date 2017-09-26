@@ -18,16 +18,18 @@ import java.util.concurrent.Executors;
  * Proprietary and confidential
  * Created by kevinflachsmann on 24.08.17.
  */
-public class KFImageLoader {
+public class KFImageManagerImageLoader {
 
-    private static final String LOG_TAG = "KFImageLoader";
+    private static final String LOG_TAG = "KFImageManagerImageLoader";
     private ExecutorService downloadQueue;
     private ConcurrentHashMap<String, ArrayList<KFImageManagerCompletionHandler>> completionHandlerStore;
+    private KFImageManagerBitmapEngine engine;
 
 
-    public KFImageLoader() {
+    public KFImageManagerImageLoader() {
         completionHandlerStore = new ConcurrentHashMap<>();
         downloadQueue = Executors.newFixedThreadPool(5);
+        engine = new KFImageManagerBitmapEngine();
     }
 
     public void getImageForUrl(final String url, final KFImageManagerCompletionHandler completionHandler) {
@@ -46,8 +48,6 @@ public class KFImageLoader {
             public void run() {
 
                 Bitmap bitmap = null;
-                //Log.d(LOG_TAG, "Downloading image...");
-
 
                 try {
                     URLConnection conn = new URL(url).openConnection();
@@ -65,22 +65,11 @@ public class KFImageLoader {
 
                     byte[] data = out.toByteArray();
 
-
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-                    options.inSampleSize = calculateInSampleSize(options.outWidth, options.outHeight, 1024, 1024);
-                    options.inJustDecodeBounds = false;
-                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-
-                    bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                    bitmap = engine.resizeBitmap(data, 1024, 1024);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                //Log.d(LOG_TAG, "Downloading image completed.");
 
                 runCompletionBlocks(bitmap, url);
             }

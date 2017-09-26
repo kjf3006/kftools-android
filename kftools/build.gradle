@@ -28,7 +28,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
 
-    compile 'com.android.billingclient:billing:dp-1'
+    compile 'com.android.billingclient:billing:1.0'
 }
 
 apply from: 'install.gradle'

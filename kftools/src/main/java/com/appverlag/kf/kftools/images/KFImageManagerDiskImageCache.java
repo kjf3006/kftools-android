@@ -8,7 +8,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,24 +23,26 @@ import java.util.concurrent.TimeUnit;
  * Proprietary and confidential
  * Created by kevinflachsmann on 24.08.17.
  */
-public class KFDiskImageCache {
+public class KFImageManagerDiskImageCache {
 
     private int maxCacheAge;
     private String diskCachePath;
     private ExecutorService ioQueue;
-    private List<String> lockedFiles;
+    private Set<String> lockedFiles;
+    private KFImageManagerBitmapEngine engine;
 
     /*
     initialisation
      */
 
-    public KFDiskImageCache(String diskCachePath, int maxCacheAge) {
+    public KFImageManagerDiskImageCache(String diskCachePath, int maxCacheAge) {
 
         this.diskCachePath = diskCachePath;
         this.maxCacheAge = maxCacheAge;
 
         ioQueue = Executors.newCachedThreadPool();
-        lockedFiles = new ArrayList<>();
+        lockedFiles = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+        engine = new KFImageManagerBitmapEngine();
 
         initImageFolder();
         cleanDisk();
@@ -98,14 +104,7 @@ public class KFDiskImageCache {
                 File file = new File(filePath);
                 Bitmap bitmap = null;
                 if(file.exists()) {
-                    final BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeFile(filePath, options);
-
-                    options.inSampleSize = calculateInSampleSize(options.outWidth, options.outHeight, desiredWidth, desiredHeight);
-                    options.inJustDecodeBounds = false;
-
-                    bitmap = BitmapFactory.decodeFile(filePath, options);
+                    bitmap = engine.resizeBitmap(file, desiredWidth, desiredHeight);
                 }
 
                 if (completionHandler != null) {
@@ -128,9 +127,7 @@ public class KFDiskImageCache {
                 BufferedOutputStream ostream = null;
                 try {
                     ostream = new BufferedOutputStream(new FileOutputStream(new File(getFilePath(key))), 2*1024);
-                    //FileLock lock = ostream.getChannel().lock();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-                    //lock.release();
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -151,6 +148,7 @@ public class KFDiskImageCache {
         });
 
     }
+
 
     public void removeImage(final String key) {
         if (key == null || key.equals("")) return;

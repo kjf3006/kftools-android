@@ -29,6 +29,7 @@ public class KFConnectionManager {
     private final OkHttpClient client = new OkHttpClient();
     private final Handler handler;
     private KFConnectionManagerValidationHandler validationHandler;
+    //private
 
 
     /*
@@ -46,6 +47,37 @@ public class KFConnectionManager {
         return KFConnectionManager.instance;
     }
 
+//    /*
+//    *** NEW API: user functions ***
+//     */
+//
+//    public void sendRequest(final Request request, final boolean synchronous, final KFConnectionManagerCallback callback) {
+//        if (synchronous) {
+//            try {
+//                Call call = client.newCall(request);
+//                Response response = call.execute();
+//                if (callback != null) callback.onResponse(response);
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//                if (callback != null) callback.onFailure();
+//            }
+//        }
+//        else {
+//            client.newCall(request).enqueue(new Callback() {
+//                @Override
+//                public void onFailure(Call call, IOException e) {
+//                    e.printStackTrace();
+//                    if (callback != null) callback.onFailure();
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    if (callback != null) callback.onResponse(response);
+//                }
+//            });
+//        }
+//    }
 
     /*
     *** user functions ***

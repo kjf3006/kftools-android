@@ -16,11 +16,12 @@ public class KFImageManager {
 
     private static KFImageManager instance;
     private final Handler handler;
-    private KFMemoryImageCache memoryImageCache;
-    private KFDiskImageCache diskImageCache;
-    private KFDiskImageCache localDiskImageCache;
-    private KFImageLoader imageLoader;
-    private KFImageMapLoader imageMapLoader;
+    private KFImageManagerMemoryImageCache memoryImageCache;
+    private KFImageManagerDiskImageCache diskImageCache;
+    private KFImageManagerDiskImageCache localDiskImageCache;
+    private KFImageManagerImageLoader imageLoader;
+    private KFImageManagerImageMapLoader imageMapLoader;
+    private KFImageManagerBitmapEngine engine;
 
 
     /*
@@ -36,11 +37,12 @@ public class KFImageManager {
         String diskCachePath = appContext.getCacheDir().getAbsolutePath() + "/image-cache/";
         String localDiskCachePath = appContext.getFilesDir().getAbsolutePath() + "/local-image-cache/";
         int cacheAge = 60 * 60 * 24 * 7 * 3; //3 weeks
-        diskImageCache = new KFDiskImageCache(diskCachePath, cacheAge);
-        localDiskImageCache = new KFDiskImageCache(localDiskCachePath, 0);
-        memoryImageCache = new KFMemoryImageCache();
-        imageLoader = new KFImageLoader();
-        imageMapLoader = new KFImageMapLoader();
+        diskImageCache = new KFImageManagerDiskImageCache(diskCachePath, cacheAge);
+        localDiskImageCache = new KFImageManagerDiskImageCache(localDiskCachePath, 0);
+        memoryImageCache = new KFImageManagerMemoryImageCache();
+        imageLoader = new KFImageManagerImageLoader();
+        imageMapLoader = new KFImageManagerImageMapLoader();
+        engine = new KFImageManagerBitmapEngine();
 
     }
 
@@ -94,8 +96,7 @@ public class KFImageManager {
                                 return;
                             }
                             diskImageCache.putImage(imageName, bitmap);
-                            double sampleSize = 1.0/calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), desiredWidth, desiredHeight);
-                            final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth()*sampleSize), (int) (bitmap.getHeight()*sampleSize), true);
+                            final Bitmap resizedBitmap = engine.resizeBitmap(bitmap, desiredWidth, desiredHeight);
                             memoryImageCache.putImage(memoryImageName, resizedBitmap);
                             runOnUiThread(new Runnable() {
                                 @Override

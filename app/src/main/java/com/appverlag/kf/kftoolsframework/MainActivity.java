@@ -14,11 +14,22 @@ import android.view.View;
 
 import com.android.billingclient.api.Purchase;
 import com.appverlag.kf.kftools.billing.KFBillingManager;
+import com.appverlag.kf.kftools.network.KFConnectionManager;
+import com.appverlag.kf.kftools.network.KFConnectionManagerCallback;
+import com.appverlag.kf.kftools.network.KFConnectionManagerJSONCallback;
 import com.appverlag.kf.kftools.other.KFRemoteLogger;
 import com.appverlag.kf.kftools.other.KFImagePicker;
+import com.appverlag.kf.kftools.permission.KFRunntimePermissionManager;
 import com.appverlag.kf.kftools.ui.KFImageView;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,17 +77,47 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonPickImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, 0);
-                    return;
-                }
-                Intent intent = KFImagePicker.getPickImageIntent(MainActivity.this);
-                startActivityForResult(intent, 100);
+                KFRunntimePermissionManager.check(MainActivity.this, new String[]{Manifest.permission.CAMERA}, new KFRunntimePermissionManager.KFRunntimePermissionManagerCallback() {
+                    @Override
+                    public void onSuccess() throws SecurityException {
+                        Intent intent = KFImagePicker.getPickImageIntent(MainActivity.this);
+                        startActivityForResult(intent, 100);
+                    }
+                });
+
+
+            }
+        });
+
+        findViewById(R.id.buttonPermission).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KFRunntimePermissionManager.check(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CAMERA}, new KFRunntimePermissionManager.KFRunntimePermissionManagerCallback() {
+                    @Override
+                    public void onSuccess() {
+                        System.out.println("permission success");
+                    }
+                });
             }
         });
 
         imageView = (KFImageView) findViewById(R.id.imageView);
         imageView.setMapSnapshotForOptions(47.2, 10.7, true, 0, 0);
+
+
+//        Request request = new Request.Builder().url("http://login-auf-polizei.at/api/events").build();
+//        KFConnectionManager.getInstance().sendRequest(request, false, new KFConnectionManagerJSONCallback() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                System.out.println(response);
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//
+//            }
+//        });
+
     }
 
 

@@ -12,6 +12,7 @@ import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class KFBillingManager {
         Context appContext = context.getApplicationContext();
 
         this.encodedKey = encodedKey;
-        billingClient = new BillingClient.Builder(appContext).setListener(purchasesUpdatedListener).build();
+        billingClient = BillingClient.newBuilder(appContext).setListener(purchasesUpdatedListener).build();
         handler = new Handler(appContext.getMainLooper());
 
         startServiceConnection(new Runnable() {
@@ -121,8 +122,7 @@ public class KFBillingManager {
         executeServiceRequest(new Runnable() {
             @Override
             public void run() {
-                BillingFlowParams purchaseParams = new BillingFlowParams.Builder()
-                        .setSku(skuId).setType(billingType).setOldSkus(oldSkus).build();
+                BillingFlowParams purchaseParams = BillingFlowParams.newBuilder().setSku(skuId).setType(billingType).setOldSkus(oldSkus).build();
                 billingClient.launchBillingFlow(activity, purchaseParams);
             }
         });
@@ -164,10 +164,10 @@ public class KFBillingManager {
             public void run() {
                 billingClient.consumeAsync(purchaseToken, new ConsumeResponseListener() {
                     @Override
-                    public void onConsumeResponse(String purchaseToken, @BillingClient.BillingResponse int resultCode) {
-                        Log.d(LOG_TAG, "Consumption finished. result code: " + resultCode + ". purchase token: " + purchaseToken);
+                    public void onConsumeResponse(@BillingClient.BillingResponse int responseCode, String purchaseToken) {
+                        Log.d(LOG_TAG, "Consumption finished. result code: " + responseCode + ". purchase token: " + purchaseToken);
                         tokensToBeConsumed.remove(purchaseToken);
-                        if (resultCode == BillingClient.BillingResponse.OK) {
+                        if (responseCode == BillingClient.BillingResponse.OK) {
                             purchases.remove(purchase);
                             notifyDataChange();
                         }
@@ -180,13 +180,16 @@ public class KFBillingManager {
 
     public void querySkuDetailsAsync(@BillingClient.SkuType final String itemType, final List<String> skuList, final SkuDetailsResponseListener listener) {
 
+        final SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
+
         executeServiceRequest(new Runnable() {
             @Override
             public void run() {
-                billingClient.querySkuDetailsAsync(itemType, skuList, new SkuDetailsResponseListener() {
+                billingClient.querySkuDetailsAsync(params.build(), new SkuDetailsResponseListener() {
                             @Override
-                            public void onSkuDetailsResponse(SkuDetails.SkuDetailsResult result) {
-                                listener.onSkuDetailsResponse(result);
+                            public void onSkuDetailsResponse(@BillingClient.BillingResponse int responseCode, List<SkuDetails> skuDetailsList) {
+                                listener.onSkuDetailsResponse(responseCode, skuDetailsList);
                             }
                 });
             }

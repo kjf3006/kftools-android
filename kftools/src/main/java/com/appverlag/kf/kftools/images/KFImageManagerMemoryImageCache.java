@@ -9,7 +9,7 @@ import android.util.LruCache;
  * Proprietary and confidential
  * Created by kevinflachsmann on 24.08.17.
  */
-public class KFMemoryImageCache {
+public class KFImageManagerMemoryImageCache {
 
     private LruCache<String, Bitmap> imageCache;
 
@@ -18,7 +18,7 @@ public class KFMemoryImageCache {
     initatilisation
      */
 
-    public KFMemoryImageCache() {
+    public KFImageManagerMemoryImageCache() {
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 4;
 
