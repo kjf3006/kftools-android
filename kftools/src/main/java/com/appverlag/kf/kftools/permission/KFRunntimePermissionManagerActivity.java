@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
 import com.appverlag.kf.kftools.R;
@@ -68,11 +69,10 @@ public class KFRunntimePermissionManagerActivity extends Activity implements Act
             if (result != PackageManager.PERMISSION_GRANTED) success = false;
         }
 
-        if (success) {
-            Intent broadcast = new Intent();
-            broadcast.setAction(requestID);
-            sendBroadcast(broadcast);
-        }
+        Intent broadcast = new Intent();
+        broadcast.setAction(requestID);
+        broadcast.putExtra("success", success);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
 
         finish();
     }

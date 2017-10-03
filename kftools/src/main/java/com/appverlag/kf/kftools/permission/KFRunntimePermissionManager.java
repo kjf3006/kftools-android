@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class KFRunntimePermissionManager {
         }
 
         if (openPermissions.size() == 0) {
-            callback.onSuccess();
+            if (callback != null) callback.onSuccess(true);
             return;
         }
 
@@ -49,11 +50,12 @@ public class KFRunntimePermissionManager {
         BroadcastReceiver receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                callback.onSuccess();
+                if (callback != null) callback.onSuccess(intent.getBooleanExtra("success", false));
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
             }
         };
 
-        context.registerReceiver(receiver, filter);
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
 
         Intent intent = new Intent(context, KFRunntimePermissionManagerActivity.class);
         intent.putExtra("permissions", openPermissions.toArray(new String[openPermissions.size()]));
@@ -64,7 +66,7 @@ public class KFRunntimePermissionManager {
 
 
     public interface KFRunntimePermissionManagerCallback {
-        void onSuccess() throws SecurityException;
+        void onSuccess(boolean success) throws SecurityException;
     }
 
 
