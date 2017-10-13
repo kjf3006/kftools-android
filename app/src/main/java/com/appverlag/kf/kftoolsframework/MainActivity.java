@@ -60,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.buttonSection).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, KFSectionedRecyclerViewActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
+
         findViewById(R.id.buttonBilling).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,9 +87,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 KFRunntimePermissionManager.check(MainActivity.this, new String[]{Manifest.permission.CAMERA}, new KFRunntimePermissionManager.KFRunntimePermissionManagerCallback() {
                     @Override
-                    public void onSuccess() throws SecurityException {
-                        Intent intent = KFImagePicker.getPickImageIntent(MainActivity.this);
-                        startActivityForResult(intent, 100);
+                    public void onSuccess(boolean success) throws SecurityException {
+                        if (success) {
+                            Intent intent = KFImagePicker.getPickImageIntent(MainActivity.this);
+                            startActivityForResult(intent, 100);
+                        }
                     }
                 });
 
@@ -94,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 KFRunntimePermissionManager.check(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CAMERA}, new KFRunntimePermissionManager.KFRunntimePermissionManagerCallback() {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(boolean success) {
                         System.out.println("permission success");
                     }
                 });

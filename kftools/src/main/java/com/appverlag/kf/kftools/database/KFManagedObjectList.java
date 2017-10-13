@@ -26,6 +26,7 @@ public class KFManagedObjectList<T extends KFManagedObject> implements Iterable<
     }
 
     public T getObject(int index) {
+        if (index >= getCount()) return null;
         T object = objects.get(index, null);
         if(object == null) {
             cursor.moveToPosition(index);

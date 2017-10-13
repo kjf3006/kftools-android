@@ -9,6 +9,12 @@
     tools:context="com.appverlag.kf.kftoolsframework.MainActivity">
 
     <Button
+        android:id="@+id/buttonSection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sections" />
+
+    <Button
         android:id="@+id/buttonGallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
