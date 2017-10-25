@@ -17,7 +17,7 @@ import okhttp3.Request;
  */
 public class KFExceptionHandler implements Thread.UncaughtExceptionHandler {
 
-    private static final String APPVERLAG_CRASH_LOG_URL = "http://admin.content-appverlag.com/api/crash-log";
+    private static final String APPVERLAG_CRASH_LOG_URL = "https://content-appverlag.com/api/crash-log";
     private static final String APPVERLAG_TOKEN = "uBJpVp655721ru6YztIUnXbSEHjPnVa48jnfobL2EXWPWL290yKp3Q54Heu626vE7ih1O4o7006L51kciFJe1XEKjX9qIQ99";
 
     private Thread.UncaughtExceptionHandler defaultUEH;

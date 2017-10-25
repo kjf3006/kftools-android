@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import com.appverlag.kf.kftools.images.KFImageManager;
 import com.appverlag.kf.kftools.ui.recyclerview.KFIndexPath;
 import com.appverlag.kf.kftools.ui.recyclerview.KFRecyclerViewAdapter;
-import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
-import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved

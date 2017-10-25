@@ -17,6 +17,7 @@ import com.appverlag.kf.kftools.billing.KFBillingManager;
 import com.appverlag.kf.kftools.network.KFConnectionManager;
 import com.appverlag.kf.kftools.network.KFConnectionManagerCallback;
 import com.appverlag.kf.kftools.network.KFConnectionManagerJSONCallback;
+import com.appverlag.kf.kftools.other.KFExceptionHandler;
 import com.appverlag.kf.kftools.other.KFRemoteLogger;
 import com.appverlag.kf.kftools.other.KFImagePicker;
 import com.appverlag.kf.kftools.permission.KFRunntimePermissionManager;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 //        if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof KFExceptionHandler)) {
 //            Thread.setDefaultUncaughtExceptionHandler(new KFExceptionHandler("KFTools", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 //        }
+//
+//        int i = 1/0;
 
         KFBillingManager.initialise(getApplicationContext(), "");
 
