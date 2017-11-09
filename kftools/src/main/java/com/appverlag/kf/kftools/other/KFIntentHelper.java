@@ -8,6 +8,7 @@ import java.util.Hashtable;
  * Proprietary and confidential
  * Created by kevinflachsmann on 14.05.17.
  */
+@Deprecated
 public class KFIntentHelper {
 
     private static KFIntentHelper instance;
