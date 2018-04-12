@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved
@@ -42,7 +43,7 @@ public class KFNotificationCenter {
         list.add(new WeakReference<>(listener));
     }
 
-    public synchronized void postNotification(final String notificationName){
+    public synchronized void postNotification(final String notificationName, final Map<String, String> userinfo){
         List<WeakReference<KFNotificationCenterListener>> list = registredObjects.get(notificationName);
         if(list != null) {
             Iterator<WeakReference<KFNotificationCenterListener>> iterator = list.iterator();
@@ -53,7 +54,7 @@ public class KFNotificationCenter {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            listener.didReceiveNotification(notificationName);
+                            listener.didReceiveNotification(notificationName, userinfo);
                         }
                     });
                 }
@@ -62,6 +63,6 @@ public class KFNotificationCenter {
     }
 
     public interface KFNotificationCenterListener {
-        void didReceiveNotification(String notificationName);
+        void didReceiveNotification(String notificationName, Map<String, String> userinfo);
     }
 }

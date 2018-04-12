@@ -119,6 +119,9 @@ public final class KFContentProvider {
             case "salzburg":
                 stateDescriptor = "salzburg";
                 break;
+            case "steiermark":
+                stateDescriptor = "steiermark";
+                break;
             case "tirol":
                 stateDescriptor = "tirol";
                 break;
