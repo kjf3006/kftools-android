@@ -159,8 +159,14 @@ public class KFImageView extends AppCompatImageView {
     }
 
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        //loadImageIfNecessary(true, null);
+    }
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //   let the default measuring occur, then force the desired aspect ratio
         //   on the view (not the drawable).
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

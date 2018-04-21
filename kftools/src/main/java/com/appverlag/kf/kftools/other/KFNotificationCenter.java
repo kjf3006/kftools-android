@@ -1,5 +1,6 @@
 package com.appverlag.kf.kftools.other;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -43,7 +44,11 @@ public class KFNotificationCenter {
         list.add(new WeakReference<>(listener));
     }
 
-    public synchronized void postNotification(final String notificationName, final Map<String, String> userinfo){
+    public synchronized void postNotification(final String notificationName) {
+        postNotification(notificationName, new Intent());
+    }
+
+    public synchronized void postNotification(final String notificationName, final Intent userinfo){
         List<WeakReference<KFNotificationCenterListener>> list = registredObjects.get(notificationName);
         if(list != null) {
             Iterator<WeakReference<KFNotificationCenterListener>> iterator = list.iterator();
@@ -63,6 +68,6 @@ public class KFNotificationCenter {
     }
 
     public interface KFNotificationCenterListener {
-        void didReceiveNotification(String notificationName, Map<String, String> userinfo);
+        void didReceiveNotification(String notificationName, Intent userinfo);
     }
 }

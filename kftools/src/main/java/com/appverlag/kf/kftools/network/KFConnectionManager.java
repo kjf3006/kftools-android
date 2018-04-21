@@ -4,7 +4,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.IOException;
 
@@ -143,7 +145,15 @@ public class KFConnectionManager {
         }
         else {
             try {
-                jsonObject = new JSONObject(jsonString);
+                Object json = new JSONTokener(jsonString).nextValue();
+                if (json instanceof JSONObject) {
+                    jsonObject = new JSONObject(jsonString);
+                }
+                else if (json instanceof JSONArray) {
+                    JSONArray array = new JSONArray(jsonString);
+                    jsonObject = new JSONObject();
+                    jsonObject.put("result", array);
+                }
             }
             catch (Exception e) {
                 Log.d(LOG_TAG, "error parsing input: " + jsonString + "\nwith error: " + e.toString());

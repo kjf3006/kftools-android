@@ -1,5 +1,6 @@
 package com.appverlag.kf.kftools.database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 /**
@@ -13,6 +14,7 @@ public abstract class KFManagedObject {
     protected long id;
 
     protected abstract void onCreate(Cursor cursor);
+    protected abstract ContentValues getContentValues();
 
     public long getId() {
         return id;
