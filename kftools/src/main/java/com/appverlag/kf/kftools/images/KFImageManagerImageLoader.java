@@ -2,8 +2,10 @@ package com.appverlag.kf.kftools.images;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -11,6 +13,12 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved
@@ -24,6 +32,7 @@ public class KFImageManagerImageLoader {
     private ExecutorService downloadQueue;
     private ConcurrentHashMap<String, ArrayList<KFImageManagerCompletionHandler>> completionHandlerStore;
     private KFImageManagerBitmapEngine engine;
+    private final OkHttpClient client = new OkHttpClient();
 
 
     public KFImageManagerImageLoader() {
@@ -42,19 +51,19 @@ public class KFImageManagerImageLoader {
         addCompletionBlockToStore(completionHandler, url);
         if (!needsToLoad) return;
 
-
-        downloadQueue.execute(new Runnable() {
+        client.newCall(new Request.Builder().url(url).build()).enqueue(new Callback() {
             @Override
-            public void run() {
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
 
                 Bitmap bitmap = null;
 
                 try {
-                    URLConnection conn = new URL(url).openConnection();
-                    conn.setConnectTimeout(5000);
-                    conn.setReadTimeout(10000);
-
-                    InputStream is  = ((InputStream) conn.getContent());
+                    InputStream is  = response.body().byteStream();
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     byte[] buffer = new byte[1024];
                     while (true) {

@@ -13,8 +13,8 @@ public abstract class KFManagedObject {
 
     protected long id;
 
-    protected abstract void onCreate(Cursor cursor);
-    protected abstract ContentValues getContentValues();
+    public abstract void onCreate(Cursor cursor);
+    public abstract ContentValues getContentValues();
 
     public long getId() {
         return id;

@@ -1,9 +1,11 @@
 package com.appverlag.kf.kftools.ui;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.appverlag.kf.kftools.R;
 
@@ -34,6 +36,8 @@ public class KFLoadingView extends FrameLayout {
 
     private void initView(Context context) {
         View.inflate(context, R.layout.kftools_loading_container, this);
+        ((ProgressBar) findViewById(R.id.progressBar)).getIndeterminateDrawable().setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
+
         findViewById(R.id.errorButton).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
