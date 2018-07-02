@@ -54,7 +54,7 @@ public class KFImageManagerImageLoader {
         client.newCall(new Request.Builder().url(url).build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                runCompletionBlocks(null, url);
             }
 
             @Override

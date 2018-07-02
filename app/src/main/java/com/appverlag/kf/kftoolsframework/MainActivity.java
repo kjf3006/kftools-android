@@ -1,9 +1,12 @@
 package com.appverlag.kf.kftoolsframework;
 
 import android.Manifest;
+import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,13 +21,17 @@ import com.appverlag.kf.kftools.network.KFConnectionManager;
 import com.appverlag.kf.kftools.network.KFConnectionManagerCallback;
 import com.appverlag.kf.kftools.network.KFConnectionManagerJSONCallback;
 import com.appverlag.kf.kftools.other.KFExceptionHandler;
+import com.appverlag.kf.kftools.other.KFFilePicker;
 import com.appverlag.kf.kftools.other.KFRemoteLogger;
 import com.appverlag.kf.kftools.other.KFImagePicker;
 import com.appverlag.kf.kftools.permission.KFRunntimePermissionManager;
+import com.appverlag.kf.kftools.ui.KFBottomSheetDialog;
 import com.appverlag.kf.kftools.ui.KFImageView;
+import com.appverlag.kf.kftools.ui.KFRichTextView;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,8 +73,19 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonSection).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, KFSectionedRecyclerViewActivity.class);
-                MainActivity.this.startActivity(intent);
+                String [] options = {"TEST", "Test 2"};
+                KFBottomSheetDialog.Builder builder = new KFBottomSheetDialog.Builder();
+
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                KFBottomSheetDialog dialog = builder.create();
+                dialog.show(getSupportFragmentManager(), null);
+
             }
         });
 
@@ -92,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(boolean success) throws SecurityException {
                         if (success) {
-                            Intent intent = KFImagePicker.getPickImageIntent(MainActivity.this);
+                            Intent intent = KFFilePicker.getPickerIntent(MainActivity.this, true, false);
                             startActivityForResult(intent, 100);
                         }
                     }
@@ -131,14 +149,26 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        final KFRichTextView textView = findViewById(R.id.richTextView);
+        textView.setOnInitialLoadListener(new KFRichTextView.AfterInitialLoadListener() {
+            @Override
+            public void onAfterInitialLoad(boolean isReady) {
+                if (isReady) textView.setHtml("<p dir=\"ltr\">wir hoffen, dass Du wieder gut Zuhause angekommen bist und viele neue Eindr&#252;cke und tolle Erinnerungen gesammelt hast! Herzlichen Dank f&#252;r Deine <b>Teilnahme</b> an unserem Bergzeit Erlebnis. Wir haben uns gefreut, dass Du dabei warst!</p>\n");
+            }
+        });
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100 && resultCode == RESULT_OK) {
-            Bitmap bitmap = KFImagePicker.getImageFromResult(this, resultCode, data);
-            imageView.setImageBitmap(bitmap);
+            File file = KFFilePicker.getFileFromResult(this, resultCode, data);
+            Log.d("TEST", file.toString());
+
+            Uri uri = Uri.fromFile(file);
+            ContentResolver cR = getContentResolver();
+            String mime = cR.getType(KFFilePicker.getUriFromResult(this, resultCode, data));
+            Log.d("TEST", "mime: " + mime + "\n");
         }
     }
 }

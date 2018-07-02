@@ -104,22 +104,23 @@ public class KFImagePicker {
             bm = rotate(bm, rotation);
         }
         return bm;
+    }
 
-//        Bitmap bm = null;
-//        File imageFile = getTempFile(context);
-//        if (resultCode == Activity.RESULT_OK && imageReturnedIntent != null) {
-//            Uri selectedImage;
-//            if (imageReturnedIntent.getExtras() != null) {     /** CAMERA **/
-//                bm = (Bitmap) imageReturnedIntent.getExtras().get("data");
-//            } else if (imageReturnedIntent.getData() != null) {            /** ALBUM **/
-//                selectedImage = imageReturnedIntent.getData();
-//                bm = getImageResized(context, selectedImage);
-//                int rotation = getRotation(context, selectedImage, isCamera);
-//            }
-//
-//            bm = rotate(bm, rotation);
-//        }
-//        return bm;
+    public static Uri getUriFromResult(Context context, int resultCode, Intent imageReturnedIntent) {
+        Log.d(TAG, "getUriFromResult, resultCode: " + resultCode);
+        Bitmap bm = null;
+        File imageFile = getTempFile(context);
+        Uri selectedImage = null;
+        if (resultCode == Activity.RESULT_OK) {
+            boolean isCamera = (imageReturnedIntent == null || imageReturnedIntent.getData() == null  || imageReturnedIntent.getData().toString().contains(imageFile.toString()));
+            if (isCamera) {     /** CAMERA **/
+                selectedImage = FileProvider.getUriForFile(context, context.getPackageName() + ".kftools.fileprovider", getTempFile(context));
+            } else {            /** ALBUM **/
+                selectedImage = imageReturnedIntent.getData();
+            }
+            Log.d(TAG, "selectedImage: " + selectedImage);
+        }
+        return selectedImage;
     }
 
 
