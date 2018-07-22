@@ -47,9 +47,10 @@ import okhttp3.Request;
 public class KFWeatherManager {
 
     private static final String WEATHER_URL = "https://api.meteomatics.com";
-    private static final String WEATHER_PARAMETER = "t_2m:C,relative_humidity_2m:p,msl_pressure:hPa,wind_speed_10m:kmh,wind_dir_10m:d,fresh_snow_1h:cm,weather_symbol_1h:idx";
+    private static final String WEATHER_PARAMETER = "t_2m:C,relative_humidity_2m:p,msl_pressure:hPa,wind_speed_10m:kmh,wind_dir_10m:d,wind_gusts_10m_24h:kmh,fresh_snow_1h:cm,weather_symbol_1h:idx,total_cloud_cover:p,prob_precip_3h:p,precip_3h:mm,sunrise:sql,sunset:sql,moonrise:sql,moonset:sql,moon_vis_area:p,moon_phase:idx,moon_age:d,moon_light:p";
 
     private Geocoder geocoder;
+    private final Handler handler;
 
 
     /*
@@ -57,6 +58,7 @@ public class KFWeatherManager {
      */
     public KFWeatherManager (Context context) {
         geocoder = new Geocoder(context, Locale.GERMAN);
+        handler = new Handler(context.getApplicationContext().getMainLooper());
     }
 
 
@@ -138,7 +140,7 @@ public class KFWeatherManager {
 
                 JSONArray temperatures = parameterDataFromWeatherData(response, "t_2m:C");
                 JSONArray icons = parameterDataFromWeatherData(response, "weather_symbol_1h:idx");
-                JSONArray windDirections = parameterDataFromWeatherData(response, "wind_dir_10m");
+                JSONArray windDirections = parameterDataFromWeatherData(response, "wind_dir_10m:d");
                 JSONArray windSpeeds = parameterDataFromWeatherData(response, "wind_speed_10m:kmh");
                 JSONArray freshSnows = parameterDataFromWeatherData(response, "fresh_snow_1h:cm");
 
@@ -154,7 +156,13 @@ public class KFWeatherManager {
                     weather.add(entry);
                 }
 
-                completion.onComplete(weather);
+                final List<KFWeatherEntry> weatherF = weather;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        completion.onComplete(weatherF);
+                    }
+                });
             }
         }).start();
     }
@@ -188,5 +196,14 @@ public class KFWeatherManager {
         long diff = d2.getTime() - d1.getTime();
         return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
     }
+
+    /*
+     *** helper ***
+     */
+
+    private void runOnUiThread(Runnable r) {
+        handler.post(r);
+    }
+
 
 }

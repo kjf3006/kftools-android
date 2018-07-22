@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
+import com.appverlag.kf.kftools.images.KFImageContainer;
 import com.appverlag.kf.kftools.images.KFImageManager;
 import com.appverlag.kf.kftools.images.KFImageManagerCompletionHandler;
 
@@ -17,6 +18,9 @@ import com.appverlag.kf.kftools.images.KFImageManagerCompletionHandler;
  * Created by kevinflachsmann on 10.03.16.
  */
 public class KFImageView extends AppCompatImageView {
+
+    public enum Size {SMALL, MEDIUM, LARGE};
+
 
     private String savedURL;
     private float aspectRatio = 0;
@@ -158,6 +162,21 @@ public class KFImageView extends AppCompatImageView {
 
     }
 
+
+    /*
+    container
+     */
+
+    public void setImage(KFImageContainer container, Integer placeholder, Size size) {
+        switch (container.getType()) {
+            case KEY:
+                setImageWithKey(container.getKey(), placeholder);
+                break;
+            case URL:
+                setImageWithURL(container.getUrl(), placeholder);
+                break;
+        }
+    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
