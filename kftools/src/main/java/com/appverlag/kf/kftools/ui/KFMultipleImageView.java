@@ -51,7 +51,7 @@ public class KFMultipleImageView extends FrameLayout {
     public void setImages(List<KFImageContainer> images) {
         container.removeAllViews();
 
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
 
         ShapeDrawable divider = new ShapeDrawable();
         divider.setIntrinsicWidth(px);
@@ -107,7 +107,7 @@ public class KFMultipleImageView extends FrameLayout {
         return onImageClickListener;
     }
 
-    public void setOnClickListener(OnImageClickListener onImageClickListener) {
+    public void setOnImageClickListener(OnImageClickListener onImageClickListener) {
         this.onImageClickListener = onImageClickListener;
     }
 }

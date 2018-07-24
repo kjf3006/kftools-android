@@ -21,29 +21,21 @@ public class KFLocationManagerRequest {
     private Location lastEvaluatedLocation;
     private KFLocationManagerRequestCallback callback;
     private int requestType, requestAccuracy;
-    private boolean isCanceled;
 
     public KFLocationManagerRequest(int requestType, int requestAccuracy, KFLocationManagerRequestCallback callback) {
         this.requestType = requestType;
         this.requestAccuracy = requestAccuracy;
         this.callback = callback;
-        this.isCanceled = false;
     }
 
 
     public void updateWithLocation(Location location) {
         if (requestType == TYPE_NONE) return;
-        else if (requestType == TYPE_SINGLE) {
-            if (location.getAccuracy() > horizontalAccuracyForRequestAccuracry()) return;
+
+        if (location.getAccuracy() > horizontalAccuracyForRequestAccuracry()) return;
+        if (lastEvaluatedLocation == null || lastEvaluatedLocation.distanceTo(location) > distanceForRequestAccuracy()) {
             runCallbackWithLocation(location);
-            isCanceled = true;
-        }
-        else if (requestType == TYPE_SUBSCRIPTION) {
-            if (location.getAccuracy() > horizontalAccuracyForRequestAccuracry()) return;
-            if (lastEvaluatedLocation == null || lastEvaluatedLocation.distanceTo(location) > distanceForRequestAccuracy()) {
-                runCallbackWithLocation(location);
-                lastEvaluatedLocation = location;
-            }
+            lastEvaluatedLocation = location;
         }
     }
 
@@ -92,14 +84,6 @@ public class KFLocationManagerRequest {
 
     public void setRequestAccuracy(int requestAccuracy) {
         this.requestAccuracy = requestAccuracy;
-    }
-
-    public boolean isCanceled() {
-        return isCanceled;
-    }
-
-    public void setCanceled(boolean canceled) {
-        isCanceled = canceled;
     }
 
     public interface KFLocationManagerRequestCallback {

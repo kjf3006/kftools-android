@@ -12,17 +12,19 @@ public class KFImageContainer {
 
 
     private String key, url;
-    private Type type;
+    private Type type = Type.KEY;
 
     public static KFImageContainer key(String key) {
         KFImageContainer container = new KFImageContainer();
         container.key = key;
+        container.type = Type.KEY;
         return container;
     }
 
     public static KFImageContainer url(String url) {
         KFImageContainer container = new KFImageContainer();
         container.url = url;
+        container.type = Type.URL;
         return container;
     }
 
@@ -44,9 +46,5 @@ public class KFImageContainer {
 
     public Type getType() {
         return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 }
