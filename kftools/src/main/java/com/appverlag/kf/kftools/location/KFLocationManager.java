@@ -65,8 +65,9 @@ public class KFLocationManager implements LocationListener {
 
     public void addRequest(KFLocationManagerRequest request) {
         if (request.getRequestType() == KFLocationManagerRequest.TYPE_NONE) return;
-        if (request.getRequestType() == KFLocationManagerRequest.TYPE_SINGLE) {
-            if (currentLocation != null) request.updateWithLocation(currentLocation);
+        if (currentLocation != null && request.getRequestType() == KFLocationManagerRequest.TYPE_SINGLE && request.getRequestAccuracy() == KFLocationManagerRequest.ACCURACY_DEFAULT) {
+            request.updateWithLocation(currentLocation);
+            return;
         }
         requests.add(request);
         locationManagerNeedsUpdate();
@@ -139,9 +140,7 @@ public class KFLocationManager implements LocationListener {
         List<KFLocationManagerRequest> deleteRequests = new ArrayList<>();
         for (KFLocationManagerRequest request : requests) {
             if (request.getRequestType() ==  KFLocationManagerRequest.TYPE_SINGLE) deleteRequests.add(request);
-            else {
-                request.updateWithLocation(location);
-            }
+            request.updateWithLocation(location);
         }
         removeRequests(deleteRequests);
     }
