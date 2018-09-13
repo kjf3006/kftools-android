@@ -125,6 +125,7 @@ public class KFLocationManager implements LocationListener {
             minUpdateTime = 500;
         }
 
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minUpdateTime, minUpdateDistance, this);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minUpdateTime, minUpdateDistance, this);
     }
 
