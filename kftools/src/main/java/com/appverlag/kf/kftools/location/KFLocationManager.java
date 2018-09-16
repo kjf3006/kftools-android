@@ -11,6 +11,7 @@ import android.support.annotation.RequiresPermission;
 import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -27,7 +28,7 @@ public class KFLocationManager implements LocationListener {
     private static KFLocationManager instance;
     private LocationManager locationManager;
     private Location currentLocation;
-    private int currentRequestType, currentRequestAccuracy;
+    private int currentRequestType, currentRequestAccuracy, currentRequestDistanceFilter;
     private List<KFLocationManagerRequest> requests;
     private Context context;
 
@@ -41,6 +42,7 @@ public class KFLocationManager implements LocationListener {
         currentLocation = null;
         currentRequestType = KFLocationManagerRequest.TYPE_NONE;
         currentRequestAccuracy = KFLocationManagerRequest.ACCURACY_DEFAULT;
+        currentRequestDistanceFilter = KFLocationManagerRequest.DISTANCE_FILTER_DEFAULT;
     }
 
     public static KFLocationManager getInstance (Context context) {
@@ -65,9 +67,10 @@ public class KFLocationManager implements LocationListener {
 
     public void addRequest(KFLocationManagerRequest request) {
         if (request.getRequestType() == KFLocationManagerRequest.TYPE_NONE) return;
-        if (currentLocation != null && request.getRequestType() == KFLocationManagerRequest.TYPE_SINGLE && request.getRequestAccuracy() == KFLocationManagerRequest.ACCURACY_DEFAULT) {
-            request.updateWithLocation(currentLocation);
-            return;
+
+        if (currentLocation != null && currentLocation.getTime() > (System.currentTimeMillis() - 1000 * 60)) {
+            boolean consumed = request.updateWithLocation(currentLocation);
+            if (consumed && request.getRequestType() == KFLocationManagerRequest.TYPE_SINGLE) return;
         }
         requests.add(request);
         locationManagerNeedsUpdate();
@@ -93,15 +96,18 @@ public class KFLocationManager implements LocationListener {
 
         int requestType = KFLocationManagerRequest.TYPE_NONE;
         int requestAccuracy = KFLocationManagerRequest.ACCURACY_DEFAULT;
+        int distanceFilter = KFLocationManagerRequest.DISTANCE_FILTER_DEFAULT;
 
         for (KFLocationManagerRequest request :  requests) {
             requestType = Math.max(requestType, request.getRequestType());
-            requestAccuracy = Math.max(requestAccuracy, request.getRequestAccuracy());
+            requestAccuracy = Math.min(requestAccuracy, request.getRequestAccuracy());
+            distanceFilter = Math.min(distanceFilter, request.getDistanceFilter());
         }
-        if (currentRequestType == requestType && requestAccuracy == currentRequestAccuracy) return;
+        if (currentRequestType == requestType && requestAccuracy == currentRequestAccuracy && currentRequestDistanceFilter == distanceFilter) return;
 
         currentRequestType = requestType;
         currentRequestAccuracy = requestAccuracy;
+        currentRequestDistanceFilter = distanceFilter;
 
         //type
         if (requestType == KFLocationManagerRequest.TYPE_NONE) {
@@ -109,24 +115,8 @@ public class KFLocationManager implements LocationListener {
             return;
         }
 
-
-        //accuracy
-        long minUpdateTime = 20000, minUpdateDistance = 100;
-        if (requestAccuracy == KFLocationManagerRequest.ACCURACY_DEFAULT) {
-            minUpdateDistance = 50;
-            minUpdateTime = 20000;
-        }
-        else if (requestAccuracy == KFLocationManagerRequest.ACCURACY_MEDIUM) {
-            minUpdateDistance = 10;
-            minUpdateTime = 2000;
-        }
-        else if (requestAccuracy == KFLocationManagerRequest.ACCURACY_BEST) {
-            minUpdateDistance = 1;
-            minUpdateTime = 500;
-        }
-
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minUpdateTime, minUpdateDistance, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minUpdateTime, minUpdateDistance, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, currentRequestDistanceFilter, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, currentRequestDistanceFilter, this);
     }
 
 
@@ -140,8 +130,8 @@ public class KFLocationManager implements LocationListener {
 
         List<KFLocationManagerRequest> deleteRequests = new ArrayList<>();
         for (KFLocationManagerRequest request : requests) {
-            if (request.getRequestType() ==  KFLocationManagerRequest.TYPE_SINGLE) deleteRequests.add(request);
-            request.updateWithLocation(location);
+            boolean consumed = request.updateWithLocation(location);
+            if (consumed && request.getRequestType() == KFLocationManagerRequest.TYPE_SINGLE) deleteRequests.add(request);
         }
         removeRequests(deleteRequests);
     }

@@ -10,9 +10,14 @@ import android.location.Location;
  */
 public class KFLocationManagerRequest {
 
-    public static final int ACCURACY_DEFAULT = 1;
+    public static final int ACCURACY_DEFAULT = 100;
     public static final int ACCURACY_MEDIUM = 50;
-    public static final int ACCURACY_BEST = 100;
+    public static final int ACCURACY_BEST = 25;
+
+    public static final int DISTANCE_FILTER_DEFAULT = 100;
+    public static final int DISTANCE_FILTER_MEDIUM = 30;
+    public static final int DISTANCE_FILTER_BEST = 1;
+
 
     public static final int TYPE_NONE = 0;
     public static final int TYPE_SINGLE = 1;
@@ -20,42 +25,33 @@ public class KFLocationManagerRequest {
 
     private Location lastEvaluatedLocation;
     private KFLocationManagerRequestCallback callback;
-    private int requestType, requestAccuracy;
+    private int requestType, requestAccuracy, distanceFilter;
 
+    //backward support only
+    @Deprecated
     public KFLocationManagerRequest(int requestType, int requestAccuracy, KFLocationManagerRequestCallback callback) {
+        this(requestType, requestAccuracy, DISTANCE_FILTER_DEFAULT, callback);
+    }
+
+    public KFLocationManagerRequest(int requestType, int requestAccuracy, int distanceFilter, KFLocationManagerRequestCallback callback) {
         this.requestType = requestType;
         this.requestAccuracy = requestAccuracy;
         this.callback = callback;
     }
 
 
-    public void updateWithLocation(Location location) {
-        if (requestType == TYPE_NONE) return;
+    public boolean updateWithLocation(Location location) {
+        if (requestType == TYPE_NONE) return false;
 
-        if (location.getAccuracy() > horizontalAccuracyForRequestAccuracry()) return;
-        if (lastEvaluatedLocation == null || lastEvaluatedLocation.distanceTo(location) > distanceForRequestAccuracy()) {
+        if (location.getAccuracy() > requestAccuracy) return false;
+        if (lastEvaluatedLocation == null || lastEvaluatedLocation.distanceTo(location) > distanceFilter) {
             runCallbackWithLocation(location);
             lastEvaluatedLocation = location;
+            return true;
         }
+        return false;
     }
 
-
-
-    private int distanceForRequestAccuracy() {
-        int distance = 0;
-        if (requestAccuracy == ACCURACY_DEFAULT) distance = 30;
-        else if (requestAccuracy == ACCURACY_MEDIUM) distance = 10;
-        else if (requestAccuracy == ACCURACY_BEST) distance = 1;
-        return distance;
-    }
-
-    private int horizontalAccuracyForRequestAccuracry() {
-        int distance = 0;
-        if (requestAccuracy == ACCURACY_DEFAULT) distance = 100;
-        else if (requestAccuracy == ACCURACY_MEDIUM) distance = 50;
-        else if (requestAccuracy == ACCURACY_BEST) distance = 25;
-        return distance;
-    }
 
     private void runCallbackWithLocation(Location location) {
         if (callback != null) callback.didUpdateLocation(location);
@@ -84,6 +80,14 @@ public class KFLocationManagerRequest {
 
     public void setRequestAccuracy(int requestAccuracy) {
         this.requestAccuracy = requestAccuracy;
+    }
+
+    public int getDistanceFilter() {
+        return distanceFilter;
+    }
+
+    public void setDistanceFilter(int distanceFilter) {
+        this.distanceFilter = distanceFilter;
     }
 
     public interface KFLocationManagerRequestCallback {
