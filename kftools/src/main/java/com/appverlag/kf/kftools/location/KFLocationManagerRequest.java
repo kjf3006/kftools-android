@@ -37,6 +37,7 @@ public class KFLocationManagerRequest {
         this.requestType = requestType;
         this.requestAccuracy = requestAccuracy;
         this.callback = callback;
+        this.distanceFilter = distanceFilter;
     }
 
 
