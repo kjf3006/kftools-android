@@ -43,8 +43,10 @@ public class KFImageManagerImageMapLoader {
             @Override
             public void run() {
                 Bitmap bitmap = null;
-                String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=18&size=512x512&scale=2&format=jpg";
-                if (satellite) url += "&maptype=hybrid";
+                String style = "streets-v10";
+                if (satellite) style = "satellite-streets-v10";
+                String url = "https://api.mapbox.com/styles/v1/mapbox/" + style +"/static/" + longitude + "," + latitude + ",17.0,0,0/500x500@2x?access_token=pk.eyJ1Ijoia2V2aW5mbGFjaHNtYW5uIiwiYSI6ImNqbTk3dW1nYjA2ZzYzcHMza2JxM3dmZXEifQ.6e4p7rwneugs1j4uv5qB4Q";
+
                 System.out.println("Downloading map snapshot...");
                 try {
                     URLConnection conn = new URL(url).openConnection();
