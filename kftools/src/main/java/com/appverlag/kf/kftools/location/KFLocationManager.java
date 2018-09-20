@@ -11,6 +11,7 @@ import android.support.annotation.RequiresPermission;
 import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class KFLocationManager implements LocationListener {
     private LocationManager locationManager;
     private Location currentLocation;
     private int currentRequestType, currentRequestAccuracy, currentRequestDistanceFilter;
-    private List<KFLocationManagerRequest> requests;
+    private List<KFLocationManagerRequest> requests = Collections.synchronizedList(new ArrayList<KFLocationManagerRequest>());
     private Context context;
 
     /*
@@ -38,7 +39,6 @@ public class KFLocationManager implements LocationListener {
     private KFLocationManager (Context context) {
         this.context = context.getApplicationContext();
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        requests = new ArrayList<>();
         currentLocation = null;
         currentRequestType = KFLocationManagerRequest.TYPE_NONE;
         currentRequestAccuracy = KFLocationManagerRequest.ACCURACY_DEFAULT;
