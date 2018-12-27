@@ -61,9 +61,7 @@ public class KFSectionedManagedObjectList<T extends KFManagedObject> {
 
     @Override
     public void finalize() {
-        for (Cursor cursor : sectionContent) {
-            cursor.close();
-        }
+        close();
         try {
             super.finalize();
         }

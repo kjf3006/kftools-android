@@ -33,4 +33,8 @@ public abstract class KFManagedObject {
     public boolean equals(Object obj) {
         return obj instanceof KFManagedObject &&(obj == this || ((KFManagedObject) obj).getId() == id);
     }
+
+    public void prepareForSave() {
+
+    }
 }

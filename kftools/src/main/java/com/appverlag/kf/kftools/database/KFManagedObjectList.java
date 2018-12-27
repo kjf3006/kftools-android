@@ -38,6 +38,7 @@ public class KFManagedObjectList<T extends KFManagedObject> implements Iterable<
             catch (Exception e) {
                 e.printStackTrace();
             }
+            if (objects.size() == getCount()) close();
         }
 
         return object;
@@ -52,6 +53,7 @@ public class KFManagedObjectList<T extends KFManagedObject> implements Iterable<
         for (int i = 0; i < getCount(); i++) {
             objects.add(getObject(i));
         }
+        close();
         return objects;
     }
 

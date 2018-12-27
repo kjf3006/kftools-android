@@ -18,7 +18,6 @@ public class KFLocationManagerRequest {
     public static final int DISTANCE_FILTER_MEDIUM = 30;
     public static final int DISTANCE_FILTER_BEST = 1;
 
-
     public static final int TYPE_NONE = 0;
     public static final int TYPE_SINGLE = 1;
     public static final int TYPE_SUBSCRIPTION = 2;
