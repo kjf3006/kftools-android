@@ -21,60 +21,17 @@ public class KFWeatherForecast {
     private Location location;
     private String locationName;
     private Date validTo;
-    private int identifier;
 
-    public KFWeatherForecast(JSONObject response) {
+    public KFWeatherForecast() {
         weatherData = new ArrayList<>();
-        validTo = new Date();
-        identifier = 0;
+        validTo = new Date(0);
         location = new Location("");
-
-        try {
-            int cod = response.getInt("cod");
-            if (cod != 200) return;
-
-            JSONObject city = response.getJSONObject("city");
-            JSONObject coord = city.getJSONObject("coord");
-            location.setLatitude(coord.getDouble("lat"));
-            location.setLongitude(coord.getDouble("lon"));
-            locationName = city.getString("name");
-
-            JSONArray list = response.getJSONArray("list");
-            for (int i = 0; i < list.length(); i++) {
-                JSONObject object = list.getJSONObject(i);
-                KFWeatherEntry entry = new KFWeatherEntry();
-                entry.setDate(new Date(object.optLong("dt")*1000));
-
-                JSONObject main = object.getJSONObject("main");
-                entry.setTemperature(main.optDouble("temp"));
-
-                JSONObject snow = object.getJSONObject("snow");
-                entry.setFreshSnow(snow.optDouble("3h"));
-
-                JSONObject wind = object.getJSONObject("wind");
-                entry.setWindSpeed(wind.optDouble("speed"));
-                entry.setWindDirection(wind.optDouble("deg"));
-
-                JSONArray weather = object.getJSONArray("weather");
-                if (weather.length() > 0) {
-                    JSONObject weatherObject = weather.getJSONObject(0);
-                    entry.setWeatherSymbolCode(weatherObject.optString("icon"));
-                }
-
-
-                if (i == 0) validTo = entry.getDate();
-                weatherData.add(entry);
-            }
-
-            identifier = (validTo.getTime() + "-" + location.getLatitude() + "-" + location.getLongitude()).hashCode();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
+
+
     public boolean isValid() {
-        return validTo.after(new Date());
+        return validTo.after(new Date()) && weatherData.size() > 0;
     }
 
     /*
@@ -97,14 +54,6 @@ public class KFWeatherForecast {
         this.location = location;
     }
 
-    public int getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(int identifier) {
-        this.identifier = identifier;
-    }
-
     public Date getValidTo() {
         return validTo;
     }
@@ -119,15 +68,5 @@ public class KFWeatherForecast {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
-    }
-
-    @Override
-    public int hashCode() {
-        return String.valueOf(identifier).hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof KFWeatherForecast &&(obj == this || ((KFWeatherForecast) obj).getIdentifier() == identifier);
     }
 }

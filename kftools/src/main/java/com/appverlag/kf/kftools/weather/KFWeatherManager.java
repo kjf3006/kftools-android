@@ -52,10 +52,10 @@ public class KFWeatherManager {
 
     private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast";
 
-    private final Handler handler;
     private static KFWeatherManager instance;
 
     private LruCache<String, KFWeatherForecast> weatherCache;
+    private KFWeatherParserProtocol weatherParser;
 
     /*
     singleton
@@ -72,8 +72,8 @@ public class KFWeatherManager {
     *** lifecycle ***
      */
     public KFWeatherManager () {
-        handler = new Handler(Looper.getMainLooper());
         weatherCache = new LruCache<>(10);
+        weatherParser = new KFWeatherParserOWM();
     }
 
 
@@ -101,14 +101,14 @@ public class KFWeatherManager {
         KFConnectionManager.getInstance().sendJSONRequest(request, new KFConnectionManager.KFConnectionManagerCompletionHandler() {
             @Override
             public void onSuccess(JSONObject response) {
-                KFWeatherForecast forecast = new KFWeatherForecast(response);
-                weatherCache.put(identifier, forecast);
+                KFWeatherForecast forecast = weatherParser.parseResponse(response);
+                if (forecast.isValid()) weatherCache.put(identifier, forecast);
                 completion.onComplete(forecast);
             }
 
             @Override
             public void onError() {
-                completion.onComplete(null);
+                completion.onComplete(new KFWeatherForecast());
             }
         });
 

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +18,8 @@ import android.view.View;
 
 import com.android.billingclient.api.Purchase;
 import com.appverlag.kf.kftools.billing.KFBillingManager;
+import com.appverlag.kf.kftools.location.KFLocationManager;
+import com.appverlag.kf.kftools.location.KFLocationManagerRequest;
 import com.appverlag.kf.kftools.network.KFConnectionManager;
 import com.appverlag.kf.kftools.network.KFConnectionManagerCallback;
 import com.appverlag.kf.kftools.network.KFConnectionManagerJSONCallback;
@@ -28,6 +31,8 @@ import com.appverlag.kf.kftools.permission.KFRunntimePermissionManager;
 import com.appverlag.kf.kftools.ui.KFBottomSheetDialog;
 import com.appverlag.kf.kftools.ui.KFImageView;
 import com.appverlag.kf.kftools.ui.KFRichTextView;
+import com.appverlag.kf.kftools.weather.KFWeatherForecast;
+import com.appverlag.kf.kftools.weather.KFWeatherManager;
 
 import org.json.JSONObject;
 
@@ -136,18 +141,39 @@ public class MainActivity extends AppCompatActivity {
         imageView.setMapSnapshotForOptions(47.2, 10.7, true, 0, 0);
 
 
-//        Request request = new Request.Builder().url("http://login-auf-polizei.at/api/events").build();
-//        KFConnectionManager.getInstance().sendRequest(request, false, new KFConnectionManagerJSONCallback() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                System.out.println(response);
-//            }
-//
-//            @Override
-//            public void onFailure() {
-//
-//            }
-//        });
+        KFConnectionManager.RequestParams p = new KFConnectionManager.RequestParams();
+        p.put("test", "akjhdfad");
+        Request request = new Request.Builder().url("https://content-appverlag.com/hdr.php?q=123").post(p.getParams()).build();
+        KFConnectionManager.getInstance().sendJSONRequest(request, new KFConnectionManager.KFConnectionManagerCompletionHandler() {
+            @Override
+            public void onSuccess(JSONObject response) {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        }, false, false);
+
+        KFRunntimePermissionManager.check(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, new KFRunntimePermissionManager.KFRunntimePermissionManagerCallback() {
+            @Override
+            public void onSuccess(boolean success) throws SecurityException {
+
+            }
+        });
+
+        KFLocationManager.getInstance(this).addRequest(new KFLocationManagerRequest(KFLocationManagerRequest.TYPE_SINGLE, KFLocationManagerRequest.ACCURACY_DEFAULT, KFLocationManagerRequest.DISTANCE_FILTER_DEFAULT, new KFLocationManagerRequest.KFLocationManagerRequestCallback() {
+            @Override
+            public void didUpdateLocation(Location location) {
+                KFWeatherManager.getInstance().getWeatherDataForLocation(location, new KFWeatherManager.KFWeatherManagerCompletionHandler() {
+                    @Override
+                    public void onComplete(KFWeatherForecast forecast) {
+                        Log.d("TEST", forecast.toString());
+                    }
+                });
+            }
+        }));
 
         final KFRichTextView textView = findViewById(R.id.richTextView);
         textView.setOnInitialLoadListener(new KFRichTextView.AfterInitialLoadListener() {

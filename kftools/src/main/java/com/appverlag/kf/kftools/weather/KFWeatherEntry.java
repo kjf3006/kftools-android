@@ -18,18 +18,16 @@ import java.util.TimeZone;
  * Created by kevinflachsmann on 07.06.17.
  */
 public class KFWeatherEntry {
-
-    private static final String WEATHER_IMAGE_URL = "https://openweathermap.org/img/w/";
     private static String [] windDirectionValues = {"N","NNO","NO","ONO","O","OSO","SO","SSO","S","SSW","SW","WSW","W","WNW","NW","NNW","N"};
 
     private Date date;
-    private String windDirectionDescription, weatherSymbolCode;
+    private String windDirectionDescription, weatherSymbolCode, weatherSymbolURL;
     //private float relativeHumidity, atmosphericPressure;
     private double temperature, freshSnow, windSpeed, windDirection;
 
 
     public KFWeatherEntry() {
-
+        date = new Date(0);
     }
 
 
@@ -99,12 +97,12 @@ public class KFWeatherEntry {
     }
 
     public String getWeatherSymbolURL() {
-        return WEATHER_IMAGE_URL + weatherSymbolCode + ".png";
+        return weatherSymbolURL;
     }
 
-//    public void setWeatherSymbolURL(String weatherSymbolURL) {
-//        this.weatherSymbolURL = weatherSymbolURL;
-//    }
+    public void setWeatherSymbolURL(String weatherSymbolURL) {
+        this.weatherSymbolURL = weatherSymbolURL;
+    }
 
     public String getWeatherSymbolCode() {
         return weatherSymbolCode;

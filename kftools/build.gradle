@@ -31,10 +31,10 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
-    api 'com.squareup.okhttp3:okhttp:3.11.0'
+    compile 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
-    api 'com.android.billingclient:billing:1.1'
+    compile 'com.android.billingclient:billing:1.1'
 }
 
 apply from: 'install.gradle'
