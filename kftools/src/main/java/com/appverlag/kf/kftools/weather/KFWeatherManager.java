@@ -50,7 +50,7 @@ import okhttp3.Request;
  */
 public class KFWeatherManager {
 
-    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast";
+    private static final String WEATHER_URL = "https://content-appverlag.com/weather/weather.php";
 
     private static KFWeatherManager instance;
 
@@ -83,7 +83,7 @@ public class KFWeatherManager {
      */
 
     public void getWeatherDataForLocation(@NonNull Location location, @NonNull final KFWeatherManagerCompletionHandler completion) {
-        final String identifier = String.format(Locale.US, "%.3f-%.3f", location.getLatitude(), location.getLongitude());
+        final String identifier = String.format(Locale.US, "%.2f-%.2f", location.getLatitude(), location.getLongitude());
 
         KFWeatherForecast forecast = weatherCache.get(identifier);
         if (forecast != null) {
@@ -94,7 +94,7 @@ public class KFWeatherManager {
             weatherCache.remove(identifier);
         }
 
-        String url = WEATHER_URL + "?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&units=metric&APPID=827fd0193d2bfe99f1c6c53ed1489db9";
+        String url = WEATHER_URL + "?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&units=metric";
 
         Request request = new Request.Builder().url(url).build();
 
