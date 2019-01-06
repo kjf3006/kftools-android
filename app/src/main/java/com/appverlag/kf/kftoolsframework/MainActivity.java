@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(KFWeatherForecast forecast) {
                         Log.d("TEST", forecast.toString());
+                        Log.d("TEST", forecast.getLocationName());
                     }
                 });
             }

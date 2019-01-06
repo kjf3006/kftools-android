@@ -22,8 +22,12 @@ public class KFWeatherEntry {
 
     private Date date;
     private String windDirectionDescription, weatherSymbolCode, weatherSymbolURL;
-    //private float relativeHumidity, atmosphericPressure;
-    private double temperature, freshSnow, windSpeed, windDirection;
+    private float temperature, freshSnow, windSpeed, windDirection, atmosphericPressure, relativeHumidity, cloudCover;
+
+    /*units:
+    snow - mm
+    wind - m/s
+     */
 
 
     public KFWeatherEntry() {
@@ -39,35 +43,35 @@ public class KFWeatherEntry {
         this.date = date;
     }
 
-    public double getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
 
-//    public float getRelativeHumidity() {
-//        return relativeHumidity;
-//    }
-//
-//    public void setRelativeHumidity(float relativeHumidity) {
-//        this.relativeHumidity = relativeHumidity;
-//    }
+    public float getRelativeHumidity() {
+        return relativeHumidity;
+    }
 
-//    public float getAtmosphericPressure() {
-//        return atmosphericPressure;
-//    }
-//
-//    public void setAtmosphericPressure(float atmosphericPressure) {
-//        this.atmosphericPressure = atmosphericPressure;
-//    }
+    public void setRelativeHumidity(float relativeHumidity) {
+        this.relativeHumidity = relativeHumidity;
+    }
 
-    public double getWindSpeed() {
+    public float getAtmosphericPressure() {
+        return atmosphericPressure;
+    }
+
+    public void setAtmosphericPressure(float atmosphericPressure) {
+        this.atmosphericPressure = atmosphericPressure;
+    }
+
+    public float getWindSpeed() {
         return windSpeed;
     }
 
-    public void setWindSpeed(double windSpeed) {
+    public void setWindSpeed(float windSpeed) {
         this.windSpeed = windSpeed;
     }
 
@@ -75,24 +79,20 @@ public class KFWeatherEntry {
         return windDirectionDescription;
     }
 
-//    public void setWindDirectionDescription(String windDirectionDescription) {
-//        this.windDirectionDescription = windDirectionDescription;
-//    }
-
-    public double getWindDirection() {
+    public float getWindDirection() {
         return windDirection;
     }
 
-    public void setWindDirection(double windDirection) {
+    public void setWindDirection(float windDirection) {
         this.windDirection = windDirection;
         this.windDirectionDescription = windDirectionValues[(int) Math.round(windDirection/22.5)];
     }
 
-    public double getFreshSnow() {
+    public float getFreshSnow() {
         return freshSnow;
     }
 
-    public void setFreshSnow(double freshSnow) {
+    public void setFreshSnow(float freshSnow) {
         this.freshSnow = freshSnow;
     }
 
@@ -110,5 +110,21 @@ public class KFWeatherEntry {
 
     public void setWeatherSymbolCode(String weatherSymbolCode) {
         this.weatherSymbolCode = weatherSymbolCode;
+    }
+
+//    public float getWindGust() {
+//        return windGust;
+//    }
+//
+//    public void setWindGust(float windGust) {
+//        this.windGust = windGust;
+//    }
+
+    public float getCloudCover() {
+        return cloudCover;
+    }
+
+    public void setCloudCover(float cloudCover) {
+        this.cloudCover = cloudCover;
     }
 }

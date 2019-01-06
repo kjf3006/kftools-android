@@ -41,15 +41,20 @@ public class KFWeatherParserOWM implements KFWeatherParserProtocol {
                     entry.setDate(new Date(object.optLong("dt")*1000));
 
                     JSONObject main = object.getJSONObject("main");
-                    entry.setTemperature(main.optDouble("temp"));
+                    entry.setTemperature((float)main.optDouble("temp"));
+                    entry.setAtmosphericPressure((float)main.optDouble("pressure"));
+                    entry.setRelativeHumidity((float)main.optDouble("humidity"));
 
                     JSONObject snow = object.optJSONObject("snow");
-                    if (snow != null) entry.setFreshSnow(snow.optDouble("3h"));
+                    if (snow != null) entry.setFreshSnow((float)snow.optDouble("3h"));
+
+                    JSONObject clouds = object.optJSONObject("clouds");
+                    if (clouds != null) entry.setCloudCover((float)clouds.optDouble("all"));
 
                     JSONObject wind = object.optJSONObject("wind");
                     if (wind != null) {
-                        entry.setWindSpeed(wind.optDouble("speed"));
-                        entry.setWindDirection(wind.optDouble("deg"));
+                        entry.setWindSpeed((float)wind.optDouble("speed"));
+                        entry.setWindDirection((float)wind.optDouble("deg"));
                     }
 
                     JSONArray weather = object.getJSONArray("weather");

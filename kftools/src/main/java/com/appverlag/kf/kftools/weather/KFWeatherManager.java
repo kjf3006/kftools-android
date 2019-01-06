@@ -71,7 +71,7 @@ public class KFWeatherManager {
     /*
     *** lifecycle ***
      */
-    public KFWeatherManager () {
+    private KFWeatherManager () {
         weatherCache = new LruCache<>(10);
         weatherParser = new KFWeatherParserOWM();
     }

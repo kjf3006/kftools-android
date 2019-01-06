@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -68,5 +69,33 @@ public class KFWeatherForecast {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public List<KFWeatherEntry> getWeatherDataForDay(int day, int month, int year) {
+
+        Calendar calendarStart = Calendar.getInstance();
+        calendarStart.set(Calendar.DAY_OF_MONTH, day);
+        calendarStart.set(Calendar.MONTH, month);
+        calendarStart.set(Calendar.YEAR, year);
+        calendarStart.set(Calendar.MINUTE, 0);
+        calendarStart.set(Calendar.SECOND, 0);
+        calendarStart.set(Calendar.HOUR_OF_DAY, 0);
+        calendarStart.set(Calendar.MILLISECOND, 0);
+
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTime(calendarStart.getTime());
+        calendarEnd.add(Calendar.DAY_OF_MONTH, 1);
+
+        Date startDate = calendarStart.getTime();
+        Date endDate = calendarEnd.getTime();
+
+        List<KFWeatherEntry> data = new ArrayList<>();
+        for (KFWeatherEntry entry : weatherData) {
+            if (entry.getDate().after(endDate)) break;
+            if (entry.getDate().before(startDate)) continue;
+            data.add(entry);
+        }
+
+        return data;
     }
 }
