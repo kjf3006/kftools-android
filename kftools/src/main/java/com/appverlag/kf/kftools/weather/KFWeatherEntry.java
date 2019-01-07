@@ -21,11 +21,12 @@ public class KFWeatherEntry {
     private static String [] windDirectionValues = {"N","NNO","NO","ONO","O","OSO","SO","SSO","S","SSW","SW","WSW","W","WNW","NW","NNW","N"};
 
     private Date date;
-    private String windDirectionDescription, weatherSymbolCode, weatherSymbolURL;
-    private float temperature, freshSnow, windSpeed, windDirection, atmosphericPressure, relativeHumidity, cloudCover;
+    private String windDirectionDescription, windDirectionSymbolURL, weatherSymbolCode, weatherSymbolURL;
+    private float temperature, freshSnow, rain, windSpeed, windDirection, atmosphericPressure, relativeHumidity, cloudCover;
 
     /*units:
     snow - mm
+    rain - mm
     wind - m/s
      */
 
@@ -86,6 +87,7 @@ public class KFWeatherEntry {
     public void setWindDirection(float windDirection) {
         this.windDirection = windDirection;
         this.windDirectionDescription = windDirectionValues[(int) Math.round(windDirection/22.5)];
+        this.windDirectionSymbolURL = "https://content-appverlag.com/static/images/weather/wind/" + this.windDirectionDescription + ".png";
     }
 
     public float getFreshSnow() {
@@ -96,8 +98,20 @@ public class KFWeatherEntry {
         this.freshSnow = freshSnow;
     }
 
+    public float getRain() {
+        return rain;
+    }
+
+    public void setRain(float rain) {
+        this.rain = rain;
+    }
+
     public String getWeatherSymbolURL() {
         return weatherSymbolURL;
+    }
+
+    public String getWindDirectionSymbolURL() {
+        return windDirectionSymbolURL;
     }
 
     public void setWeatherSymbolURL(String weatherSymbolURL) {
@@ -126,5 +140,9 @@ public class KFWeatherEntry {
 
     public void setCloudCover(float cloudCover) {
         this.cloudCover = cloudCover;
+    }
+
+    public float getPrecipitation() {
+        return freshSnow == 0 ? rain : freshSnow;
     }
 }
