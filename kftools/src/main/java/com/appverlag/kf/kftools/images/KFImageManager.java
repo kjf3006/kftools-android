@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.content.FileProvider;
+import android.webkit.URLUtil;
 
 import java.io.File;
 
@@ -60,7 +61,7 @@ public class KFImageManager {
      */
 
     public void imageForURL(final String url, final int desiredWidth, final int desiredHeight, final KFImageManagerCompletionHandler completionHandler) {
-        if (url == null || url.equals("")) {
+        if (!URLUtil.isValidUrl(url)) {
             if (completionHandler != null) completionHandler.onComplete(null);
             return;
         }

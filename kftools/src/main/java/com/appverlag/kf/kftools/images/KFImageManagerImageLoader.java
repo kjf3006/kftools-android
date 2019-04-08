@@ -3,6 +3,7 @@ package com.appverlag.kf.kftools.images;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class KFImageManagerImageLoader {
     }
 
     public void getImageForUrl(final String url, final KFImageManagerCompletionHandler completionHandler) {
-        if (url == null || url.equals("")) {
+        if (url == null || url.equals("") || !URLUtil.isValidUrl(url) ) {
             if (completionHandler != null) completionHandler.onComplete(null);
             return;
         }
