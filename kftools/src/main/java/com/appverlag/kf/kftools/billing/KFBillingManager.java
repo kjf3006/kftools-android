@@ -14,6 +14,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.appverlag.kf.kftools.other.KFLog;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -61,7 +62,7 @@ public class KFBillingManager {
         startServiceConnection(new Runnable() {
             @Override
             public void run() {
-                Log.d(LOG_TAG, "Setup successful. Querying inventory.");
+                KFLog.d(LOG_TAG, "Setup successful. Querying inventory.");
                 queryPurchases();
             }
         });
@@ -104,7 +105,7 @@ public class KFBillingManager {
                     return;
                 }
 
-                Log.d(LOG_TAG, "Query inventory was successful.");
+                KFLog.d(LOG_TAG, "Query inventory was successful.");
 
                 purchases.clear();
                 purchasesUpdatedListener.onPurchasesUpdated(BillingClient.BillingResponse.OK, purchasesResult.getPurchasesList());
@@ -165,7 +166,7 @@ public class KFBillingManager {
                 billingClient.consumeAsync(purchaseToken, new ConsumeResponseListener() {
                     @Override
                     public void onConsumeResponse(@BillingClient.BillingResponse int responseCode, String purchaseToken) {
-                        Log.d(LOG_TAG, "Consumption finished. result code: " + responseCode + ". purchase token: " + purchaseToken);
+                        KFLog.d(LOG_TAG, "Consumption finished. result code: " + responseCode + ". purchase token: " + purchaseToken);
                         tokensToBeConsumed.remove(purchaseToken);
                         if (responseCode == BillingClient.BillingResponse.OK) {
                             purchases.remove(purchase);
@@ -223,7 +224,7 @@ public class KFBillingManager {
             return;
         }
 
-        Log.d(LOG_TAG, "Got a verified purchase: " + purchase);
+        KFLog.d(LOG_TAG, "Got a verified purchase: " + purchase);
 
         purchases.add(purchase);
     }

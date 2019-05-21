@@ -79,14 +79,14 @@ public class KFImagePicker {
             Intent targetedIntent = new Intent(intent);
             targetedIntent.setPackage(packageName);
             list.add(targetedIntent);
-            Log.d(TAG, "Intent: " + intent.getAction() + " package: " + packageName);
+            KFLog.d(TAG, "Intent: " + intent.getAction() + " package: " + packageName);
         }
         return list;
     }
 
 
     public static Bitmap getImageFromResult(Context context, int resultCode, Intent imageReturnedIntent) {
-        Log.d(TAG, "getImageFromResult, resultCode: " + resultCode);
+        KFLog.d(TAG, "getImageFromResult, resultCode: " + resultCode);
         Bitmap bm = null;
         File imageFile = getTempFile(context);
         if (resultCode == Activity.RESULT_OK) {
@@ -97,7 +97,7 @@ public class KFImagePicker {
             } else {            /** ALBUM **/
                 selectedImage = imageReturnedIntent.getData();
             }
-            Log.d(TAG, "selectedImage: " + selectedImage);
+            KFLog.d(TAG, "selectedImage: " + selectedImage);
 
             bm = getImageResized(context, selectedImage);
             int rotation = getRotation(context, selectedImage, isCamera);
@@ -107,7 +107,7 @@ public class KFImagePicker {
     }
 
     public static Uri getUriFromResult(Context context, int resultCode, Intent imageReturnedIntent) {
-        Log.d(TAG, "getUriFromResult, resultCode: " + resultCode);
+        KFLog.d(TAG, "getUriFromResult, resultCode: " + resultCode);
         Bitmap bm = null;
         File imageFile = getTempFile(context);
         Uri selectedImage = null;
@@ -118,7 +118,7 @@ public class KFImagePicker {
             } else {            /** ALBUM **/
                 selectedImage = imageReturnedIntent.getData();
             }
-            Log.d(TAG, "selectedImage: " + selectedImage);
+            KFLog.d(TAG, "selectedImage: " + selectedImage);
         }
         return selectedImage;
     }
@@ -144,7 +144,7 @@ public class KFImagePicker {
         Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(
                 fileDescriptor.getFileDescriptor(), null, options);
 
-        Log.d(TAG, options.inSampleSize + " sample method bitmap ... " +
+        KFLog.d(TAG, options.inSampleSize + " sample method bitmap ... " +
                 actuallyUsableBitmap.getWidth() + " " + actuallyUsableBitmap.getHeight());
 
         return actuallyUsableBitmap;
@@ -159,7 +159,7 @@ public class KFImagePicker {
         int i = 0;
         do {
             bm = decodeBitmap(context, selectedImage, sampleSizes[i]);
-            Log.d(TAG, "resizer: new bitmap width = " + bm.getWidth());
+            KFLog.d(TAG, "resizer: new bitmap width = " + bm.getWidth());
             i++;
         } while (bm.getWidth() < minWidthQuality && i < sampleSizes.length);
         return bm;
@@ -173,7 +173,7 @@ public class KFImagePicker {
         } else {
             rotation = getRotationFromGallery(context, imageUri);
         }
-        Log.d(TAG, "Image rotation: " + rotation);
+        KFLog.d(TAG, "Image rotation: " + rotation);
         return rotation;
     }
 

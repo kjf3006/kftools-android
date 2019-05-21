@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 
+import com.appverlag.kf.kftools.other.KFLog;
 import com.appverlag.kf.kftools.other.KFNotificationCenter;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class KFSyncEngine {
         if (handler == null) return;
 
         if (!operations.contains(identifier)) {
-            Log.d(LOG_TAG, "starting sync for identifier: " + identifier);
+            KFLog.d(LOG_TAG, "starting sync for identifier: " + identifier);
             operations.add(identifier);
             handler.startSync();
         }
@@ -84,7 +85,7 @@ public class KFSyncEngine {
     private KFSyncEngineHandler.KFSyncEngineHandlerCallback callback = new KFSyncEngineHandler.KFSyncEngineHandlerCallback() {
         @Override
         public void didFinishSync(String identifier, boolean success) {
-            Log.d(LOG_TAG, "sync finished for identifier: " + identifier);
+            KFLog.d(LOG_TAG, "sync finished for identifier: " + identifier);
             operations.remove(identifier);
             if (success) {
                 Intent intent = new Intent();

@@ -128,7 +128,7 @@ public class KFRemoteLogger {
     }
 
     private void uploadLog(String sessionID, String log) {
-        Log.d(LOG_TAG, "KFRemoteLogger upload: \ndeviceID: " + deviceID + "\nuserInfo: " + userInfo + "\nlogID: " + sessionID + "\n\n" + log);
+        KFLog.d(LOG_TAG, "KFRemoteLogger upload: \ndeviceID: " + deviceID + "\nuserInfo: " + userInfo + "\nlogID: " + sessionID + "\n\n" + log);
     }
 
 

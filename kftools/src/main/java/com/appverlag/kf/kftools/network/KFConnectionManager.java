@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.appverlag.kf.kftools.other.KFLog;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -99,7 +101,7 @@ public class KFConnectionManager {
             return;
         }
 
-        Log.d(LOG_TAG, request.url().toString());
+        KFLog.d(LOG_TAG, request.url().toString());
 
         if (synchronous) {
             try {
@@ -115,7 +117,7 @@ public class KFConnectionManager {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    Log.d(LOG_TAG, "" + e.getLocalizedMessage());
+                    KFLog.d(LOG_TAG, "" + e.getLocalizedMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -141,7 +143,7 @@ public class KFConnectionManager {
 
         if (jsonString.length() == 0) {
             validData = false;
-            Log.d(LOG_TAG, "error loading data");
+            KFLog.d(LOG_TAG, "error loading data");
         }
         else {
             try {
@@ -156,11 +158,11 @@ public class KFConnectionManager {
                 }
             }
             catch (Exception e) {
-                Log.d(LOG_TAG, "error parsing input: " + jsonString + "\nwith error: " + e.toString());
+                KFLog.d(LOG_TAG, "error parsing input: " + jsonString + "\nwith error: " + e.toString());
                 validData = false;
             }
             if (validData) {
-                Log.d(LOG_TAG, "recived data: " + jsonString);
+                KFLog.d(LOG_TAG, "recived data: " + jsonString);
                 if (evaluateResponse) {
                     if (validationHandler != null) validData = validationHandler.validateJSON(jsonObject);
                 }
