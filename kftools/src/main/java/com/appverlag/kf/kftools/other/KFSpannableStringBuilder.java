@@ -1,5 +1,8 @@
 package com.appverlag.kf.kftools.other;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -152,5 +155,16 @@ public class KFSpannableStringBuilder extends SpannableStringBuilder {
         SpannableString spannableString = new SpannableString(text);
         spannableString.setSpan(span, 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
+    }
+
+    public void appendImage(Context context, final int drawableRes) {
+        Drawable image = ContextCompat.getDrawable(context, drawableRes);
+        if (image != null) {
+            image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
+            ImageSpan imageSpan = new KFCenteredImageSpan(image);
+            SpannableString spFilterWithIcon = new SpannableString(" ");
+            spFilterWithIcon.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            append(spFilterWithIcon);
+        }
     }
 }
