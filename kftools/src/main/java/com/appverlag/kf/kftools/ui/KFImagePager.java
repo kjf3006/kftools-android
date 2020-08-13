@@ -1,6 +1,7 @@
 package com.appverlag.kf.kftools.ui;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.appverlag.kf.kftools.R;
+import com.appverlag.kf.kftools.images.KFImageContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class KFImagePager extends ViewPager {
         setAdapter(adapter);
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(List<KFImageContainer> images) {
         adapter.setImages(images);
     }
 
@@ -48,14 +50,14 @@ public class KFImagePager extends ViewPager {
     private class ImagePagerAdapter extends PagerAdapter {
 
         LayoutInflater layoutInflater;
-        private List<String> images;
+        private List<KFImageContainer> images;
 
         public ImagePagerAdapter() {
             layoutInflater = (LayoutInflater) KFImagePager.this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             images = new ArrayList<>();
         }
 
-        private void setImages(List<String> images) {
+        private void setImages(List<KFImageContainer> images) {
             this.images = images;
             notifyDataSetChanged();
         }
@@ -67,23 +69,19 @@ public class KFImagePager extends ViewPager {
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == ((LinearLayout) object);
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == object;
         }
 
+        @NonNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             View itemView = layoutInflater.inflate(R.layout.kftools_pager_item, container, false);
 
             KFImageView imageView = (KFImageView) itemView.findViewById(R.id.imageView);
 
-            String key = images.get(position);
-            if (key.contains("http")) {
-                imageView.setImageWithURL(key, 0);
-            }
-            else {
-                imageView.setImageWithKey(key, 0);
-            }
+            KFImageContainer key = images.get(position);
+            imageView.setImage(images.get(position));
 
             container.addView(itemView);
 
@@ -91,7 +89,7 @@ public class KFImagePager extends ViewPager {
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(ViewGroup container, int position, @NonNull Object object) {
             container.removeView((LinearLayout) object);
         }
     }

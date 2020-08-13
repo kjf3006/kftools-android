@@ -75,7 +75,7 @@ public class KFMultipleImageView extends FrameLayout {
 
             KFImageView imageView = new KFImageView(getContext());
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImage(images.get(i),0, KFImageView.Size.LARGE);
+            imageView.setImage(images.get(i));
             imageView.setAspectRatio(0.56f);
             imageView.setTag(i);
 

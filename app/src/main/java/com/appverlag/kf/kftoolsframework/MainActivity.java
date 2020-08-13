@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,9 @@ import android.view.View;
 
 import com.android.billingclient.api.Purchase;
 import com.appverlag.kf.kftools.billing.KFBillingManager;
+import com.appverlag.kf.kftools.cache.KFCache;
+import com.appverlag.kf.kftools.cache.KFDiskCache;
+import com.appverlag.kf.kftools.cache.KFMemoryCache;
 import com.appverlag.kf.kftools.location.KFLocationManager;
 import com.appverlag.kf.kftools.location.KFLocationManagerRequest;
 import com.appverlag.kf.kftools.network.KFConnectionManager;
@@ -25,6 +29,7 @@ import com.appverlag.kf.kftools.network.KFConnectionManagerCallback;
 import com.appverlag.kf.kftools.network.KFConnectionManagerJSONCallback;
 import com.appverlag.kf.kftools.other.KFExceptionHandler;
 import com.appverlag.kf.kftools.other.KFFilePicker;
+import com.appverlag.kf.kftools.other.KFLog;
 import com.appverlag.kf.kftools.other.KFRemoteLogger;
 import com.appverlag.kf.kftools.other.KFImagePicker;
 import com.appverlag.kf.kftools.permission.KFRunntimePermissionManager;
@@ -34,9 +39,11 @@ import com.appverlag.kf.kftools.ui.KFRichTextView;
 import com.appverlag.kf.kftools.weather.KFWeatherForecast;
 import com.appverlag.kf.kftools.weather.KFWeatherManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +59,72 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*
+        cache test
+         */
+
+        final KFCache cache = KFCache.defaultCache(this);
+
+        //cache.put("string", "ABCDEFG");
+
+
+        //cache.removeAll();
+
+        cache.get("string", String.class, new KFCache.KFCacheCompletionHandler<String>() {
+            @Override
+            public void loaded(String object) {
+                if (object != null) KFLog.d("KFCache", object);
+            }
+        });
+//
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("key1", "value1");
+//            jsonObject.put("key2", "value1");
+//            jsonObject.put("key3", 3);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        cache.put("json", jsonObject);
+
+//        cache.get("json", new KFCache.KFCacheCompletionHandler<Object>() {
+//            @Override
+//            public void loaded(Object object) {
+//                if (object != null) KFLog.d("KFCache", object.toString());
+//            }
+//        });
+
+//        cache.get("json", JSONObject.class, new KFCache.KFCacheCompletionHandler<JSONObject>() {
+//            @Override
+//            public void loaded(JSONObject object) {
+//                if (object != null) KFLog.d("KFCache", object.toString());
+//            }
+//        });
+
+//        List<Integer> list = Arrays.asList(299, 23, 4442, 33);
+//        cache.put("list", list);
+
+        cache.get("list", List.class, new KFCache.KFCacheCompletionHandler<List>() {
+            @Override
+            public void loaded(List object) {
+                if (object != null) KFLog.d("KFCache", object.toString());
+            }
+        });
+
+
+//        cache.get("test1", new KFCache.KFCacheCompletionHandler<Object>() {
+//            @Override
+//            public void loaded(Object object) {
+//                if (object != null) KFLog.d("KFCache", object.toString());
+//            }
+//        });
+
+
+        /*
+        other
+         */
 
         KFRemoteLogger.initialise(getApplicationContext(), "info@example.com", "KFTools", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
 

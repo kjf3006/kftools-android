@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
@@ -167,22 +168,29 @@ public class KFImageView extends AppCompatImageView {
     container
      */
 
-    public void setImage(KFImageContainer container, Integer placeholder, Size size) {
+    public void setImage(@NonNull KFImageContainer container) {
+        boolean useBitmapPlaceholder = container.getPlaceholderBitmap() != null;
+
         switch (container.getType()) {
             case KEY:
-                setImageWithKey(container.getKey(), placeholder);
+                if (useBitmapPlaceholder) setImageWithKey(container.getKey(), container.getPlaceholderBitmap());
+                else setImageWithKey(container.getKey(), container.getPlaceholder());
                 break;
             case URL:
-                setImageWithURL(container.getUrl(), placeholder);
+                if (useBitmapPlaceholder) setImageWithURL(container.getUrl(), container.getPlaceholderBitmap());
+                else setImageWithURL(container.getUrl(), container.getPlaceholder());
+                break;
+            case RES:
+                setImageResource(container.getResId());
                 break;
         }
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        //loadImageIfNecessary(true, null);
-    }
+//    @Override
+//    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+//        super.onLayout(changed, left, top, right, bottom);
+//        //loadImageIfNecessary(true, null);
+//    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
