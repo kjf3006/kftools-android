@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) Kevin Flachsmann - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Created by kevinflachsmann on 2019-05-21.
+ */
 package com.appverlag.kf.kftools.other;
 
 import android.util.Log;
@@ -5,10 +11,7 @@ import android.util.Log;
 import com.appverlag.kf.kftools.BuildConfig;
 
 /**
- * Copyright (C) Kevin Flachsmann - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Created by kevinflachsmann on 2019-05-21.
+ * Production-save logging service
  */
 public class KFLog {
 

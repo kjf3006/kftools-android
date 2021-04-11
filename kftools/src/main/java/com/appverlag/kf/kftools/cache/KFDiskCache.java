@@ -1,7 +1,7 @@
 package com.appverlag.kf.kftools.cache;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.appverlag.kf.kftools.cache.serialize.KFCacheSerializer;
 import com.appverlag.kf.kftools.cache.serialize.KFJSONArrayCacheSerializer;

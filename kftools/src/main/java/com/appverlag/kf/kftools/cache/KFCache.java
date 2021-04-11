@@ -1,11 +1,7 @@
 package com.appverlag.kf.kftools.cache;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-
-import org.json.JSONObject;
-
-import java.security.MessageDigest;
+import androidx.annotation.NonNull;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved

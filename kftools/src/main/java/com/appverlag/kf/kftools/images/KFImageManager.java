@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.webkit.URLUtil;
 
 import java.io.File;

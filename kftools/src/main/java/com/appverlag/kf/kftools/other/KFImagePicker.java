@@ -12,15 +12,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
-
-import com.appverlag.kf.kftools.BuildConfig;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved
@@ -52,15 +47,13 @@ public class KFImagePicker {
         List<Intent> intentList = new ArrayList<>();
 
         Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intentList = addIntentsToList(context, intentList, pickIntent);
+        intentList.add(pickIntent);
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePhotoIntent.resolveActivity(context.getPackageManager()) != null) {
-            Uri photoUri = FileProvider.getUriForFile(context, context.getPackageName() + ".kftools.fileprovider", getTempFile(context));
-            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            takePhotoIntent.putExtra("return-data", true);
-            intentList = addIntentsToList(context, intentList, takePhotoIntent);
-        }
+        Uri photoUri = FileProvider.getUriForFile(context, context.getPackageName() + ".kftools.fileprovider", getTempFile(context));
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        takePhotoIntent.putExtra("return-data", true);
+        intentList.add(takePhotoIntent);
 
 
         if (intentList.size() > 0) {

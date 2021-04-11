@@ -1,8 +1,6 @@
 package com.appverlag.kf.kftools.cache;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.LruCache;
 
 import com.appverlag.kf.kftools.other.KFLog;

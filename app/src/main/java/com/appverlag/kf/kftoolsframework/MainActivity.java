@@ -4,34 +4,24 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.android.billingclient.api.Purchase;
-import com.appverlag.kf.kftools.billing.KFBillingManager;
 import com.appverlag.kf.kftools.cache.KFCache;
-import com.appverlag.kf.kftools.cache.KFDiskCache;
-import com.appverlag.kf.kftools.cache.KFMemoryCache;
 import com.appverlag.kf.kftools.location.KFLocationManager;
 import com.appverlag.kf.kftools.location.KFLocationManagerRequest;
 import com.appverlag.kf.kftools.network.KFConnectionManager;
-import com.appverlag.kf.kftools.network.KFConnectionManagerCallback;
-import com.appverlag.kf.kftools.network.KFConnectionManagerJSONCallback;
-import com.appverlag.kf.kftools.other.KFExceptionHandler;
 import com.appverlag.kf.kftools.other.KFFilePicker;
+import com.appverlag.kf.kftools.other.KFImagePicker;
 import com.appverlag.kf.kftools.other.KFLog;
 import com.appverlag.kf.kftools.other.KFRemoteLogger;
-import com.appverlag.kf.kftools.other.KFImagePicker;
 import com.appverlag.kf.kftools.permission.KFRunntimePermissionManager;
 import com.appverlag.kf.kftools.ui.KFBottomSheetDialog;
 import com.appverlag.kf.kftools.ui.KFImageView;
@@ -39,17 +29,12 @@ import com.appverlag.kf.kftools.ui.KFRichTextView;
 import com.appverlag.kf.kftools.weather.KFWeatherForecast;
 import com.appverlag.kf.kftools.weather.KFWeatherManager;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Request;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -138,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
 //
 //        int i = 1/0;
 
-        KFBillingManager.initialise(getApplicationContext(), "");
 
         findViewById(R.id.buttonGallery).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,12 +156,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                Intent intent = new Intent(MainActivity.this, KFBillingActivity.class);
 //                MainActivity.this.startActivity(intent);
-                KFBillingManager.getInstance().initiatePurchaseFlow(MainActivity.this, "android.test.purchased", null, "inapp");
-                List<Purchase> purchases = KFBillingManager.getInstance().getPurchases();
-                for (Purchase purchase : purchases) {
-                    Log.e("TEST", purchase.toString());
-                    KFBillingManager.getInstance().consumeAsync(purchase);
-                }
+//                KFBillingManager.getInstance().initiatePurchaseFlow(MainActivity.this, "android.test.purchased", null, "inapp");
+//                List<Purchase> purchases = KFBillingManager.getInstance().getPurchases();
+//                for (Purchase purchase : purchases) {
+//                    Log.e("TEST", purchase.toString());
+//                    KFBillingManager.getInstance().consumeAsync(purchase);
+//                }
             }
         });
 
@@ -188,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(boolean success) throws SecurityException {
                         if (success) {
-                            Intent intent = KFFilePicker.getPickerIntent(MainActivity.this, true, false);
+                            Intent intent = KFImagePicker.getPickImageIntent(MainActivity.this);
                             startActivityForResult(intent, 100);
                         }
                     }
@@ -242,8 +226,9 @@ public class MainActivity extends AppCompatActivity {
                 KFWeatherManager.getInstance().getWeatherDataForLocation(location, new KFWeatherManager.KFWeatherManagerCompletionHandler() {
                     @Override
                     public void onComplete(KFWeatherForecast forecast) {
-                        Log.d("TEST", forecast.toString());
+                        KFLog.d("TEST", forecast.toString());
                         Log.d("TEST", forecast.getLocationName());
+
                     }
                 });
             }

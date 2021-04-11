@@ -6,8 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 import com.appverlag.kf.kftools.images.KFImageContainer;
@@ -183,6 +183,9 @@ public class KFImageView extends AppCompatImageView {
             case RES:
                 setImageResource(container.getResId());
                 break;
+            case BMP:
+                setImageBitmap(container.getBitmap());
+                break;
         }
     }
 
@@ -204,10 +207,12 @@ public class KFImageView extends AppCompatImageView {
         }
     }
 
+    @Deprecated
     public float getAspectRatio() {
         return aspectRatio;
     }
 
+    @Deprecated
     public void setAspectRatio(float aspectRatio) {
         this.aspectRatio = aspectRatio;
     }

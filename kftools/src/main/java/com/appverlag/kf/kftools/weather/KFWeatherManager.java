@@ -1,45 +1,16 @@
 package com.appverlag.kf.kftools.weather;
 
-import android.Manifest;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.BaseColumns;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 import android.util.LruCache;
 
-import com.appverlag.kf.kftools.database.KFManagedObjectList;
-import com.appverlag.kf.kftools.location.KFLocationManager;
-import com.appverlag.kf.kftools.location.KFLocationManagerRequest;
 import com.appverlag.kf.kftools.network.KFConnectionManager;
-import com.appverlag.kf.kftools.permission.KFRunntimePermissionManager;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.Credentials;
 import okhttp3.Request;
 
 /**

@@ -1,6 +1,6 @@
 package com.appverlag.kf.kftools.other;
 
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved

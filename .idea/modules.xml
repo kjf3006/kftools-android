@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/KFToolsFramework.iml" filepath="$PROJECT_DIR$/KFToolsFramework.iml" group="KFToolsFramework" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="KFToolsFramework/app" />
-      <module fileurl="file://$PROJECT_DIR$/kftools/kftools.iml" filepath="$PROJECT_DIR$/kftools/kftools.iml" group="KFToolsFramework/kftools" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kftools-android.iml" filepath="$PROJECT_DIR$/.idea/modules/kftools-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/kftools-android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/kftools-android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.iml" filepath="$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.iml" />
     </modules>
   </component>
 </project>

@@ -1,8 +1,8 @@
 package com.appverlag.kf.kftools.images;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
+
+import androidx.annotation.DrawableRes;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,14 +15,14 @@ import java.util.regex.Pattern;
  */
 public class KFImageContainer {
 
-    public enum Type { KEY, URL, RES }
+    public enum Type { KEY, URL, RES, BMP }
     public enum Size {SMALL, MEDIUM, LARGE, ORIGINAL}; //100x100 500x500 1000x1000 0x0
 
 
     private String key, url, youtubeID;
     private Type type = Type.KEY;
     private @DrawableRes int placeholder;
-    private Bitmap placeholderBitmap;
+    private Bitmap placeholderBitmap, bitmap;
     private @DrawableRes int resId;
 
     /*
@@ -30,24 +30,23 @@ public class KFImageContainer {
      */
 
     public static KFImageContainer res(@DrawableRes int resId) {
-        return res(resId, 0);
-    }
-
-    public static KFImageContainer res(@DrawableRes int resId, @DrawableRes int placeholder) {
         KFImageContainer container = new KFImageContainer();
         container.resId = resId;
         container.type = Type.RES;
-        container.placeholder = placeholder;
         return container;
     }
 
-    public static KFImageContainer res(@DrawableRes int resId, Bitmap placeholder) {
+    /*
+    BMP
+     */
+
+    public static KFImageContainer bmp(Bitmap bitmap) {
         KFImageContainer container = new KFImageContainer();
-        container.resId = resId;
-        container.type = Type.RES;
-        container.placeholderBitmap = placeholder;
+        container.bitmap = bitmap;
+        container.type = Type.BMP;
         return container;
     }
+
 
 
     /*
@@ -188,6 +187,13 @@ public class KFImageContainer {
         this.resId = resId;
     }
 
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
 
     /*
     helper

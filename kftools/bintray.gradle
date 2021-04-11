@@ -1,6 +1,6 @@
 apply plugin: 'com.jfrog.bintray'
 
-version = '1.8.6' //YOUR LIBRARY VERSION ./gradlew bintrayUpload
+version = '1.8.7' //YOUR LIBRARY VERSION ./gradlew bintrayUpload
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
