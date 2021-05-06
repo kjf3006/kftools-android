@@ -283,6 +283,7 @@ public class KFDiskCache extends KFCache {
 
     private void runWaitingOperations() {
         for (Runnable runnable : waitingOperations) {
+            if (runnable == null) continue;
             ioQueue.execute(runnable);
         }
         waitingOperations.clear();
