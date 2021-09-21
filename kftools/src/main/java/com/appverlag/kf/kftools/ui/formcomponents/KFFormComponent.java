@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appverlag.kf.kftools.R;
+import com.appverlag.kf.kftools.ui.widgets.KFEmptyHiddenTextView;
 
 public abstract class KFFormComponent <T> extends LinearLayout {
 
@@ -42,13 +43,14 @@ public abstract class KFFormComponent <T> extends LinearLayout {
 
         LinearLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        textViewTitle = new TextView(context, null, 0, R.style.KFTools_TextView);
+        textViewTitle = new KFEmptyHiddenTextView(context, null, 0, R.style.KFTools_TextView);
+        textViewTitle.setTextColor(getResources().getColor(R.color.secondaryLabelColor));
         addView(textViewTitle);
 
         contentView = new FrameLayout(context);
         addView(contentView, params);
 
-        textViewDescription = new TextView(context, null, 0, R.style.KFTools_TextView_Secondary);
+        textViewDescription = new KFEmptyHiddenTextView(context, null, 0, R.style.KFTools_TextView_Secondary);
         addView(textViewDescription, params);
 
         initialisedRoot = true;

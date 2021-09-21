@@ -117,7 +117,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void handleSelection(String id) {
+            if (id.equals("KFFormComponents")) {
 
+            }
         }
     }
 

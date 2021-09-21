@@ -29,10 +29,12 @@
     </style>
 
     <style name="KFTools.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/labelColor</item>
     </style>
 
     <style name="KFTools.TextView.Secondary" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/secondaryLabelColor</item>
     </style>
 
