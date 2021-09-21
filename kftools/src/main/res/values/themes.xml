@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.KFTools" parent="@style/Theme.AppCompat.DayNight">
+
+        <item name="android:windowBackground">@color/systemBackgroundColor</item>
+
+        <item name="editTextStyle">@style/KFTools.EditText</item>
+        <item name="android:textViewStyle">@style/KFTools.TextView</item>
+
+    </style>
+
+</resources>

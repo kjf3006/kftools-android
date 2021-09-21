@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="labelColor">#FF000000</color>
+    <color name="secondaryLabelColor">#993C3C43</color>
+
+    <color name="systemBackgroundColor">#FFFFFFFF</color>
+
+    <color name="systemGray5Color">#FFE5E5EA</color>
+
+    <color name="systemRedColor">#FFFF3B30</color>
+
+</resources>

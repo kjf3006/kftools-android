@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="description" format="string" />
+
+<!--    KFFormComponent-->
+    <declare-styleable name="KFFormComponent">
+        <attr name="android:title" />
+        <attr name="description" />
+        <attr name="android:identifier" />
+        <attr name="android:text" />
+    </declare-styleable>
+
+    <declare-styleable name="KFFormEditTextComponent">
+        <attr name="android:singleLine" />
+    </declare-styleable>
+
+
+
+<!--    Widgets-->
+    <declare-styleable name="KFDropDownView">
+        <attr name="android:title"/>
+    </declare-styleable>
+
+    <declare-styleable name="KFDateTimeView">
+        <attr name="android:title"/>
+        <attr name="datePickerMode">
+            <enum name="DatePickerModeDate" value="0" />
+            <enum name="DatePickerModeTime" value="1" />
+            <enum name="DatePickerModeDateAndTime" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+</resources>

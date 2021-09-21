@@ -2,6 +2,8 @@ package com.appverlag.kf.kftools.other;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -39,6 +41,10 @@ public class KFSpannableStringBuilder extends SpannableStringBuilder {
         setSpan(span, 0, text.length());
     }
 
+    public KFSpannableStringBuilder appendNewline() {
+        return append("\n");
+    }
+
     /**
      * Appends the character sequence {@code text} and spans {@code spans} over the appended part.
      * @param text the character sequence to append.
@@ -74,7 +80,9 @@ public class KFSpannableStringBuilder extends SpannableStringBuilder {
      * Append plain text.
      * @return this {@code KFSpannableStringBuilder}.
      */
-    @Override public KFSpannableStringBuilder append(CharSequence text) {
+    @NonNull
+    @Override
+    public KFSpannableStringBuilder append(CharSequence text) {
         super.append(text);
         return this;
     }

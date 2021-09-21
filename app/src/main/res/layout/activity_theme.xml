@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.appverlag.kf.kftoolsframework.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:divider="@drawable/kftools_space_default"
+        android:showDividers="middle">
+
+        <com.appverlag.kf.kftools.ui.widgets.KFDateTimeView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:datePickerMode="DatePickerModeTime"
+            app:title="KFDateTimeViewTitle"/>
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormCheckboxComponent
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:title="KFFormCheckboxComponentTitle"
+            app:description="KFFormCheckboxComponentDescription"
+            android:checked="true"
+            android:text="KFFormCheckboxComponentText"
+            />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormEditTextComponent
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormEditTextComponentTitle"
+            app:description="KFFormEditTextComponentDescription"
+            android:text="KFFormEditTextComponentText"
+            />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormEditTextComponent
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormEditTextComponentTitle"
+            app:description="KFFormEditTextComponentDescription"
+            android:text="KFFormEditTextComponentText"
+            android:singleLine="true"
+            />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormColorComponent
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormColorComponentTitle"
+            app:description="KFFormColorComponentDescription"
+            android:backgroundTint="#FFFFCC00"
+            />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormSeparatorComponent
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormButtonComponent
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormButtonComponentTitle"
+            app:description="KFFormButtonComponentDescription"
+            android:backgroundTint="@color/systemRedColor"
+            android:text="KFFormButtonComponentText"
+            />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormDropDownComponent
+            android:id="@+id/dropDownComponent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormDropDownComponentTitle"
+            android:enabled="false"
+            app:description="KFFormDropDownComponentDescription"
+            />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormDateTimeComponent
+            android:id="@+id/dateTimeComponent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormDateTimeComponentTitle"
+            app:description="KFFormDateTimeComponentDescription"
+            />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.KFFormDateTimeComponent
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormDateTimeComponentTitle"
+            app:description="KFFormDateTimeComponentDescription"
+            app:datePickerMode="DatePickerModeDateAndTime"
+            />
+
+    </LinearLayout>
+
+</ScrollView>

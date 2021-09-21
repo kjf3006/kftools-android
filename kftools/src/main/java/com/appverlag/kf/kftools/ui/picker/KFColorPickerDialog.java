@@ -1,8 +1,10 @@
-package com.appverlag.kf.kftools.ui;
+package com.appverlag.kf.kftools.ui.picker;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,11 +21,11 @@ import com.appverlag.kf.kftools.R;
  * Proprietary and confidential
  * Created by kevinflachsmann on 14.09.17.
  */
-public class KFColorPicker extends Dialog {
+public class KFColorPickerDialog extends Dialog {
 
     private OnColorSelectedListener onColorSelectedListender;
 
-    public KFColorPicker(Context context) {
+    public KFColorPickerDialog(Context context) {
         super(context);
     }
 
@@ -53,7 +55,7 @@ public class KFColorPicker extends Dialog {
      */
 
     private class KFColorPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private final Integer[] items = {0xFFFFC80C, 0xFFEFA500, 0xFFEA5F00, 0xFFE41C00, 0xFFDF0023, 0xFFDA0060, 0xFFD40099, 0xFFCD00CF, 0xFF8F00C9, 0xFF5400C4, 0xFF1B00BF };
+        private final Integer[] items = {0xFFFFCC00, 0xFF34C759, 0xFF5AC8FA, 0xFF007AFF, 0xFF5856D6, 0xFF8F00C9, 0xFFAF52DE, 0xFFFF2D55, 0xFFDF0023, 0xFFFF3B30, 0xFFFF9500 };
 
         KFColorPickerAdapter() {
 
@@ -64,6 +66,7 @@ public class KFColorPicker extends Dialog {
             return items.length;
         }
 
+        @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ViewHolderColor(LayoutInflater.from(parent.getContext()).inflate(R.layout.kftools_alert_dialog_color_item, parent, false));
@@ -71,18 +74,13 @@ public class KFColorPicker extends Dialog {
 
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
             ViewHolderColor viewHolder = (ViewHolderColor) holder;
 
             final int color = items[position];
             viewHolder.contentView.setBackgroundColor(color);
-            viewHolder.contentView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    didPickColor(color);
-                }
-            });
+            viewHolder.contentView.setOnClickListener(v -> didPickColor(color));
 
         }
 
@@ -99,6 +97,6 @@ public class KFColorPicker extends Dialog {
 
 
     public interface OnColorSelectedListener {
-        void onColorSelected(KFColorPicker picker, int color);
+        void onColorSelected(KFColorPickerDialog picker, int color);
     }
 }

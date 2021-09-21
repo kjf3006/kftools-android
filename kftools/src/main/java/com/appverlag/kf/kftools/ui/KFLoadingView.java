@@ -38,13 +38,10 @@ public class KFLoadingView extends FrameLayout {
         View.inflate(context, R.layout.kftools_loading_container, this);
         ((ProgressBar) findViewById(R.id.progressBar)).getIndeterminateDrawable().setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
 
-        findViewById(R.id.errorButton).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                findViewById(R.id.errorView).setVisibility(GONE);
-                findViewById(R.id.progressBar).setVisibility(VISIBLE);
-                if (listener != null) listener.onClick();
-            }
+        findViewById(R.id.errorButton).setOnClickListener(view -> {
+            findViewById(R.id.errorView).setVisibility(GONE);
+            findViewById(R.id.progressBar).setVisibility(VISIBLE);
+            if (listener != null) listener.onClick();
         });
         setVisibility(GONE);
     }

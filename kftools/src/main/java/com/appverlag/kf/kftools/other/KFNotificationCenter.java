@@ -21,21 +21,21 @@ public class KFNotificationCenter {
 
     private static KFNotificationCenter instance;
 
-    private HashMap<String, List<WeakReference<KFNotificationCenterListener>>> registredObjects;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final HashMap<String, List<WeakReference<KFNotificationCenterListener>>> registredObjects = new HashMap<>();
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private KFNotificationCenter(){
-        registredObjects = new HashMap<>();
+    private KFNotificationCenter() {
+
     }
 
-    public static synchronized KFNotificationCenter defaultCenter(){
+    public static synchronized KFNotificationCenter defaultCenter() {
         if(instance == null) {
             instance = new KFNotificationCenter();
         }
         return instance;
     }
 
-    public synchronized void registerForNotification(String notificationName, KFNotificationCenterListener listener){
+    public synchronized void registerForNotification(String notificationName, KFNotificationCenterListener listener) {
         List<WeakReference<KFNotificationCenterListener>> list = registredObjects.get(notificationName);
         if(list == null) {
             list = new ArrayList<>();
@@ -56,12 +56,7 @@ public class KFNotificationCenter {
                 final KFNotificationCenterListener listener = iterator.next().get();
                 if (listener == null) iterator.remove();
                 else {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            listener.didReceiveNotification(notificationName, userinfo);
-                        }
-                    });
+                    handler.post(() -> listener.didReceiveNotification(notificationName, userinfo));
                 }
             }
         }

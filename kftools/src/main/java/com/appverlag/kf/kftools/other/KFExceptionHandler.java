@@ -14,7 +14,11 @@ import okhttp3.Request;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  * Created by kevinflachsmann on 17.04.17.
+ *
+ * @deprecated
+ * This class will be removed
  */
+@Deprecated
 public class KFExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     private static final String APPVERLAG_CRASH_LOG_URL = "https://content-appverlag.com/api/crash-log";

@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
  * Proprietary and confidential
  * Created by kevinflachsmann on 01.09.17.
  */
+@Deprecated
 public class KFRemoteLogger {
 
     private static final String APPVERLAG_LOGGER_LOG_URL = "http://admin.content-appverlag.com/api/logger";
