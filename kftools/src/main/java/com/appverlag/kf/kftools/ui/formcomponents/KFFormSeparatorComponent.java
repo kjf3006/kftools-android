@@ -13,6 +13,11 @@ import androidx.annotation.Nullable;
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.other.KFDensityTool;
 
+/**
+ *
+ * @deprecated Use plain View with KFTools.Separator style
+ */
+@Deprecated
 public class KFFormSeparatorComponent extends KFFormComponent<Object> {
 
     View separator;

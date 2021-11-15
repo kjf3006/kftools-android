@@ -29,7 +29,6 @@
             <enum name="DatePickerModeTime" value="1" />
             <enum name="DatePickerModeDateAndTime" value="2" />
         </attr>
-
     </declare-styleable>
 
 </resources>

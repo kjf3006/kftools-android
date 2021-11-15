@@ -11,6 +11,11 @@ import androidx.annotation.Nullable;
 
 import com.appverlag.kf.kftools.R;
 
+/**
+ *
+ * @deprecated Use plain Button with KFTools.Button style
+ */
+@Deprecated
 public class KFFormButtonComponent extends KFFormComponent<Object> {
 
     private Button button;

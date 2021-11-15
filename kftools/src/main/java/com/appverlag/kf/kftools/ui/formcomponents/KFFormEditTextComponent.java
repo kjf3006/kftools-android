@@ -24,15 +24,6 @@ public class KFFormEditTextComponent extends KFFormComponent<String>{
     public KFFormEditTextComponent(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setupView(context, attrs);
-
-//        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.KFFormEditTextComponent, 0, 0);
-//        boolean singleLine = a.getBoolean(R.styleable.KFFormEditTextComponent_singleLine, false);
-//        editText.setSingleLine(singleLine);
-//        editText.setText(a.getString(R.styleable.KFFormEditTextComponent_text));
-//
-//        if (!singleLine) {
-//            editText.setMinHeight(KFDensityTool.dpToPx(150));
-//        }
     }
 
     private void setupView(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -41,7 +32,7 @@ public class KFFormEditTextComponent extends KFFormComponent<String>{
 
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.KFFormEditTextComponent, 0, 0);
         boolean singleLine = a.getBoolean(R.styleable.KFFormEditTextComponent_android_singleLine, false);
-        if (singleLine) {
+        if (!singleLine) {
             editText.setMinHeight(KFDensityTool.dpToPx(150));
         }
     }
