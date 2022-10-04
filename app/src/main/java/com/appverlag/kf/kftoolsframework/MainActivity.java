@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void testNetwork() {
-            Request request = new Request.Builder().url("https://dev-fraktionsapp.de/api/v3/test/authenticated-client").build();
+            Request request = new Request.Builder().url("https://dev-app.de/api/v3/test/authenticated-client").build();
 
 
             ConnectionManager.shared().send(request, new ResponseJSONSerializer(), response -> {

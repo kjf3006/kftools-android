@@ -13,7 +13,7 @@ public class APIRequestInterceptor implements RequestInterceptor {
     @Override
     public Request intercept(Request request) {
         Request.Builder builder = request.newBuilder();
-        builder.header("X-API-KEY", "pm_o1dOCNgJb9opQSIjOpbCNgJb9oppQSIjOpbopQSIjOpbyukhLgB5NeHA485uXacUeK8Z4UPTYlYGPfgY7Yhs6udlXZvuOcteFDG125U");
+        builder.header("X-API-KEY", "ABCDE");
         return builder.build();
     }
 }
