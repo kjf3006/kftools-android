@@ -1,11 +1,9 @@
-package com.appverlag.kf.kftools.ui.formcomponents;
+package com.appverlag.kf.kftools.ui.formcomponents.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -5,10 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appverlag.kf.kftools.other.KFLog;
-import com.appverlag.kf.kftools.ui.formcomponents.KFFormDateTimeComponent;
-import com.appverlag.kf.kftools.ui.formcomponents.KFFormDropDownComponent;
-import com.appverlag.kf.kftools.ui.widgets.KFDateTimeView;
-import com.appverlag.kf.kftools.ui.widgets.KFDropDownView;
+import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDateTimeComponent;
+import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDropDownComponent;
 
 import java.util.Arrays;
 import java.util.Date;

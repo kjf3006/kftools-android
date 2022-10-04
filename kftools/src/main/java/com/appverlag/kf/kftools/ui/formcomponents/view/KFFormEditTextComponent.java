@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools.ui.formcomponents;
+package com.appverlag.kf.kftools.ui.formcomponents.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,7 +7,6 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.view.ContextThemeWrapper;
 
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.other.KFDensityTool;

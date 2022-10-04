@@ -20,7 +20,7 @@
             app:datePickerMode="DatePickerModeTime"
             app:title="KFDateTimeViewTitle"/>
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormCheckboxComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormCheckboxComponent
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:title="KFFormCheckboxComponentTitle"
@@ -29,7 +29,7 @@
             android:text="KFFormCheckboxComponentText"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormEditTextComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormEditTextComponent
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:title="KFFormEditTextComponentTitle"
@@ -37,7 +37,7 @@
             android:text="KFFormEditTextComponentText"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormEditTextComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormEditTextComponent
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:title="KFFormEditTextComponentTitle"
@@ -46,7 +46,7 @@
             android:singleLine="true"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormColorComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormColorComponent
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:title="KFFormColorComponentTitle"
@@ -54,12 +54,12 @@
             android:backgroundTint="#FFFFCC00"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormSeparatorComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormSeparatorComponent
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormButtonComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormButtonComponent
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:title="KFFormButtonComponentTitle"
@@ -68,7 +68,7 @@
             android:text="KFFormButtonComponentText"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormDropDownComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDropDownComponent
             android:id="@+id/dropDownComponent"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -77,7 +77,7 @@
             app:description="KFFormDropDownComponentDescription"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormDateTimeComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDateTimeComponent
             android:id="@+id/dateTimeComponent"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -85,7 +85,7 @@
             app:description="KFFormDateTimeComponentDescription"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.KFFormDateTimeComponent
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDateTimeComponent
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:title="KFFormDateTimeComponentTitle"

@@ -1,14 +1,11 @@
-package com.appverlag.kf.kftools.ui.formcomponents;
+package com.appverlag.kf.kftools.ui.formcomponents.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.appverlag.kf.kftools.R;
 
 public class KFFormCheckboxComponent extends KFFormComponent<Boolean> {
 

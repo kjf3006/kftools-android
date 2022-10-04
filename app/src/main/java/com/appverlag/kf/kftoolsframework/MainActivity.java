@@ -2,6 +2,7 @@ package com.appverlag.kf.kftoolsframework;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appverlag.kf.kftools.network.ConnectionManager;
+import com.appverlag.kf.kftools.network.Response;
+import com.appverlag.kf.kftools.network.ResponseJSONSerializer;
+import com.appverlag.kf.kftools.network.ResponseStringSerializer;
 import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
 import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(new Adapter());
 
     }
+
 
      /*
     adapter
@@ -51,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
             data.add(new Section("UI-Components", Arrays.asList("KFThemes", "KFFormComponents", "KFYoutube")));
             data.add(new Section("Data-Handling", Arrays.asList("KFCache", "KFManagedObjects")));
+            data.add(new Section("Network", Arrays.asList("ConnectionManager")));
             notifyAllSectionsDataSetChanged();
         }
 
@@ -78,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 final int offset = getItemSectionOffset(section, holder.getBindingAdapterPosition());
                 String id = data.get(section).rows.get(offset);
 
-                Intent intent = new Intent(v.getContext(), ThemeActivity.class);
-                v.getContext().startActivity(intent);
+//                Intent intent = new Intent(v.getContext(), ThemeActivity.class);
+//                v.getContext().startActivity(intent);
                 handleSelection(id);
             });
 
@@ -120,6 +129,34 @@ public class MainActivity extends AppCompatActivity {
             if (id.equals("KFFormComponents")) {
 
             }
+            else if (id.equals("ConnectionManager")) {
+                testNetwork();
+            }
+        }
+
+        private void testNetwork() {
+            Request request = new Request.Builder().url("https://jsonplaceholder.typicode.com/todos/1").build();
+//            ConnectionManager.shared().send(request, new ResponseStringSerializer(), response -> {
+//                if (response.error != null) {
+//                    Log.d("NETWORK ERROR", response.error.getLocalizedMessage());
+//                }
+//                else {
+//                    Log.d("NETWORK SUCCESS", response.value);
+//                }
+//            });
+
+            ConnectionManager.shared().getRequestInterceptors().add(new APIRequestInterceptor());
+
+            ConnectionManager.shared().send(request, new ResponseJSONSerializer(), response -> {
+                Log.d("NETWORK REQUEST", response.request.toString());
+                Log.d("NETWORK REQUEST", response.request.headers().toString());
+                if (!response.success()) {
+                    Log.d("NETWORK ERROR", response.error.getLocalizedMessage());
+                }
+                else {
+                    Log.d("NETWORK SUCCESS", response.value.toString());
+                }
+            });
         }
     }
 

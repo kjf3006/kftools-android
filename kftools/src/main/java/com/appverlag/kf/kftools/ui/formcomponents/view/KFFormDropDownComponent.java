@@ -1,13 +1,11 @@
-package com.appverlag.kf.kftools.ui.formcomponents;
+package com.appverlag.kf.kftools.ui.formcomponents.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.ui.widgets.KFDropDownView;
 
 public class KFFormDropDownComponent extends KFFormComponent<String> {

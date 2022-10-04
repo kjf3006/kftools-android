@@ -6,8 +6,14 @@
 
     <color name="systemBackgroundColor">#FFFFFFFF</color>
 
+    <color name="systemGroupedBackgroundColor">#FFF2F2F7</color>
+
     <color name="systemGray5Color">#FFE5E5EA</color>
 
     <color name="systemRedColor">#FFFF3B30</color>
+
+    <!-- fixed colors -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools.ui.formcomponents;
+package com.appverlag.kf.kftools.ui.formcomponents.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
