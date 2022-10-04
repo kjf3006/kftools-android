@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.Call;
@@ -19,7 +21,8 @@ public class ConnectionManager {
     private static ConnectionManager shared;
     public static ConnectionManager shared() {
         if (ConnectionManager.shared == null) {
-            ConnectionManager.shared = new ConnectionManager(defaultClient(), null);
+            ConnectionManager.shared = new ConnectionManager(defaultClient());
+            ConnectionManager.shared.addResponseInterceptor(new HTTPStatusCodeResponseInterceptor());
         }
         return ConnectionManager.shared;
     }
@@ -28,13 +31,10 @@ public class ConnectionManager {
     private final Handler handler;
     private final OkHttpClient client;
     private final List<RequestInterceptor> requestInterceptors = new ArrayList<>();
+    private final List<ResponseInterceptor> responseInterceptors = new ArrayList<>();
 
-    public ConnectionManager(final OkHttpClient client, final List<RequestInterceptor> requestInterceptors) {
+    public ConnectionManager(final OkHttpClient client) {
         this.client = client;
-
-        if (requestInterceptors != null) {
-            this.requestInterceptors.addAll(requestInterceptors);
-        }
 
         handler = new Handler(Looper.getMainLooper());
     }
@@ -70,6 +70,11 @@ public class ConnectionManager {
             @Override
             public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) throws IOException {
                 try {
+
+                    for (ResponseInterceptor interceptor : responseInterceptors) {
+                        interceptor.intercept(response, finalRequest);
+                    }
+
                     T value = serializer.serialize(response);
                     completionHandler.onResponse(new Response<>(finalRequest, response, value));
                 } catch (Exception e) {
@@ -87,11 +92,14 @@ public class ConnectionManager {
         void onResponse(Response<T> response);
     }
 
-    // GETTER & SETTER
+    // Interceptors
 
+    public void addRequestInterceptor(RequestInterceptor interceptor) {
+        requestInterceptors.add(interceptor);
+    }
 
-    public List<RequestInterceptor> getRequestInterceptors() {
-        return requestInterceptors;
+    public void addResponseInterceptor(ResponseInterceptor interceptor) {
+        responseInterceptors.add(interceptor);
     }
 
 }

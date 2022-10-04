@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new StickyHeaderGridLayoutManager(1));
         recyclerView.setAdapter(new Adapter());
 
+        ConnectionManager.shared().addRequestInterceptor(new APIRequestInterceptor());
     }
 
 
@@ -135,17 +136,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void testNetwork() {
-            Request request = new Request.Builder().url("https://jsonplaceholder.typicode.com/todos/1").build();
-//            ConnectionManager.shared().send(request, new ResponseStringSerializer(), response -> {
-//                if (response.error != null) {
-//                    Log.d("NETWORK ERROR", response.error.getLocalizedMessage());
-//                }
-//                else {
-//                    Log.d("NETWORK SUCCESS", response.value);
-//                }
-//            });
+            Request request = new Request.Builder().url("https://dev-fraktionsapp.de/api/v3/test/authenticated-client").build();
 
-            ConnectionManager.shared().getRequestInterceptors().add(new APIRequestInterceptor());
 
             ConnectionManager.shared().send(request, new ResponseJSONSerializer(), response -> {
                 Log.d("NETWORK REQUEST", response.request.toString());
