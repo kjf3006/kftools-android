@@ -11,7 +11,7 @@ public class APIRequestInterceptor implements RequestInterceptor {
 
     @NonNull
     @Override
-    public Request intercept(Request request) {
+    public Request intercept(@NonNull Request request) {
         Request.Builder builder = request.newBuilder();
         builder.header("X-API-KEY", "ABCDE");
         return builder.build();

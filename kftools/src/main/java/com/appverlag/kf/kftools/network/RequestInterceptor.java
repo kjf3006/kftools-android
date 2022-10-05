@@ -5,7 +5,5 @@ import androidx.annotation.NonNull;
 import okhttp3.Request;
 
 public interface RequestInterceptor {
-
-    @NonNull
-    Request intercept(Request request);
+    Request intercept(@NonNull Request request);
 }

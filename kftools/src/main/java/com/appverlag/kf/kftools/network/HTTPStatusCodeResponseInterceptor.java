@@ -9,7 +9,7 @@ public class HTTPStatusCodeResponseInterceptor implements ResponseInterceptor {
 
     @NonNull
     @Override
-    public void intercept(Response response, Request request) throws Exception {
+    public void intercept(@NonNull Response response, @NonNull Request request) throws Exception {
 
         int statusCode = response.code();
         if (statusCode < 200 || statusCode > 300) {

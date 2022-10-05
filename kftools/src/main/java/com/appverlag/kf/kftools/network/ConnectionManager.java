@@ -1,39 +1,43 @@
 package com.appverlag.kf.kftools.network;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
+/**
+ * Wrapper for OkHttpClient with simple handling of HTTP requests
+ */
 public class ConnectionManager {
 
     private static ConnectionManager shared;
     public static ConnectionManager shared() {
         if (ConnectionManager.shared == null) {
             ConnectionManager.shared = new ConnectionManager(defaultClient());
-            ConnectionManager.shared.addResponseInterceptor(new HTTPStatusCodeResponseInterceptor());
         }
         return ConnectionManager.shared;
     }
 
 
     private final Handler handler;
-    private final OkHttpClient client;
+    private OkHttpClient client;
     private final List<RequestInterceptor> requestInterceptors = new ArrayList<>();
     private final List<ResponseInterceptor> responseInterceptors = new ArrayList<>();
 
-    public ConnectionManager(final OkHttpClient client) {
+    public ConnectionManager(@NonNull final OkHttpClient client) {
         this.client = client;
 
         handler = new Handler(Looper.getMainLooper());
@@ -43,7 +47,25 @@ public class ConnectionManager {
         return new OkHttpClient();
     }
 
-    public <T> void send(final Request request, final ResponseSerializer<T> serializer, final ConnectionManagerCompletionHandler<T> completionHandler) {
+    /**
+     * Set default 1GB file cache
+     * @param context Context for getting the applications cache directory
+     */
+    public void setupDefaultCache(@NonNull Context context) {
+        File httpCacheDirectory = new File(context.getCacheDir(), "http-cache");
+        int cacheSize = 1_000_000_000;
+        setCache(new Cache(httpCacheDirectory, cacheSize));
+    }
+
+    /**
+     * Set the cache to be used by internal OkHttpClient.
+     * @param cache The cache to be used
+     */
+    public void setCache(@Nullable Cache cache) {
+        client = client.newBuilder().cache(cache).build();
+    }
+
+    public <T> void send(@NonNull final Request request, @NonNull final ResponseSerializer<T> serializer, @NonNull final ConnectionManagerCompletionHandler<T> completionHandler) {
 
         Request _request = request;
 
@@ -64,11 +86,11 @@ public class ConnectionManager {
         client.newCall(finalRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                completionHandler.onResponse(new Response<>(finalRequest, null, e));
+                runCompletionHandler(completionHandler, new Response<>(finalRequest, null, e));
             }
 
             @Override
-            public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) {
                 try {
 
                     for (ResponseInterceptor interceptor : responseInterceptors) {
@@ -76,16 +98,16 @@ public class ConnectionManager {
                     }
 
                     T value = serializer.serialize(response);
-                    completionHandler.onResponse(new Response<>(finalRequest, response, value));
+                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value));
                 } catch (Exception e) {
-                    completionHandler.onResponse(new Response<>(finalRequest, response, e));
+                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, e));
                 }
             }
         });
     }
 
-    private void runOnUiThread(Runnable r) {
-        handler.post(r);
+    private <T> void runCompletionHandler(final ConnectionManagerCompletionHandler<T> completionHandler, final Response<T> response) {
+        handler.post(() -> completionHandler.onResponse(response));
     }
 
     public interface ConnectionManagerCompletionHandler<T> {
@@ -93,12 +115,11 @@ public class ConnectionManager {
     }
 
     // Interceptors
-
-    public void addRequestInterceptor(RequestInterceptor interceptor) {
+    public void addRequestInterceptor(@NonNull final RequestInterceptor interceptor) {
         requestInterceptors.add(interceptor);
     }
 
-    public void addResponseInterceptor(ResponseInterceptor interceptor) {
+    public void addResponseInterceptor(@NonNull final ResponseInterceptor interceptor) {
         responseInterceptors.add(interceptor);
     }
 

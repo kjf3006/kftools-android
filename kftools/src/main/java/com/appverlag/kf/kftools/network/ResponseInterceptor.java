@@ -6,7 +6,5 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public interface ResponseInterceptor {
-
-    @NonNull
-    void intercept(Response response, Request request) throws Exception;
+    void intercept(@NonNull Response response, @NonNull Request request) throws Exception;
 }

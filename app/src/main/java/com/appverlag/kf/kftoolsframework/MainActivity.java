@@ -19,10 +19,12 @@ import com.appverlag.kf.kftools.network.ResponseStringSerializer;
 import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
 import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import okhttp3.Cache;
 import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(new Adapter());
 
         ConnectionManager.shared().addRequestInterceptor(new APIRequestInterceptor());
+
+        ConnectionManager.shared().setupDefaultCache(getApplicationContext());
     }
 
 
