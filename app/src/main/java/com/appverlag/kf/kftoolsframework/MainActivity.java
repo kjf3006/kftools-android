@@ -16,6 +16,7 @@ import com.appverlag.kf.kftools.network.ConnectionManager;
 import com.appverlag.kf.kftools.network.Response;
 import com.appverlag.kf.kftools.network.ResponseJSONSerializer;
 import com.appverlag.kf.kftools.network.ResponseStringSerializer;
+import com.appverlag.kf.kftools.ui.KFLoadingView;
 import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
 import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
 
@@ -29,6 +30,8 @@ import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ViewGroup rootView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -41,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new StickyHeaderGridLayoutManager(1));
         recyclerView.setAdapter(new Adapter());
 
-        ConnectionManager.shared().addRequestInterceptor(new APIRequestInterceptor());
+        rootView = (ViewGroup) recyclerView.getParent();
 
+        ConnectionManager.shared().addRequestInterceptor(new APIRequestInterceptor());
         ConnectionManager.shared().setupDefaultCache(getApplicationContext());
     }
 
@@ -51,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     adapter
     */
 
-    private static class Adapter extends StickyHeaderGridAdapter {
+    private class Adapter extends StickyHeaderGridAdapter {
 
         private List<Section> data;
 
@@ -62,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         private void setupData() {
             data = new ArrayList<>();
 
-            data.add(new Section("UI-Components", Arrays.asList("KFThemes", "KFFormComponents", "KFYoutube")));
+            data.add(new Section("UI-Components", Arrays.asList("KFThemes", "KFFormComponents", "KFYoutube", "KFLoadingView")));
             data.add(new Section("Data-Handling", Arrays.asList("KFCache", "KFManagedObjects")));
             data.add(new Section("Network", Arrays.asList("ConnectionManager")));
             notifyAllSectionsDataSetChanged();
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        private static class Section {
+        private class Section {
 
             public Section(String title, List<String>rows) {
                 this.title = title;
@@ -131,8 +135,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void handleSelection(String id) {
-            if (id.equals("KFFormComponents")) {
-
+            if (id.equals("KFLoadingView")) {
+                KFLoadingView loadingView = new KFLoadingView(MainActivity.this);
+                loadingView.showInView(MainActivity.this.rootView);
             }
             else if (id.equals("ConnectionManager")) {
                 testNetwork();

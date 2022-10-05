@@ -8,10 +8,16 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">55dp</item>
         <item name="android:padding">15dp</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18sp</item>
         <item name="android:background">@drawable/kftools_bg_rectangle_round_24</item>
         <item name="android:drawablePadding">8dp</item>
+        <item name="backgroundTintMode">screen</item>
+    </style>
+
+    <style name="KFTools.Button.Plain" parent="KFTools.Button">
+        <item name="android:textColor">@color/labelColor</item>
+        <item name="android:background">#00FFFFFF</item>
     </style>
 
     <style name="KFTools.Button.ColorPicker" parent="KFTools.Button">

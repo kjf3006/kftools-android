@@ -27,6 +27,7 @@
         <entry key="kftools/src/main/res/drawable/kftools_bg_rectangle_round_8.xml" value="0.22083333333333333" />
         <entry key="kftools/src/main/res/drawable/kftools_color_text_selector.xml" value="0.22083333333333333" />
         <entry key="kftools/src/main/res/drawable/kftools_edittext_background_default.xml" value="0.22083333333333333" />
+        <entry key="kftools/src/main/res/drawable/kftools_space_8dp.xml" value="0.197" />
         <entry key="kftools/src/main/res/drawable/kftools_space_default.xml" value="0.22083333333333333" />
         <entry key="kftools/src/main/res/layout/kftools_alert_dialog_color_picker.xml" value="0.2046875" />
         <entry key="kftools/src/main/res/layout/kftools_form_component.xml" value="0.2391304347826087" />

@@ -7,6 +7,7 @@
 
         <item name="editTextStyle">@style/KFTools.EditText</item>
         <item name="android:textViewStyle">@style/KFTools.TextView</item>
+        <item name="android:buttonStyle">@style/KFTools.Button</item>
 
     </style>
 

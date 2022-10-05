@@ -14,6 +14,12 @@
         android:divider="@drawable/kftools_space_default"
         android:showDividers="middle">
 
+        <Button
+            style="@style/KFTools.Button.Plain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Plain Button"/>
+
         <com.appverlag.kf.kftools.ui.widgets.KFDateTimeView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

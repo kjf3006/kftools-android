@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
@@ -18,6 +19,10 @@ import com.appverlag.kf.kftools.R;
 public class KFLoadingView extends FrameLayout {
 
     private KFLoadingViewErrorListener listener;
+    private ProgressBar progressBar;
+    private View errorView;
+
+    private boolean dynamiclyAdded;
 
     public KFLoadingView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -36,30 +41,44 @@ public class KFLoadingView extends FrameLayout {
 
     private void initView(Context context) {
         View.inflate(context, R.layout.kftools_loading_container, this);
-        ((ProgressBar) findViewById(R.id.progressBar)).getIndeterminateDrawable().setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
+        errorView = findViewById(R.id.errorView);
+        View errorButton = findViewById(R.id.errorButton);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
 
-        findViewById(R.id.errorButton).setOnClickListener(view -> {
-            findViewById(R.id.errorView).setVisibility(GONE);
-            findViewById(R.id.progressBar).setVisibility(VISIBLE);
+        errorButton.setOnClickListener(view -> {
+            errorView.setVisibility(GONE);
+            progressBar.setVisibility(VISIBLE);
             if (listener != null) listener.onClick();
         });
         setVisibility(GONE);
     }
 
+    public void showInView(ViewGroup viewGroup) {
+        dynamiclyAdded = true;
+
+        ViewGroup.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        viewGroup.addView(this, layoutParams);
+        showProgress();
+    }
 
     public void showProgress() {
         setVisibility(VISIBLE);
-        findViewById(R.id.errorView).setVisibility(GONE);
-        findViewById(R.id.progressBar).setVisibility(VISIBLE);
+        errorView.setVisibility(GONE);
+        progressBar.setVisibility(VISIBLE);
     }
 
     public void hide() {
         setVisibility(GONE);
+
+        if (dynamiclyAdded) {
+            ((ViewGroup) getParent()).removeView(this);
+        }
     }
 
     public void showError() {
-        findViewById(R.id.errorView).setVisibility(VISIBLE);
-        findViewById(R.id.progressBar).setVisibility(GONE);
+        errorView.setVisibility(VISIBLE);
+        progressBar.setVisibility(GONE);
     }
 
     public void setListener(KFLoadingViewErrorListener listener) {
