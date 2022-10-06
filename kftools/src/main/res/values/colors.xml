@@ -3,17 +3,27 @@
 
     <color name="labelColor">#FF000000</color>
     <color name="secondaryLabelColor">#993C3C43</color>
+    <color name="tertiaryLabelColor">#4C3C3C43</color>
+    <color name="quaternaryLabelColor">#2D3C3C43</color>
 
     <color name="systemBackgroundColor">#FFFFFFFF</color>
+    <color name="secondarySystemBackgroundColor">#FFF2F2F7</color>
+    <color name="tertiarySystemBackgroundColor">#FFFFFFFF</color>
 
     <color name="systemGroupedBackgroundColor">#FFF2F2F7</color>
+    <color name="secondarySystemGroupedBackgroundColor">#FFFFFFFF</color>
+    <color name="tertiarySystemGroupedBackgroundColor">#FFF2F2F7</color>
 
     <color name="systemGray5Color">#FFE5E5EA</color>
 
     <color name="systemRedColor">#FFFF3B30</color>
+    <color name="systemOrangeColor">#FFFF9500</color>
+    <color name="systemYellowColor">#FFFFCC00</color>
+    <color name="systemGreenColor">#FF34C759</color>
+    <color name="systemBlueColor">#FF007AFF</color>
 
     <!-- fixed colors -->
-    <color name="white">#FFFFFFFF</color>
-    <color name="black">#FF000000</color>
+    <color name="whiteColor">#FFFFFFFF</color>
+    <color name="blackColor">#FF000000</color>
 
 </resources>

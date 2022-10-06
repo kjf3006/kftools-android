@@ -19,8 +19,8 @@ public class Response<T> {
         this.error = error;
     }
 
-    public Response(@NonNull Request request, okhttp3.Response response, Exception error) {
-        this(request, response, null, error);
+    public Response(@NonNull Request request, Exception error) {
+        this(request, null, null, error);
     }
 
     public Response(@NonNull Request request, okhttp3.Response response, T value) {

@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved
@@ -35,7 +36,7 @@ public class KFNotificationCenter {
         return instance;
     }
 
-    public synchronized void registerForNotification(String notificationName, KFNotificationCenterListener listener) {
+    public synchronized void registerForNotification(@NonNull String notificationName, @NonNull KFNotificationCenterListener listener) {
         List<WeakReference<KFNotificationCenterListener>> list = registredObjects.get(notificationName);
         if(list == null) {
             list = new ArrayList<>();
@@ -44,11 +45,38 @@ public class KFNotificationCenter {
         list.add(new WeakReference<>(listener));
     }
 
-    public synchronized void postNotification(final String notificationName) {
+    public synchronized void removeObserver(@NonNull String notificationName, @NonNull KFNotificationCenterListener listener) {
+        List<WeakReference<KFNotificationCenterListener>> list = registredObjects.get(notificationName);
+        removeObserver(list, listener);
+    }
+
+    public synchronized void removeObserver(@NonNull KFNotificationCenterListener listener) {
+        for (String notificationName : registredObjects.keySet()) {
+            List<WeakReference<KFNotificationCenterListener>> list = registredObjects.get(notificationName);
+            removeObserver(list, listener);
+        }
+    }
+
+    /**
+     * Remove observer from given list, if found
+     * @param list The list the listener should be removed
+     * @param listener The listener to be removed
+     */
+    private void removeObserver(List<WeakReference<KFNotificationCenterListener>> list, @NonNull KFNotificationCenterListener listener) {
+        if(list != null) {
+            Iterator<WeakReference<KFNotificationCenterListener>> iterator = list.iterator();
+            while (iterator.hasNext()) {
+                final KFNotificationCenterListener _listener = iterator.next().get();
+                if (listener == _listener) iterator.remove();
+            }
+        }
+    }
+
+    public synchronized void postNotification(@NonNull final String notificationName) {
         postNotification(notificationName, new Intent());
     }
 
-    public synchronized void postNotification(final String notificationName, final Intent userinfo){
+    public synchronized void postNotification(@NonNull final String notificationName, @NonNull final Intent userinfo){
         List<WeakReference<KFNotificationCenterListener>> list = registredObjects.get(notificationName);
         if(list != null) {
             Iterator<WeakReference<KFNotificationCenterListener>> iterator = list.iterator();

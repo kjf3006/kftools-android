@@ -7,6 +7,8 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.appverlag.kf.kftools.other.KFLog;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import okhttp3.Request;
  * Wrapper for OkHttpClient with simple handling of HTTP requests
  */
 public class ConnectionManager {
+
+    private static final String LOG_TAG = "ConnectionManager";
 
     private static ConnectionManager shared;
     public static ConnectionManager shared() {
@@ -86,11 +90,13 @@ public class ConnectionManager {
         client.newCall(finalRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                runCompletionHandler(completionHandler, new Response<>(finalRequest, null, e));
+                KFLog.d(LOG_TAG, String.format("Did fail with error: %s", e.getLocalizedMessage()));
+                runCompletionHandler(completionHandler, new Response<>(finalRequest, e));
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) {
+                KFLog.d(LOG_TAG, String.format("Did receive data: %s", response.body()));
                 try {
 
                     for (ResponseInterceptor interceptor : responseInterceptors) {
@@ -100,7 +106,7 @@ public class ConnectionManager {
                     T value = serializer.serialize(response);
                     runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value));
                 } catch (Exception e) {
-                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, e));
+                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, null, e));
                 }
             }
         });
