@@ -59,7 +59,7 @@ public class KFLoadingView extends FrameLayout {
     public void showInView(ViewGroup viewGroup) {
         dynamiclyAdded = true;
 
-        if (getParent() != null) {
+        if (getParent() == null) {
             ViewGroup.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             viewGroup.addView(this, layoutParams);
         }
@@ -75,7 +75,7 @@ public class KFLoadingView extends FrameLayout {
     public void hide() {
         setVisibility(GONE);
 
-        if (dynamiclyAdded) {
+        if (dynamiclyAdded && getParent() != null) {
             ((ViewGroup) getParent()).removeView(this);
         }
     }
