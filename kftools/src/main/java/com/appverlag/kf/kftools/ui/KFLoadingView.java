@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.appverlag.kf.kftools.R;
 
@@ -21,6 +22,7 @@ public class KFLoadingView extends FrameLayout {
     private KFLoadingViewErrorListener listener;
     private ProgressBar progressBar;
     private View errorView;
+    private TextView textViewErrorMessage;
 
     private boolean dynamiclyAdded;
 
@@ -42,11 +44,11 @@ public class KFLoadingView extends FrameLayout {
     private void initView(Context context) {
         View.inflate(context, R.layout.kftools_loading_container, this);
         errorView = findViewById(R.id.errorView);
-        View errorButton = findViewById(R.id.errorButton);
+        textViewErrorMessage = findViewById(R.id.textViewErrorMessage);
         progressBar = findViewById(R.id.progressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
 
-        errorButton.setOnClickListener(view -> {
+        findViewById(R.id.errorButton).setOnClickListener(view -> {
             errorView.setVisibility(GONE);
             progressBar.setVisibility(VISIBLE);
             if (listener != null) listener.onClick();
@@ -57,8 +59,10 @@ public class KFLoadingView extends FrameLayout {
     public void showInView(ViewGroup viewGroup) {
         dynamiclyAdded = true;
 
-        ViewGroup.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        viewGroup.addView(this, layoutParams);
+        if (getParent() != null) {
+            ViewGroup.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            viewGroup.addView(this, layoutParams);
+        }
         showProgress();
     }
 
@@ -77,6 +81,11 @@ public class KFLoadingView extends FrameLayout {
     }
 
     public void showError() {
+        showError("Verbindung nicht möglich");
+    }
+
+    public void showError(String message) {
+        textViewErrorMessage.setText(message);
         errorView.setVisibility(VISIBLE);
         progressBar.setVisibility(GONE);
     }

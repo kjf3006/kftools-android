@@ -40,7 +40,7 @@
     </style>
 
     <style name="KFTools.TextView" parent="Widget.AppCompat.TextView">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textAppearance">@style/KFTools.TextTextAppearance.Body</item>
         <item name="android:textColor">@color/labelColor</item>
     </style>
 

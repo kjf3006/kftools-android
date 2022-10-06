@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="KFTools.TextTextAppearance">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Title1">
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Title2">
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Title3">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Headline">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Body">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Callout">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Subheadline">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Footnote">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Caption1">
+        <item name="android:textSize">9sp</item>
+    </style>
+
+    <style name="KFTools.TextTextAppearance.Caption2">
+        <item name="android:textSize">8sp</item>
+    </style>
+
+</resources>

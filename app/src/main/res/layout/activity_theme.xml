@@ -14,6 +14,11 @@
         android:divider="@drawable/kftools_space_default"
         android:showDividers="middle">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nur ein Test"
+            android:textAppearance="@style/KFTools.TextTextAppearance.Body"/>
         <Button
             style="@style/KFTools.Button.Plain"
             android:layout_width="match_parent"
