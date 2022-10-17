@@ -73,6 +73,8 @@ public abstract class KFFormComponent <T> extends LinearLayout {
 
     public abstract T getValue();
 
+    public abstract void setValue(T value);
+
     /*
     getter and setter
      */

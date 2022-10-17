@@ -20,7 +20,7 @@
             android:text="Nur ein Test"
             android:textAppearance="@style/KFTools.TextTextAppearance.Body"/>
         <Button
-            style="@style/KFTools.Button.Plain"
+            style="@style/KFTools.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Plain Button"/>

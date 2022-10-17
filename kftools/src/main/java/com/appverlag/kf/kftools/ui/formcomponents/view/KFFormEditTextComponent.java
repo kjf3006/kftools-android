@@ -41,6 +41,11 @@ public class KFFormEditTextComponent extends KFFormComponent<String>{
         return editText.getText().toString();
     }
 
+    @Override
+    public void setValue(String value) {
+        editText.setText(value);
+    }
+
     public EditText getEditText() {
         return editText;
     }

@@ -41,6 +41,11 @@ public class KFFormColorComponent extends KFFormComponent<Integer>{
         return selectedColor;
     }
 
+    @Override
+    public void setValue(Integer value) {
+
+    }
+
     private void showPicker(Context context) {
         KFColorPickerDialog colorPicker = new KFColorPickerDialog(context);
         colorPicker.setOnColorSelectedListender((picker, color) -> {

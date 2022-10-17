@@ -5,11 +5,16 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appverlag.kf.kftools.other.KFLog;
+import com.appverlag.kf.kftools.ui.formcomponents.controller.KFFormComponentContoller;
+import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormComponent;
 import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDateTimeComponent;
 import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDropDownComponent;
 
 import java.util.Arrays;
 import java.util.Date;
+
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 public class ThemeActivity extends AppCompatActivity {
 
@@ -41,5 +46,12 @@ public class ThemeActivity extends AppCompatActivity {
             timePickerDialog.setMinuteInterval(30);
         });
 
+        KFFormComponentContoller contoller = new KFFormComponentContoller(dateTimeComponent);
+
+        Object object = "TEST";
+        KFFormComponent<?> component = contoller.getComponent("");
+        if (component.getValue().getClass().equals(object.getClass())) {
+
+        }
     }
 }

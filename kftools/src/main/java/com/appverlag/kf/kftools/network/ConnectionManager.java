@@ -96,7 +96,6 @@ public class ConnectionManager {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) {
-                KFLog.d(LOG_TAG, String.format("Did receive data: %s", response.body()));
                 try {
 
                     for (ResponseInterceptor interceptor : responseInterceptors) {
@@ -104,8 +103,11 @@ public class ConnectionManager {
                     }
 
                     T value = serializer.serialize(response);
+                    KFLog.d(LOG_TAG, String.format("Did receive data: %s", value));
+
                     runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value));
                 } catch (Exception e) {
+                    KFLog.d(LOG_TAG, String.format("Did fail with error: %s", e.getLocalizedMessage()));
                     runCompletionHandler(completionHandler, new Response<>(finalRequest, response, null, e));
                 }
             }

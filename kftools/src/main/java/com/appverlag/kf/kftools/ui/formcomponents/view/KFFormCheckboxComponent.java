@@ -31,6 +31,11 @@ public class KFFormCheckboxComponent extends KFFormComponent<Boolean> {
         return checkBox.isChecked();
     }
 
+    @Override
+    public void setValue(Boolean value) {
+        checkBox.setChecked(value);
+    }
+
     public CheckBox getCheckBox() {
         return checkBox;
     }

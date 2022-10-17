@@ -32,6 +32,11 @@ public class KFFormDropDownComponent extends KFFormComponent<String> {
         return dropDownView.getSelectedValue();
     }
 
+    @Override
+    public void setValue(String value) {
+        dropDownView.setSelectedValue(value);
+    }
+
     public KFDropDownView getDropDownView() {
         return dropDownView;
     }

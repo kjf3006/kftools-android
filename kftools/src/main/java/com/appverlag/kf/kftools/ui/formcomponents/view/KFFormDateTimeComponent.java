@@ -34,6 +34,11 @@ public class KFFormDateTimeComponent extends KFFormComponent<Date> {
         return dateTimeView.getDate();
     }
 
+    @Override
+    public void setValue(Date value) {
+        dateTimeView.setDate(value);
+    }
+
     public KFDateTimeView getDateTimeView() {
         return dateTimeView;
     }
