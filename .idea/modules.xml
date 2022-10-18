@@ -4,7 +4,13 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kftools-android.iml" filepath="$PROJECT_DIR$/.idea/modules/kftools-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/kftools-android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/kftools-android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/kftools-android.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/kftools-android.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/kftools-android.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/kftools-android.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/kftools-android.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/kftools-android.app.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.iml" filepath="$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/kftools/kftools-android.kftools.unitTest.iml" />
     </modules>
   </component>
 </project>

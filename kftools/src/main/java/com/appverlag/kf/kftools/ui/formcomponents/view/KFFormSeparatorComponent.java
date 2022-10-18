@@ -39,4 +39,9 @@ public class KFFormSeparatorComponent extends KFFormComponent<Object> {
     public Object getValue() {
         return null;
     }
+
+    @Override
+    public void setValue(Object value) {
+
+    }
 }
