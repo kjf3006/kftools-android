@@ -49,7 +49,7 @@ public class KFFormComponentContoller {
     public KFFormComponent<?> getComponent(String identifier) {
         for (KFFormComponent<?> component : components) {
             String key = component.getIdentifier();
-            if (!key.isEmpty() && key.equals(identifier)) {
+            if (key != null && !key.isEmpty() && key.equals(identifier)) {
                 return component;
             }
         }

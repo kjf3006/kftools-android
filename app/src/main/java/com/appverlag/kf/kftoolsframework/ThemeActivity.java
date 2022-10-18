@@ -50,8 +50,6 @@ public class ThemeActivity extends AppCompatActivity {
 
         Object object = "TEST";
         KFFormComponent<?> component = contoller.getComponent("");
-        if (component.getValue().getClass().equals(object.getClass())) {
 
-        }
     }
 }

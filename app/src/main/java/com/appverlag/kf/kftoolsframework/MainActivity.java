@@ -142,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
             else if (id.equals("ConnectionManager")) {
                 testNetwork();
             }
+            else if (id.equals("KFThemes")) {
+                Intent intent = new Intent(MainActivity.this, ThemeActivity.class);
+                startActivity(intent);
+            }
         }
 
         private void testNetwork() {

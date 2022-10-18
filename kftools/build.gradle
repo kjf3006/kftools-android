@@ -34,7 +34,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    api 'com.squareup.okhttp3:okhttp:3.12.1'
+    api 'com.squareup.okhttp3:okhttp:4.10.0'
     api 'com.makeramen:roundedimageview:2.3.0'
 
     api 'com.android.billingclient:billing:5.0.0'

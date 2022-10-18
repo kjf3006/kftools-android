@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -56,6 +58,7 @@ public class KFDateTimeView extends TextView {
     }
 
     private void setupView(@NonNull Context context) {
+        setSaveEnabled(true);
         setDate(new Date());
         setDatePickerMode(DatePickerMode.DatePickerModeDateAndTime);
         setOnClickListener(v -> showPicker());
@@ -86,7 +89,7 @@ public class KFDateTimeView extends TextView {
                 didSelectDate();
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        dialog.setTitle(title);
+//        dialog.setTitle(title);
 
         if (onShowDatePickerListener != null) {
             onShowDatePickerListener.willShowDatePicker(dialog.getDatePicker());
@@ -105,7 +108,7 @@ public class KFDateTimeView extends TextView {
             date = calendar.getTime();
             didSelectDate();
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-        dialog.setTitle(title);
+//        dialog.setTitle(title);
 
         if (onShowTimePickerDialogListener != null) {
             onShowTimePickerDialogListener.willShowTimePickerDialog(dialog);
@@ -203,5 +206,53 @@ public class KFDateTimeView extends TextView {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    /*
+    saved state
+     */
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        final Parcelable superState = super.onSaveInstanceState();
+        final SavedState customViewSavedState = new SavedState(superState);
+        customViewSavedState.date = date;
+        return customViewSavedState;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        final SavedState customViewSavedState = (SavedState) state;
+        setDate(customViewSavedState.date);
+        super.onRestoreInstanceState(customViewSavedState.getSuperState());
+    }
+
+    private static class SavedState extends BaseSavedState {
+
+        Date date;
+
+        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
+            @Override public SavedState createFromParcel(Parcel source) {
+                return new SavedState(source);
+            }
+
+            @Override public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel source) {
+            super(source);
+            date = (Date) source.readSerializable();
+        }
+
+        @Override public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeSerializable(date);
+        }
     }
 }

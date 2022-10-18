@@ -47,7 +47,7 @@ public class ConnectionManager {
         handler = new Handler(Looper.getMainLooper());
     }
 
-    public static OkHttpClient defaultClient() {
+    protected static OkHttpClient defaultClient() {
         return new OkHttpClient();
     }
 
@@ -69,7 +69,7 @@ public class ConnectionManager {
         client = client.newBuilder().cache(cache).build();
     }
 
-    public <T> void send(@NonNull final Request request, @NonNull final ResponseSerializer<T> serializer, @NonNull final ConnectionManagerCompletionHandler<T> completionHandler) {
+    public <T> Call send(@NonNull final Request request, @NonNull final ResponseSerializer<T> serializer, @NonNull final ConnectionManagerCompletionHandler<T> completionHandler) {
 
         Request _request = request;
 
@@ -87,7 +87,8 @@ public class ConnectionManager {
         }
 
         final Request finalRequest = _request;
-        client.newCall(finalRequest).enqueue(new Callback() {
+        Call call = client.newCall(finalRequest);
+        call.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 KFLog.d(LOG_TAG, String.format("Did fail with error: %s", e.getLocalizedMessage()));
@@ -112,6 +113,7 @@ public class ConnectionManager {
                 }
             }
         });
+        return call;
     }
 
     private <T> void runCompletionHandler(final ConnectionManagerCompletionHandler<T> completionHandler, final Response<T> response) {

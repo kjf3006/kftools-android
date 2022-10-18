@@ -20,6 +20,10 @@
         <item name="android:colorAccent">?colorAccent</item>
     </style>
 
+    <style name="KFTools.DatePickerDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+
+    </style>
+
     <style name="KFTools.Button.Plain" parent="KFTools.Button">
         <item name="android:textColor">@color/labelColor</item>
         <item name="android:background">#00FFFFFF</item>
