@@ -31,19 +31,19 @@
     </style>
 
     <style name="KFTools.TextTextAppearance.Subheadline">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
     <style name="KFTools.TextTextAppearance.Footnote">
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="KFTools.TextTextAppearance.Caption1">
-        <item name="android:textSize">9sp</item>
+        <item name="android:textSize">11sp</item>
     </style>
 
     <style name="KFTools.TextTextAppearance.Caption2">
-        <item name="android:textSize">8sp</item>
+        <item name="android:textSize">10sp</item>
     </style>
 
 </resources>

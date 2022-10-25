@@ -166,10 +166,22 @@ public class KFSpannableStringBuilder extends SpannableStringBuilder {
     }
 
     public void appendImage(Context context, final int drawableRes) {
+        appendImage(context, drawableRes, -1, -1);
+    }
+
+    public void appendImage(Context context, final int drawableRes, int width, int heigth) {
         Drawable image = ContextCompat.getDrawable(context, drawableRes);
         if (image != null) {
-            image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
-            ImageSpan imageSpan = new KFCenteredImageSpan(image);
+            if (width == -1) width = image.getIntrinsicWidth();
+            if (heigth == -1) heigth = image.getIntrinsicHeight();
+            image.setBounds(0, 0, width, heigth);
+            ImageSpan imageSpan;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                imageSpan = new ImageSpan(image, ImageSpan.ALIGN_CENTER);
+            }
+            else {
+                imageSpan = new KFCenteredImageSpan(image);
+            }
             SpannableString spFilterWithIcon = new SpannableString(" ");
             spFilterWithIcon.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             append(spFilterWithIcon);

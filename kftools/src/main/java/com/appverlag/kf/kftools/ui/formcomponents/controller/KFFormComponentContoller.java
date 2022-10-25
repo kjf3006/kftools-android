@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.FormBody;
+
 public class KFFormComponentContoller {
 
     private List<KFFormComponent<?>> components;
@@ -72,11 +74,46 @@ public class KFFormComponentContoller {
         Map<String, String> data = new HashMap<>();
         for (KFFormComponent<?> component : components) {
             Object value = component.getValue();
-            if (value != null) {
-                data.put(component.getIdentifier(), serializer.serialize(component.getValue()));
+            String identifier = component.getIdentifier();
+            if (identifier != null && value != null) {
+                data.put(identifier, serializer.serialize(value));
             }
         }
         return data;
+    }
+
+    /**
+     * Support for getting okhhtp FormBody from getSerializedData. Uses the KFFormComponentDefaultSerializer as serializer.
+     * @return The created FormBody
+     */
+    public FormBody getSerializedFormBody() {
+        return getSerializedFormBody(new KFFormComponentDefaultSerializer());
+    }
+
+    /**
+     * Support for getting okhhtp FormBody from getSerializedData
+     * @param serializer The serializer to be used
+     * @return The created FormBody
+     */
+    public FormBody getSerializedFormBody(KFFormComponentSerializer serializer) {
+        Map<String, String> data = getSerializedData(serializer);
+        return  buildFormBody(data);
+    }
+
+    /**
+     * Support for building okhhtp FormBody from Map
+     * @param data The data to be put in FormBody
+     * @return The created FormBody
+     */
+    public FormBody buildFormBody(Map<String, String> data) {
+        FormBody.Builder formBuilder = new FormBody.Builder();
+        for (String key : data.keySet()) {
+            String value = data.get(key);
+            if (value != null) {
+                formBuilder.add(key, value);
+            }
+        }
+        return  formBuilder.build();
     }
 
     /*

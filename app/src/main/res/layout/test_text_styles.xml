@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:divider="@drawable/kftools_space_8dp"
+    android:showDividers="middle">
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Title1"
+        android:text="TextTextAppearance.Title1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Title2"
+        android:text="TextTextAppearance.Title2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Title3"
+        android:text="TextTextAppearance.Title3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Headline"
+        android:text="TextTextAppearance.Headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Body"
+        android:text="TextTextAppearance.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Callout"
+        android:text="TextTextAppearance.Callout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Subheadline"
+        android:text="TextTextAppearance.Subheadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Footnote"
+        android:text="TextTextAppearance.Footnote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Caption1"
+        android:text="TextTextAppearance.Caption1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/KFTools.TextTextAppearance.Caption2"
+        android:text="TextTextAppearance.Caption2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
