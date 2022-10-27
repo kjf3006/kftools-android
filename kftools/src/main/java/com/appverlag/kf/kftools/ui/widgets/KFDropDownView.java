@@ -3,6 +3,8 @@ package com.appverlag.kf.kftools.ui.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -39,6 +41,7 @@ public class KFDropDownView extends TextView {
     }
 
     private void setupView(@NonNull Context context) {
+        setSaveEnabled(true);
         options = new ArrayList<>();
         setSelectedIndex(0);
         setOnClickListener(v -> showSelection());
@@ -127,4 +130,62 @@ public class KFDropDownView extends TextView {
     public void setOnSelectionListener(OnSelectionListener onSelectionListener) {
         this.onSelectionListener = onSelectionListener;
     }
+
+    /*
+    saved state
+     */
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        final Parcelable superState = super.onSaveInstanceState();
+        final SavedState customViewSavedState = new SavedState(superState);
+        customViewSavedState.selectedIndex = selectedIndex;
+        customViewSavedState.values = values;
+        customViewSavedState.options = options;
+        return customViewSavedState;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        final SavedState customViewSavedState = (SavedState) state;
+        values = customViewSavedState.values;
+        options = customViewSavedState.options;
+        setSelectedIndex(customViewSavedState.selectedIndex);
+        super.onRestoreInstanceState(customViewSavedState.getSuperState());
+    }
+
+    private static class SavedState extends BaseSavedState {
+
+        private List<String> options, values;
+        private int selectedIndex;
+
+        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
+            @Override public SavedState createFromParcel(Parcel source) {
+                return new SavedState(source);
+            }
+
+            @Override public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel source) {
+            super(source);
+            options = source.createStringArrayList();
+            values = source.createStringArrayList();
+            selectedIndex = source.readInt();
+        }
+
+        @Override public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeStringList(options);
+            out.writeStringList(values);
+            out.writeInt(selectedIndex);
+        }
+    }
+
 }

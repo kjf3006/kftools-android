@@ -26,10 +26,19 @@
             android:text="Plain Button"/>
 
         <com.appverlag.kf.kftools.ui.widgets.KFDateTimeView
+            android:id="@+id/dateTimeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:datePickerMode="DatePickerModeTime"
             app:title="KFDateTimeViewTitle"/>
+
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDropDownComponent
+            android:id="@+id/dropDownComponent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormDropDownComponentTitle"
+            app:description="KFFormDropDownComponentDescription"
+            />
 
         <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormCheckboxComponent
             android:layout_width="wrap_content"
@@ -39,6 +48,14 @@
             android:checked="true"
             android:text="KFFormCheckboxComponentText"
             />
+
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormSwitchComponent
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:title="KFFormSwitchComponentTitle"
+            app:description="KFFormSwitchComponentDescription"
+            android:checked="true"
+            android:text="KFFormSwitchComponentText"/>
 
         <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormEditTextComponent
             android:layout_height="wrap_content"
@@ -79,14 +96,6 @@
             android:text="KFFormButtonComponentText"
             />
 
-        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDropDownComponent
-            android:id="@+id/dropDownComponent"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:title="KFFormDropDownComponentTitle"
-            android:enabled="false"
-            app:description="KFFormDropDownComponentDescription"
-            />
 
         <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDateTimeComponent
             android:id="@+id/dateTimeComponent"
