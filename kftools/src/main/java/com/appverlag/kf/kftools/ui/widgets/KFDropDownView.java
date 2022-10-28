@@ -93,6 +93,7 @@ public class KFDropDownView extends TextView {
 
     public void setValues(List<String> values) {
         this.values = values;
+        setSelectedIndex(selectedIndex);
     }
 
     public int getSelectedIndex() {
