@@ -76,7 +76,7 @@ public class ConnectionManager {
         // inject Accept header
         if (request.header("Accept") == null) {
             Request.Builder builder = request.newBuilder();
-            for (String contentType : serializer.acceptedContentTypes) {
+            for (String contentType : serializer.acceptedContentTypes()) {
                 builder.addHeader("Accept", contentType);
             }
             _request = builder.build();

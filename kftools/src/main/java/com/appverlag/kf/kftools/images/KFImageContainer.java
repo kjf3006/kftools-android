@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.DrawableRes;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
  * Proprietary and confidential
  * Created by kevinflachsmann on 22.07.18.
  */
-public class KFImageContainer {
+public class KFImageContainer implements Serializable {
 
     public enum Type { KEY, URL, RES, BMP }
     public enum Size {SMALL, MEDIUM, LARGE, ORIGINAL}; //100x100 500x500 1000x1000 0x0

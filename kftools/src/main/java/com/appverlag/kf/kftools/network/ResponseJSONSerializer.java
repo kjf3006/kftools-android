@@ -1,7 +1,5 @@
 package com.appverlag.kf.kftools.network;
 
-import com.appverlag.kf.kftools.other.KFLog;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -11,7 +9,10 @@ import okhttp3.ResponseBody;
 
 public class ResponseJSONSerializer extends ResponseSerializer<JSONObject> {
 
-    public String[] acceptedContentTypes = new String[] { "application/json" };
+    @Override
+    public String[] acceptedContentTypes() {
+        return new String[] { "application/json" };
+    }
 
     @Override
     public JSONObject serialize(Response response) throws Exception {

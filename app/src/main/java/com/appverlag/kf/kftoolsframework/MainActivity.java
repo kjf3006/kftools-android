@@ -10,13 +10,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appverlag.kf.kftools.images.KFImageContainer;
 import com.appverlag.kf.kftools.network.ConnectionManager;
 import com.appverlag.kf.kftools.network.Response;
 import com.appverlag.kf.kftools.network.ResponseJSONSerializer;
 import com.appverlag.kf.kftools.network.ResponseStringSerializer;
 import com.appverlag.kf.kftools.ui.KFLoadingView;
+import com.appverlag.kf.kftools.ui.images.ImageGalleryFragment;
 import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
 import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
 
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         private void setupData() {
             data = new ArrayList<>();
 
-            data.add(new Section("UI-Components", Arrays.asList("KFThemes", "KFFormComponents", "KFYoutube", "KFLoadingView")));
+            data.add(new Section("UI-Components", Arrays.asList("KFThemes", "ImageGallery", "KFFormComponents", "KFYoutube", "KFLoadingView")));
             data.add(new Section("Data-Handling", Arrays.asList("KFCache", "KFManagedObjects")));
             data.add(new Section("Network", Arrays.asList("ConnectionManager")));
             notifyAllSectionsDataSetChanged();
@@ -145,6 +149,14 @@ public class MainActivity extends AppCompatActivity {
             else if (id.equals("KFThemes")) {
                 Intent intent = new Intent(MainActivity.this, ThemeActivity.class);
                 startActivity(intent);
+            }
+            else if (id.equals("ImageGallery")) {
+                ImageGalleryFragment fragment = new ImageGalleryFragment(Arrays.asList(
+                        KFImageContainer.url("https://media.idownloadblog.com/wp-content/uploads/2021/09/Apple-September-Event-California-Streaming-BasicAppleGuy-iDownloadBlog-6K.png"),
+                        KFImageContainer.url("https://restado.de/wp-content/uploads/test.jpg"),
+                        KFImageContainer.url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/1200px-SMPTE_Color_Bars.svg.png")
+                ), 0);
+                fragment.show(getSupportFragmentManager(), null);
             }
         }
 

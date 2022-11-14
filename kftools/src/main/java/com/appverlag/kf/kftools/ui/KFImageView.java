@@ -22,6 +22,8 @@ public class KFImageView extends AppCompatImageView {
 
     public enum Size {SMALL, MEDIUM, LARGE};
 
+    private OnImageChangeListener onImageChangeListener;
+
 
     private String savedURL;
     private float aspectRatio = 0;
@@ -71,6 +73,7 @@ public class KFImageView extends AppCompatImageView {
             public void onComplete(Bitmap bitmap) {
                 if (url == null || !url.equals(savedURL) || bitmap == null) return;
                 setImageBitmap(bitmap);
+                imageDidChange();
             }
         });
 
@@ -107,6 +110,7 @@ public class KFImageView extends AppCompatImageView {
             public void onComplete(Bitmap bitmap) {
                 if (!identifier.equals(savedURL) || bitmap == null) return;
                 setImageBitmap(bitmap);
+                imageDidChange();
             }
         });
     }
@@ -158,6 +162,7 @@ public class KFImageView extends AppCompatImageView {
             public void onComplete(Bitmap bitmap) {
                 if (key == null || !key.equals(savedURL) || bitmap == null) return;
                 setImageBitmap(bitmap);
+                imageDidChange();
             }
         });
 
@@ -229,5 +234,19 @@ public class KFImageView extends AppCompatImageView {
             placeholder = bitmap;
         }
         return placeholder;
+    }
+
+    private void imageDidChange() {
+        if (onImageChangeListener != null) {
+            onImageChangeListener.onImageChange(this);
+        }
+    }
+
+    public void setOnImageChangeListener(OnImageChangeListener onImageChangeListener) {
+        this.onImageChangeListener = onImageChangeListener;
+    }
+
+    public interface OnImageChangeListener {
+        void onImageChange(KFImageView imageView);
     }
 }

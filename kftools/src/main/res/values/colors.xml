@@ -25,5 +25,6 @@
     <!-- fixed colors -->
     <color name="whiteColor">#FFFFFFFF</color>
     <color name="blackColor">#FF000000</color>
+    <color name="clearColor">#00000000</color>
 
 </resources>
