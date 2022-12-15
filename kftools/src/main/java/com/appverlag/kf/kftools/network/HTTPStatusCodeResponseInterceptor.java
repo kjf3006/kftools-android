@@ -7,7 +7,6 @@ import okhttp3.Response;
 
 public class HTTPStatusCodeResponseInterceptor implements ResponseInterceptor {
 
-    @NonNull
     @Override
     public void intercept(@NonNull Response response, @NonNull Request request) throws Exception {
 

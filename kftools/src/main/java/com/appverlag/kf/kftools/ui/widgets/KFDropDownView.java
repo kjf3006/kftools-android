@@ -101,9 +101,11 @@ public class KFDropDownView extends TextView {
     }
 
     public void setSelectedIndex(int selectedIndex) {
+        if (selectedIndex > options.size() || selectedIndex < 0) {
+            selectedIndex = 0;
+        }
         this.selectedIndex = selectedIndex;
         if (options.size() > 0) {
-            if (this.selectedIndex < 0) this.selectedIndex = 0;
             setText(options.get(this.selectedIndex));
             selectedValue = values != null ? values.get(this.selectedIndex) : options.get(this.selectedIndex);
         }
