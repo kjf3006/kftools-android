@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ImageGalleryFragment extends DialogFragment {
 
-    private View rootView;
+    protected View rootView;
     protected Toolbar toolbar;
     protected ViewPager2 viewPager;
 
@@ -94,8 +94,7 @@ public class ImageGalleryFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
-        if (dialog != null)
-        {
+        if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             setStyle(DialogFragment.STYLE_NO_FRAME, android.R.style.Theme);
@@ -177,6 +176,7 @@ public class ImageGalleryFragment extends DialogFragment {
             });
             imageView.setImage(image);
             photoViewAttacher = new PhotoViewAttacher(imageView);
+            photoViewAttacher.setMaximumScale(5);
 
         }
     }

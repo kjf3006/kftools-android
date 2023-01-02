@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.webkit.URLUtil;
 
+import androidx.annotation.NonNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +33,8 @@ public class KFImageManagerImageLoader {
 
     private static final String LOG_TAG = "KFImageManagerImageLoader";
     private ExecutorService downloadQueue;
-    private ConcurrentHashMap<String, ArrayList<KFImageManagerCompletionHandler>> completionHandlerStore;
-    private KFImageManagerBitmapEngine engine;
+    private final ConcurrentHashMap<String, ArrayList<KFImageManagerCompletionHandler>> completionHandlerStore;
+    private final KFImageManagerBitmapEngine engine;
     private final OkHttpClient client = new OkHttpClient();
 
 
@@ -40,6 +42,17 @@ public class KFImageManagerImageLoader {
         completionHandlerStore = new ConcurrentHashMap<>();
         downloadQueue = Executors.newFixedThreadPool(5);
         engine = new KFImageManagerBitmapEngine();
+    }
+
+    public void fetchImage(final String url, final KFImageManagerCompletionHandler completionHandler) {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        fetchImage(request, completionHandler);
+    }
+
+    public void fetchImage(final Request request, final KFImageManagerCompletionHandler completionHandler) {
+        final String url = request.toString();
     }
 
     public void getImageForUrl(final String url, final KFImageManagerCompletionHandler completionHandler) {
@@ -54,12 +67,12 @@ public class KFImageManagerImageLoader {
 
         client.newCall(new Request.Builder().url(url).build()).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 runCompletionBlocks(null, url);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
 
                 Bitmap bitmap = null;
 
@@ -75,7 +88,7 @@ public class KFImageManagerImageLoader {
 
                     byte[] data = out.toByteArray();
 
-                    bitmap = engine.resizeBitmap(data, 1024, 1024);
+                    bitmap = engine.resizeBitmap(data, 2048, 2048);
 
                 } catch (Exception e) {
                     e.printStackTrace();
