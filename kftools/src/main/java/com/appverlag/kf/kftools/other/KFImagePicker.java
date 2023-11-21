@@ -10,7 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -106,9 +106,9 @@ public class KFImagePicker {
         Uri selectedImage = null;
         if (resultCode == Activity.RESULT_OK) {
             boolean isCamera = (imageReturnedIntent == null || imageReturnedIntent.getData() == null  || imageReturnedIntent.getData().toString().contains(imageFile.toString()));
-            if (isCamera) {     /** CAMERA **/
+            if (isCamera) {     /* CAMERA */
                 selectedImage = FileProvider.getUriForFile(context, context.getPackageName() + ".kftools.fileprovider", getTempFile(context));
-            } else {            /** ALBUM **/
+            } else {            /* ALBUM */
                 selectedImage = imageReturnedIntent.getData();
             }
             KFLog.d(TAG, "selectedImage: " + selectedImage);

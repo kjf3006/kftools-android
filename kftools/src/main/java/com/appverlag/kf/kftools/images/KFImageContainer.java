@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.Request;
+
 /**
  * Copyright (C) Kevin Flachsmann - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -17,7 +19,7 @@ import java.util.regex.Pattern;
 public class KFImageContainer implements Serializable {
 
     public enum Type { KEY, URL, RES, BMP }
-    public enum Size {SMALL, MEDIUM, LARGE, ORIGINAL}; //100x100 500x500 1000x1000 0x0
+//    public enum Size {SMALL, MEDIUM, LARGE, ORIGINAL}; //100x100 500x500 1000x1000 0x0
 
 
     private String key, url, youtubeID;
@@ -25,6 +27,7 @@ public class KFImageContainer implements Serializable {
     private @DrawableRes int placeholder;
     private Bitmap placeholderBitmap, bitmap;
     private @DrawableRes int resId;
+    private Request request;
 
     /*
     res
@@ -91,6 +94,14 @@ public class KFImageContainer implements Serializable {
     public static KFImageContainer url(String url, Bitmap placeholder) {
         KFImageContainer container = new KFImageContainer();
         container.url = url;
+        container.type = Type.URL;
+        container.placeholderBitmap = placeholder;
+        return container;
+    }
+
+    public static KFImageContainer url(Request request, Bitmap placeholder) {
+        KFImageContainer container = new KFImageContainer();
+        container.request = request;
         container.type = Type.URL;
         container.placeholderBitmap = placeholder;
         return container;
