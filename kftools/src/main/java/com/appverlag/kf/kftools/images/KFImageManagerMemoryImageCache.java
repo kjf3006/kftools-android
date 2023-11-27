@@ -11,7 +11,7 @@ import android.util.LruCache;
  */
 public class KFImageManagerMemoryImageCache {
 
-    private LruCache<String, Bitmap> imageCache;
+    private final LruCache<String, Bitmap> imageCache;
 
 
     /*
@@ -22,7 +22,7 @@ public class KFImageManagerMemoryImageCache {
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 4;
 
-        imageCache = new LruCache<String, Bitmap>(cacheSize) {
+        imageCache = new LruCache<>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
                 return bitmap.getByteCount() / 1024;

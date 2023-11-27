@@ -87,29 +87,26 @@ public class KFImageManagerDiskImageCache {
             return;
         }
 
-        ioQueue.execute(new Runnable() {
-            @Override
-            public void run() {
+        ioQueue.execute(() -> {
 
-                while (lockedFiles.contains(key)) {
-                    try {
-                        Thread.sleep(200);
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            while (lockedFiles.contains(key)) {
+                try {
+                    Thread.sleep(200);
                 }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-                String filePath = getFilePath(key);
-                File file = new File(filePath);
-                Bitmap bitmap = null;
-                if(file.exists()) {
-                    bitmap = engine.resizeBitmap(file, desiredWidth, desiredHeight);
-                }
+            String filePath = getFilePath(key);
+            File file = new File(filePath);
+            Bitmap bitmap = null;
+            if(file.exists()) {
+                bitmap = engine.resizeBitmap(file, desiredWidth, desiredHeight);
+            }
 
-                if (completionHandler != null) {
-                    completionHandler.onComplete(bitmap);
-                }
+            if (completionHandler != null) {
+                completionHandler.onComplete(bitmap);
             }
         });
     }

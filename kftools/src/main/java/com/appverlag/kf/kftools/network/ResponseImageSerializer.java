@@ -16,7 +16,7 @@ public class ResponseImageSerializer extends ResponseSerializer<Bitmap> {
     public Bitmap serialize(Response response) throws Exception {
         ResponseBody body = response.body();
         if (body == null) {
-            throw new Exception("Es wurden keine Daten empfangen.");
+            throw NetworkException.noDataReceived();
         }
 
         InputStream is  = body.byteStream();

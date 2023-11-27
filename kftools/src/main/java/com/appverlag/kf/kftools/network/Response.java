@@ -28,6 +28,6 @@ public class Response<T> {
     }
 
     public boolean success() {
-        return error == null && value != null;
+        return error == null;
     }
 }

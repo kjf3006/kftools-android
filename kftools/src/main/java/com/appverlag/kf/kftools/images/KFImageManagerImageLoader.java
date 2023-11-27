@@ -122,30 +122,4 @@ public class KFImageManagerImageLoader {
         completionHandlerStore.remove(url);
     }
 
-
-    /*
-    helper
-     */
-
-    private int calculateInSampleSize(final int width, final int height, final int desiredWidth, final int desiredHeight) {
-
-        if (desiredWidth <= 0 && desiredHeight <= 0) return 1;
-
-        int inSampleSize = 1;
-
-        if (height > desiredHeight || width > desiredWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= desiredHeight
-                    && (halfWidth / inSampleSize) >= desiredWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
 }

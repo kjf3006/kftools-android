@@ -38,8 +38,11 @@ public class ConnectionManager {
 
     private final Handler handler;
     private OkHttpClient client;
-    private final List<RequestInterceptor> requestInterceptors = new ArrayList<>();
-    private final List<ResponseInterceptor> responseInterceptors = new ArrayList<>();
+    @NonNull
+    public List<RequestInterceptor> requestInterceptors = new ArrayList<>();
+
+    @NonNull
+    public List<ResponseInterceptor> responseInterceptors = List.of(new HTTPStatusCodeResponseInterceptor());
 
     public ConnectionManager(@NonNull final OkHttpClient client) {
         this.client = client;
@@ -63,13 +66,14 @@ public class ConnectionManager {
 
     /**
      * Set the cache to be used by internal OkHttpClient.
-     * @param cache The cache to be used
+     * @param cache The cache to be used by the client
      */
     public void setCache(@Nullable Cache cache) {
         client = client.newBuilder().cache(cache).build();
     }
 
-    public <T> Call send(@NonNull final Request request, @NonNull final ResponseSerializer<T> serializer, @NonNull final ConnectionManagerCompletionHandler<T> completionHandler) {
+    @SuppressWarnings("UnusedReturnValue")
+    public <T> Call send(@NonNull final Request request, @NonNull final ResponseSerializer<T> serializer, @NonNull final CompletionHandler<T> completionHandler) {
 
         Request _request = request;
 
@@ -82,8 +86,15 @@ public class ConnectionManager {
             _request = builder.build();
         }
 
-        for (RequestInterceptor interceptor : requestInterceptors) {
-            _request = interceptor.intercept(_request);
+        try {
+            for (RequestInterceptor interceptor : requestInterceptors) {
+                _request = interceptor.intercept(_request);
+            }
+        }
+        catch (Exception e) {
+            KFLog.d(LOG_TAG, String.format("Did fail with error: %s", e.getLocalizedMessage()));
+            runCompletionHandler(completionHandler, new Response<>(_request, new NetworkException(e)));
+            return null;
         }
 
         final Request finalRequest = _request;
@@ -91,8 +102,7 @@ public class ConnectionManager {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                KFLog.d(LOG_TAG, String.format("Did fail with error: %s", e.getLocalizedMessage()));
-                runCompletionHandler(completionHandler, new Response<>(finalRequest, e));
+                runCompletionHandler(completionHandler, new Response<>(finalRequest, new NetworkException(e)));
             }
 
             @Override
@@ -108,19 +118,18 @@ public class ConnectionManager {
 
                     runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value));
                 } catch (Exception e) {
-                    KFLog.d(LOG_TAG, String.format("Did fail with error: %s", e.getLocalizedMessage()));
-                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, null, e));
+                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, null, new NetworkException(e)));
                 }
             }
         });
         return call;
     }
 
-    private <T> void runCompletionHandler(final ConnectionManagerCompletionHandler<T> completionHandler, final Response<T> response) {
+    private <T> void runCompletionHandler(final CompletionHandler<T> completionHandler, final Response<T> response) {
         handler.post(() -> completionHandler.onResponse(response));
     }
 
-    public interface ConnectionManagerCompletionHandler<T> {
+    public interface CompletionHandler<T> {
         void onResponse(Response<T> response);
     }
 

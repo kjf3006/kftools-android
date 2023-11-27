@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appverlag.kf.kftools.images.KFImageContainer;
 import com.appverlag.kf.kftools.network.ConnectionManager;
+import com.appverlag.kf.kftools.network.HTTPStatusCodeResponseInterceptor;
 import com.appverlag.kf.kftools.network.Response;
 import com.appverlag.kf.kftools.network.ResponseJSONSerializer;
 import com.appverlag.kf.kftools.network.ResponseStringSerializer;
@@ -161,8 +162,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void testNetwork() {
-            Request request = new Request.Builder().url("https://dev-app.de/api/v3/test/authenticated-client").build();
+            Request request = new Request.Builder().url("https://www.deutschlandfunkkultur.de/politik-114.rss").build();
 
+            ConnectionManager.shared().addResponseInterceptor(new HTTPStatusCodeResponseInterceptor());
 
             ConnectionManager.shared().send(request, new ResponseJSONSerializer(), response -> {
                 Log.d("NETWORK REQUEST", response.request.toString());

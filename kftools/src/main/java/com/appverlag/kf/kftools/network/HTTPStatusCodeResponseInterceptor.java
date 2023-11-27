@@ -12,7 +12,7 @@ public class HTTPStatusCodeResponseInterceptor implements ResponseInterceptor {
 
         int statusCode = response.code();
         if (statusCode < 200 || statusCode > 300) {
-            throw new Exception(String.format("Vorgang fehlgeschlagen - %d.", statusCode));
+            throw new NetworkException(statusCode);
         }
     }
 }

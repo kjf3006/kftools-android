@@ -18,12 +18,12 @@ public class ResponseJSONSerializer extends ResponseSerializer<JSONObject> {
     public JSONObject serialize(Response response) throws Exception {
         ResponseBody body = response.body();
         if (body == null) {
-            throw new Exception("Es wurden keine Daten empfangen.");
+            throw NetworkException.noDataReceived();
         }
         String jsonString = body.string().trim();
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         if (jsonString.length() == 0) {
-            throw new Exception("Ungültige Daten empfangen. Verarbeitung nicht möglich.");
+            throw NetworkException.invalidDataReceived();
         }
         Object json = new JSONTokener(jsonString).nextValue();
         if (json instanceof JSONObject) {
@@ -33,6 +33,9 @@ public class ResponseJSONSerializer extends ResponseSerializer<JSONObject> {
             JSONArray array = new JSONArray(jsonString);
             jsonObject = new JSONObject();
             jsonObject.put("data", array);
+        }
+        else {
+            throw NetworkException.invalidDataReceived();
         }
         return jsonObject;
     }
