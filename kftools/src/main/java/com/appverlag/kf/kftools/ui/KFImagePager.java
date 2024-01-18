@@ -1,5 +1,12 @@
 package com.appverlag.kf.kftools.ui;
 
+/**
+ * Copyright (C) Kevin Flachsmann - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Created by kevinflachsmann on 09.03.17.
+ */
+
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
@@ -17,11 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Copyright (C) Kevin Flachsmann - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Created by kevinflachsmann on 09.03.17.
+ * Use ImagePager instead.
  */
+@Deprecated(forRemoval = true)
 public class KFImagePager extends ViewPager {
 
     private ImagePagerAdapter adapter;

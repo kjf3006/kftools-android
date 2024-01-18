@@ -12,6 +12,8 @@ import com.appverlag.kf.kftools.other.KFLog;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.Cache;
@@ -30,24 +32,25 @@ public class ConnectionManager {
     private static ConnectionManager shared;
     public static ConnectionManager shared() {
         if (ConnectionManager.shared == null) {
-            ConnectionManager.shared = new ConnectionManager(defaultClient());
+            ConnectionManager.shared = new ConnectionManager();
         }
         return ConnectionManager.shared;
     }
 
 
-    private final Handler handler;
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private OkHttpClient client;
     @NonNull
-    public List<RequestInterceptor> requestInterceptors = new ArrayList<>();
-
+    public List<RequestInterceptor> requestInterceptors = new ArrayList<>(); // https://square.github.io/okhttp/features/interceptors/
     @NonNull
-    public List<ResponseInterceptor> responseInterceptors = List.of(new HTTPStatusCodeResponseInterceptor());
+    public List<ResponseInterceptor> responseInterceptors = new ArrayList<>(List.of(new HTTPStatusCodeResponseInterceptor()));
 
     public ConnectionManager(@NonNull final OkHttpClient client) {
         this.client = client;
+    }
 
-        handler = new Handler(Looper.getMainLooper());
+    public ConnectionManager() {
+        this.client = defaultClient();
     }
 
     protected static OkHttpClient defaultClient() {
@@ -74,6 +77,10 @@ public class ConnectionManager {
 
     @SuppressWarnings("UnusedReturnValue")
     public <T> Call send(@NonNull final Request request, @NonNull final ResponseSerializer<T> serializer, @NonNull final CompletionHandler<T> completionHandler) {
+
+        if (client.cache() == null) {
+            KFLog.w(LOG_TAG, "No cache setup for client. Consider calling setupDefaultCache(@NonNull Context) before sending requests.");
+        }
 
         Request _request = request;
 
@@ -114,7 +121,6 @@ public class ConnectionManager {
                     }
 
                     T value = serializer.serialize(response);
-                    KFLog.d(LOG_TAG, String.format("Did receive data: %s", value));
 
                     runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value));
                 } catch (Exception e) {

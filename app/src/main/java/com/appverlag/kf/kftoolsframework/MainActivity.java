@@ -24,6 +24,7 @@ import com.appverlag.kf.kftools.ui.KFLoadingView;
 import com.appverlag.kf.kftools.ui.images.ImageGalleryFragment;
 import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
 import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity {
@@ -162,14 +164,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void testNetwork() {
-            Request request = new Request.Builder().url("https://www.deutschlandfunkkultur.de/politik-114.rss").build();
+            Request request = new Request.Builder().url("https://dummyjson.com/carts").build();
 
             ConnectionManager.shared().addResponseInterceptor(new HTTPStatusCodeResponseInterceptor());
 
             ConnectionManager.shared().send(request, new ResponseJSONSerializer(), response -> {
                 Log.d("NETWORK REQUEST", response.request.toString());
                 Log.d("NETWORK REQUEST", response.request.headers().toString());
-                if (!response.success()) {
+                if (!response.success() && response.error != null) {
+                    Snackbar snackbar = Snackbar.make(rootView, response.error.getLocalizedMessage(), Snackbar.LENGTH_LONG);
+                    snackbar.setAction("TEST", v -> {});
+                    snackbar.show();
                     Log.d("NETWORK ERROR", response.error.getLocalizedMessage());
                 }
                 else {

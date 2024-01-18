@@ -74,6 +74,10 @@
         <item name="android:layout_marginTop">8dp</item>
     </style>
 
+    <style name="KFTools.Snackbar" parent="Theme.KFTools">
+        <item name="android:background">@color/secondarySystemBackgroundColor</item>
+    </style>
+
 <!--    old -->
 
     <style name="kftools.Theme.Transparent"

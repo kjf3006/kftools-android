@@ -10,16 +10,16 @@ public class Response<T> {
 
     public okhttp3.Response response;
     public T value;
-    public Exception error;
+    public NetworkException error;
 
-    public Response(@NonNull Request request, okhttp3.Response response, T value, Exception error) {
+    public Response(@NonNull Request request, okhttp3.Response response, T value, NetworkException error) {
         this.request = request;
         this.response = response;
         this.value = value;
         this.error = error;
     }
 
-    public Response(@NonNull Request request, Exception error) {
+    public Response(@NonNull Request request, NetworkException error) {
         this(request, null, null, error);
     }
 

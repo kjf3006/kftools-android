@@ -50,4 +50,13 @@ public class KFLog {
         if (enabled) Log.d(tag, msg, tr);
     }
 
+    /**
+     * Send a WARN log message.
+     * @param tag Used to identify the source of a log message.  It usually identifies
+     *        the class or activity where the log call occurs.
+     * @param msg The message you would like logged.
+     */
+    public static void w(String tag, String msg) {
+        if (enabled) Log.w(tag, msg);
+    }
 }

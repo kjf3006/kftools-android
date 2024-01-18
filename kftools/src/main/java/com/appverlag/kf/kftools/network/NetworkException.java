@@ -1,5 +1,6 @@
 package com.appverlag.kf.kftools.network;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.net.UnknownHostException;
@@ -9,8 +10,10 @@ public class NetworkException extends Exception {
     public static Exception noDataReceived() { return new Exception("Es wurden keine Daten empfangen."); }
     public static Exception invalidDataReceived() { return new Exception("Es wurden ungültige Daten empfangen. Eine Verarbeitung ist nicht möglich."); }
 
+    private static final String UNKNOWN_ERROR_MESSAGE = "Unbekannter Fehler";
+
     public NetworkException() {
-        super("Unbekannter Fehler");
+        super(UNKNOWN_ERROR_MESSAGE);
     }
 
     public NetworkException(String message) {
@@ -27,6 +30,13 @@ public class NetworkException extends Exception {
 
     public NetworkException(int statusCode) {
         super(localizedMessageForStatusCode(statusCode));
+    }
+
+    @NonNull
+    @Override
+    public String getLocalizedMessage() {
+        String message = super.getLocalizedMessage();
+        return message != null ? message : UNKNOWN_ERROR_MESSAGE;
     }
 
     private static String messageForThrowable(Throwable cause) {
@@ -53,7 +63,7 @@ public class NetworkException extends Exception {
             case 500:
                 yield "Interner Server-Fehler";
             default:
-                yield "Unbekannter Fehler";
+                yield UNKNOWN_ERROR_MESSAGE;
         };
         return message + " (" + statusCode + ")";
     }
