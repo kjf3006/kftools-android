@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.appverlag.kf.kftools.R;
-import com.appverlag.kf.kftools.images.KFImageContainer;
+import com.appverlag.kf.kftools.images.ImageContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class KFImagePager extends ViewPager {
         setAdapter(adapter);
     }
 
-    public void setImages(List<KFImageContainer> images) {
+    public void setImages(List<ImageContainer> images) {
         adapter.setImages(images);
     }
 
@@ -55,14 +55,14 @@ public class KFImagePager extends ViewPager {
     private class ImagePagerAdapter extends PagerAdapter {
 
         LayoutInflater layoutInflater;
-        private List<KFImageContainer> images;
+        private List<ImageContainer> images;
 
         public ImagePagerAdapter() {
             layoutInflater = (LayoutInflater) KFImagePager.this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             images = new ArrayList<>();
         }
 
-        private void setImages(List<KFImageContainer> images) {
+        private void setImages(List<ImageContainer> images) {
             this.images = images;
             notifyDataSetChanged();
         }
@@ -85,7 +85,7 @@ public class KFImagePager extends ViewPager {
 
             KFImageView imageView = (KFImageView) itemView.findViewById(R.id.imageView);
 
-            KFImageContainer key = images.get(position);
+            ImageContainer key = images.get(position);
             imageView.setImage(images.get(position));
 
             container.addView(itemView);

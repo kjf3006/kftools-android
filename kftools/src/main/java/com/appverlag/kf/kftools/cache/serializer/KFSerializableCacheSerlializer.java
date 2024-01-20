@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools.cache.serialize;
+package com.appverlag.kf.kftools.cache.serializer;
 
 import androidx.annotation.NonNull;
 

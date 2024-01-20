@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.appverlag.kf.kftools.images.KFImageContainer;
+import com.appverlag.kf.kftools.images.ImageContainer;
 
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class KFMultipleImageView extends FrameLayout {
         addView(container,layoutParams);
     }
 
-    public void setImages(List<KFImageContainer> images) {
+    public void setImages(List<ImageContainer> images) {
         container.removeAllViews();
 
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());

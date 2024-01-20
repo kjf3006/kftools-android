@@ -4,35 +4,30 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appverlag.kf.kftools.images.KFImageContainer;
+import com.appverlag.kf.kftools.images.ImageContainer;
 import com.appverlag.kf.kftools.network.ConnectionManager;
 import com.appverlag.kf.kftools.network.HTTPStatusCodeResponseInterceptor;
-import com.appverlag.kf.kftools.network.Response;
+import com.appverlag.kf.kftools.network.ImageSize;
+import com.appverlag.kf.kftools.network.ResponseFileSerializer;
+import com.appverlag.kf.kftools.network.ResponseImageSerializer;
 import com.appverlag.kf.kftools.network.ResponseJSONSerializer;
-import com.appverlag.kf.kftools.network.ResponseStringSerializer;
+import com.appverlag.kf.kftools.other.KFLog;
 import com.appverlag.kf.kftools.ui.KFLoadingView;
 import com.appverlag.kf.kftools.ui.images.ImageGalleryFragment;
 import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
 import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import okhttp3.Cache;
-import okhttp3.CacheControl;
 import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +49,26 @@ public class MainActivity extends AppCompatActivity {
         rootView = (ViewGroup) recyclerView.getParent();
 
         ConnectionManager.shared().addRequestInterceptor(new APIRequestInterceptor());
-        ConnectionManager.shared().setupDefaultCache(getApplicationContext());
+
+        Request request = new Request.Builder().url("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf").build();
+        ConnectionManager.shared().send(request, new ResponseFileSerializer(), response -> {
+            if (response.success()) {
+                KFLog.d("NETWORK_TEST", "Did load data to file: " + response.value.getAbsolutePath());
+            }
+            else {
+                KFLog.d("NETWORK_TEST", "Error: " + response.error.getLocalizedMessage());
+            }
+        });
+
+        Request imageRequest = new Request.Builder().url("https://media.istockphoto.com/id/952696392/de/vektor/tv-test-karte.jpg?s=612x612&w=0&k=20&c=2H27UPACVlrYcQ9jX1cSWUmk95thrEyUUrOR5DfiXcs=").build();
+        ConnectionManager.shared().send(imageRequest, new ResponseImageSerializer(new ImageSize(100, 100)), response -> {
+            if (response.success()) {
+                KFLog.d("NETWORK_TEST", "Did load image with size: " + response.value.getWidth() + " / " + response.value.getHeight());
+            }
+            else {
+                KFLog.d("NETWORK_TEST", "Error: " + response.error.getLocalizedMessage());
+            }
+        });
     }
 
 
@@ -155,9 +169,9 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (id.equals("ImageGallery")) {
                 ImageGalleryFragment fragment = new ImageGalleryFragment(Arrays.asList(
-                        KFImageContainer.url("https://media.idownloadblog.com/wp-content/uploads/2021/09/Apple-September-Event-California-Streaming-BasicAppleGuy-iDownloadBlog-6K.png"),
-                        KFImageContainer.url("https://restado.de/wp-content/uploads/test.jpg"),
-                        KFImageContainer.url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/1200px-SMPTE_Color_Bars.svg.png")
+                        ImageContainer.url("https://media.idownloadblog.com/wp-content/uploads/2021/09/Apple-September-Event-California-Streaming-BasicAppleGuy-iDownloadBlog-6K.png"),
+                        ImageContainer.url("https://restado.de/wp-content/uploads/test.jpg"),
+                        ImageContainer.url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/1200px-SMPTE_Color_Bars.svg.png")
                 ), 0);
                 fragment.show(getSupportFragmentManager(), null);
             }

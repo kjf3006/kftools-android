@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.appverlag.kf.kftools.R;
-import com.appverlag.kf.kftools.images.KFImageContainer;
+import com.appverlag.kf.kftools.images.ImageContainer;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -57,18 +57,18 @@ public class ImagePager extends FrameLayout {
         })).attach();
     }
 
-    public List<KFImageContainer> getImages() {
+    public List<ImageContainer> getImages() {
         return adapter.getImages();
     }
 
-    public void setImages(List<KFImageContainer> images) {
+    public void setImages(List<ImageContainer> images) {
         adapter.setImages(images);
         tabLayout.setVisibility(images.size() > 1 ? VISIBLE : GONE);
     }
 
     private static class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder> {
 
-        private List<KFImageContainer> images;
+        private List<ImageContainer> images;
 
         @NonNull
         @Override
@@ -87,12 +87,12 @@ public class ImagePager extends FrameLayout {
             return images != null ? images.size() : 0;
         }
 
-        public List<KFImageContainer> getImages() {
+        public List<ImageContainer> getImages() {
             return images;
         }
 
         @SuppressLint("NotifyDataSetChanged")
-        public void setImages(List<KFImageContainer> images) {
+        public void setImages(List<ImageContainer> images) {
             this.images = images;
             notifyDataSetChanged();
         }

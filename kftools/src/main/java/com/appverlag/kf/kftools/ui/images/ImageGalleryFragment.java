@@ -19,7 +19,7 @@ import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.appverlag.kf.kftools.R;
-import com.appverlag.kf.kftools.images.KFImageContainer;
+import com.appverlag.kf.kftools.images.ImageContainer;
 import com.appverlag.kf.kftools.other.KFDensityTool;
 import com.appverlag.kf.kftools.ui.KFImageView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
@@ -34,10 +34,10 @@ public class ImageGalleryFragment extends DialogFragment {
 
 //    protected ImageGalleryViewModel viewModel;
 
-    public List<KFImageContainer> images;
+    public List<ImageContainer> images;
     public int position;
 
-    public ImageGalleryFragment(List<KFImageContainer> images, int position) {
+    public ImageGalleryFragment(List<ImageContainer> images, int position) {
         this.images = images;
         this.position = position;
         setRetainInstance(true);
@@ -116,7 +116,7 @@ public class ImageGalleryFragment extends DialogFragment {
 
     private static class ImageGalleryPagerAdapter extends FragmentStateAdapter {
 
-        private List<KFImageContainer> images;
+        private List<ImageContainer> images;
 
 
         public ImageGalleryPagerAdapter(@NonNull Fragment fragment) {
@@ -125,7 +125,7 @@ public class ImageGalleryFragment extends DialogFragment {
 
 
         @SuppressLint("NotifyDataSetChanged")
-        public void setImages(List<KFImageContainer> images) {
+        public void setImages(List<ImageContainer> images) {
             this.images = images;
             notifyDataSetChanged();
         }
@@ -145,14 +145,14 @@ public class ImageGalleryFragment extends DialogFragment {
     public static class ImageGalleryPageFragment extends Fragment {
 
         private View rootView;
-        private KFImageContainer image;
+        private ImageContainer image;
         private PhotoViewAttacher photoViewAttacher;
 
         public ImageGalleryPageFragment() {
 
         }
 
-        public ImageGalleryPageFragment(KFImageContainer image) {
+        public ImageGalleryPageFragment(ImageContainer image) {
             this.image = image;
 //            setRetainInstance(true);
         }

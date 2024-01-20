@@ -1,6 +1,8 @@
 package com.appverlag.kf.kftools.images;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.annotation.DrawableRes;
 
@@ -16,7 +18,7 @@ import okhttp3.Request;
  * Proprietary and confidential
  * Created by kevinflachsmann on 22.07.18.
  */
-public class KFImageContainer implements Serializable {
+public class ImageContainer implements Serializable {
 
     public enum Type { KEY, URL, RES, BMP }
 //    public enum Size {SMALL, MEDIUM, LARGE, ORIGINAL}; //100x100 500x500 1000x1000 0x0
@@ -24,7 +26,7 @@ public class KFImageContainer implements Serializable {
 
     private String key, url, youtubeID;
     private Type type = Type.KEY;
-    private @DrawableRes int placeholder;
+    private @DrawableRes int placeholderRes;
     private Bitmap placeholderBitmap, bitmap;
     private @DrawableRes int resId;
     private Request request;
@@ -33,8 +35,8 @@ public class KFImageContainer implements Serializable {
     res
      */
 
-    public static KFImageContainer res(@DrawableRes int resId) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer res(@DrawableRes int resId) {
+        ImageContainer container = new ImageContainer();
         container.resId = resId;
         container.type = Type.RES;
         return container;
@@ -44,8 +46,8 @@ public class KFImageContainer implements Serializable {
     BMP
      */
 
-    public static KFImageContainer bmp(Bitmap bitmap) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer bmp(Bitmap bitmap) {
+        ImageContainer container = new ImageContainer();
         container.bitmap = bitmap;
         container.type = Type.BMP;
         return container;
@@ -56,20 +58,20 @@ public class KFImageContainer implements Serializable {
     /*
     key
      */
-    public static KFImageContainer key(String key) {
+    public static ImageContainer key(String key) {
         return key(key, 0);
     }
 
-    public static KFImageContainer key(String key, @DrawableRes int placeholder) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer key(String key, @DrawableRes int placeholder) {
+        ImageContainer container = new ImageContainer();
         container.key = key;
         container.type = Type.KEY;
-        container.placeholder = placeholder;
+        container.placeholderRes = placeholder;
         return container;
     }
 
-    public static KFImageContainer key(String key, Bitmap placeholder) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer key(String key, Bitmap placeholder) {
+        ImageContainer container = new ImageContainer();
         container.key = key;
         container.type = Type.KEY;
         container.placeholderBitmap = placeholder;
@@ -79,28 +81,28 @@ public class KFImageContainer implements Serializable {
     /*
     url
      */
-    public static KFImageContainer url(String url) {
+    public static ImageContainer url(String url) {
         return url(url, 0);
     }
 
-    public static KFImageContainer url(String url, @DrawableRes int placeholder) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer url(String url, @DrawableRes int placeholder) {
+        ImageContainer container = new ImageContainer();
         container.url = url;
         container.type = Type.URL;
-        container.placeholder = placeholder;
+        container.placeholderRes = placeholder;
         return container;
     }
 
-    public static KFImageContainer url(String url, Bitmap placeholder) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer url(String url, Bitmap placeholder) {
+        ImageContainer container = new ImageContainer();
         container.url = url;
         container.type = Type.URL;
         container.placeholderBitmap = placeholder;
         return container;
     }
 
-    public static KFImageContainer url(Request request, Bitmap placeholder) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer url(Request request, Bitmap placeholder) {
+        ImageContainer container = new ImageContainer();
         container.request = request;
         container.type = Type.URL;
         container.placeholderBitmap = placeholder;
@@ -110,38 +112,44 @@ public class KFImageContainer implements Serializable {
     /*
     youtube
      */
-    public static KFImageContainer youtubeID(String youtubeID) {
+    public static ImageContainer youtubeID(String youtubeID) {
         return youtubeID(youtubeID, 0);
     }
 
-    public static KFImageContainer youtubeID(String youtubeID, Bitmap placeholder) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer youtubeID(String youtubeID, Bitmap placeholder) {
+        ImageContainer container = new ImageContainer();
         container.url = "https://img.youtube.com/vi/" + youtubeID + "/hqdefault.jpg";
         container.type = Type.URL;
         container.placeholderBitmap = placeholder;
         return container;
     }
 
-    public static KFImageContainer youtubeID(String youtubeID, @DrawableRes int placeholder) {
-        KFImageContainer container = new KFImageContainer();
+    public static ImageContainer youtubeID(String youtubeID, @DrawableRes int placeholder) {
+        ImageContainer container = new ImageContainer();
         container.url = "https://img.youtube.com/vi/" + youtubeID + "/hqdefault.jpg";
         container.type = Type.URL;
-        container.placeholder = placeholder;
+        container.placeholderRes = placeholder;
         return container;
     }
 
-    public static KFImageContainer youtubeURL(String youtubeURL) {
+    public static ImageContainer youtubeURL(String youtubeURL) {
         return youtubeID(youtubeIDFormURL(youtubeURL), 0);
     }
 
-    public static KFImageContainer youtubeURL(String youtubeURL, @DrawableRes int placeholder) {
+    public static ImageContainer youtubeURL(String youtubeURL, @DrawableRes int placeholder) {
         return youtubeID(youtubeIDFormURL(youtubeURL), placeholder);
     }
 
-    public static KFImageContainer youtubeURL(String youtubeURL, Bitmap placeholder) {
+    public static ImageContainer youtubeURL(String youtubeURL, Bitmap placeholder) {
         return youtubeID(youtubeIDFormURL(youtubeURL), placeholder);
     }
 
+    public Bitmap getPlaceholder(Context context) {
+        if (placeholderBitmap != null) {
+            return placeholderBitmap;
+        }
+        return BitmapFactory.decodeResource(context.getResources(), placeholderRes);
+    }
 
     /*
     getter & setter
@@ -175,12 +183,12 @@ public class KFImageContainer implements Serializable {
         this.youtubeID = youtubeID;
     }
 
-    public Integer getPlaceholder() {
-        return placeholder;
+    public Integer getPlaceholderRes() {
+        return placeholderRes;
     }
 
-    public void setPlaceholder(Integer placeholder) {
-        this.placeholder = placeholder;
+    public void setPlaceholderRes(Integer placeholderRes) {
+        this.placeholderRes = placeholderRes;
     }
 
     public Bitmap getPlaceholderBitmap() {

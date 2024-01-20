@@ -1,12 +1,12 @@
 package com.appverlag.kf.kftools.cache;
 
-import android.content.Context;
 import androidx.annotation.NonNull;
 
-import com.appverlag.kf.kftools.cache.serialize.KFCacheSerializer;
-import com.appverlag.kf.kftools.cache.serialize.KFJSONArrayCacheSerializer;
-import com.appverlag.kf.kftools.cache.serialize.KFJSONObjectCacheSerializer;
-import com.appverlag.kf.kftools.cache.serialize.KFSerializableCacheSerlializer;
+import com.appverlag.kf.kftools.cache.serializer.KFCacheSerializer;
+import com.appverlag.kf.kftools.cache.serializer.KFJSONArrayCacheSerializer;
+import com.appverlag.kf.kftools.cache.serializer.KFJSONObjectCacheSerializer;
+import com.appverlag.kf.kftools.cache.serializer.KFSerializableCacheSerlializer;
+import com.appverlag.kf.kftools.framework.ContextProvider;
 import com.appverlag.kf.kftools.other.KFLog;
 
 import java.io.File;
@@ -30,12 +30,12 @@ import java.util.concurrent.Executors;
  * Proprietary and confidential
  * Created by kevinflachsmann on 26.07.20.
  */
-public class KFDiskCache extends KFCache {
+public class DiskCache extends KFCache {
 
     private static final String KFDiskCacheSerializerJournalKey = "KFDiskCacheSerializerJournalKey";
 
-    private long maxCacheAge;
-    private String diskCachePath;
+    private final long maxCacheAge;
+    private final String diskCachePath;
     private ExecutorService ioQueue = Executors.newCachedThreadPool();
     private Set<String> lockedFiles;
 
@@ -43,13 +43,13 @@ public class KFDiskCache extends KFCache {
     private Map<String, Class<?>> serializerJournal = new HashMap<>();
 
     private boolean fileAccessBlocked;
-    private List<Runnable> waitingOperations = new ArrayList<>();
+    private final List<Runnable> waitingOperations = new ArrayList<>();
 
-    public KFDiskCache(Context context, String name, long maxCacheAge) {
+    public DiskCache(String name, long maxCacheAge) {
 
         this.maxCacheAge = maxCacheAge;
-        lockedFiles = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
-        diskCachePath = context.getFilesDir().getAbsolutePath() + "/" + cacheIdentifierForKey(name) + "/";
+        lockedFiles = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        diskCachePath = ContextProvider.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + cacheIdentifierForKey(name) + "/";
 
         startup();
     }
@@ -57,32 +57,29 @@ public class KFDiskCache extends KFCache {
     private void startup() {
         blockFileAccess();
         loadSerializer();
-        ioQueue.execute(new Runnable() {
-            @Override
-            public void run() {
+        ioQueue.execute(() -> {
 
-                // init cache folder
-                File outFile = new File(diskCachePath);
-                if (!outFile.exists()) {
-                    outFile.mkdir();
-                }
-
-                KFCacheSerializer serializer = serializerPool.get(Serializable.class);
-                File file = new File(getFilePath(KFDiskCacheSerializerJournalKey));
-                if (file.exists() && serializer != null) {
-                    try {
-                        FileInputStream fileInput = new FileInputStream(file);
-                        Object object = serializer.fromInputStream(fileInput);
-                        serializerJournal = (HashMap<String, Class<?>>) object;
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                trimCacheInternal();
-                releaseFileAccess();
+            // init cache folder
+            File outFile = new File(diskCachePath);
+            if (!outFile.exists()) {
+                outFile.mkdir();
             }
+
+            KFCacheSerializer serializer = serializerPool.get(Serializable.class);
+            File file = new File(getFilePath(KFDiskCacheSerializerJournalKey));
+            if (file.exists() && serializer != null) {
+                try {
+                    FileInputStream fileInput = new FileInputStream(file);
+                    Object object = serializer.fromInputStream(fileInput);
+                    serializerJournal = (HashMap<String, Class<?>>) object;
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            trimCacheInternal();
+            releaseFileAccess();
         });
     }
 
@@ -137,12 +134,9 @@ public class KFDiskCache extends KFCache {
     @Override
     public void trimCache() {
         blockFileAccess();
-        ioQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                trimCacheInternal();
-                releaseFileAccess();
-            }
+        ioQueue.execute(() -> {
+            trimCacheInternal();
+            releaseFileAccess();
         });
     }
 
@@ -167,27 +161,24 @@ public class KFDiskCache extends KFCache {
         if (lockedFiles.contains(key)) return;
         KFLog.d(LOG_TAG, String.format(Locale.GERMAN, "storing %s to disk", key));
 
-        addFileOperation(new Runnable() {
-            @Override
-            public void run() {
+        addFileOperation(() -> {
 
-                KFCacheSerializer serializer = serializerForObject(object);
-                if (serializer == null) {
-                    KFLog.d(LOG_TAG, String.format(Locale.GERMAN, "Object of type %s currently not valid for disk cache", object.getClass()));
-                    return;
-                }
-
-                lockedFiles.add(key);
-                try {
-                    FileOutputStream fileOutput = new FileOutputStream(new File(getFilePath(key)));
-                    serializer.toOutputStream(fileOutput, object);
-                    addToJournal(key, serializer);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-                lockedFiles.remove(key);
+            KFCacheSerializer serializer = serializerForObject(object);
+            if (serializer == null) {
+                KFLog.d(LOG_TAG, String.format(Locale.GERMAN, "Object of type %s currently not valid for disk cache", object.getClass()));
+                return;
             }
+
+            lockedFiles.add(key);
+            try {
+                FileOutputStream fileOutput = new FileOutputStream(new File(getFilePath(key)));
+                serializer.toOutputStream(fileOutput, object);
+                addToJournal(key, serializer);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            lockedFiles.remove(key);
         });
     }
 
@@ -195,75 +186,66 @@ public class KFDiskCache extends KFCache {
     protected void load(@NonNull final String key, @NonNull final KFCacheCompletionHandler<Object> completionHandler) {
 
         KFLog.d(LOG_TAG, String.format(Locale.GERMAN, "loading %s from disk", key));
-        addFileOperation(new Runnable() {
-            @Override
-            public void run() {
+        addFileOperation(() -> {
 
-                while (lockedFiles.contains(key)) {
-                    try {
-                        Thread.sleep(200);
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                File file = new File(getFilePath(key));
-                if (!file.exists()) {
-                    KFLog.d(LOG_TAG, String.format(Locale.GERMAN, "File for key %s not found", key));
-                    completionHandler.loaded(null);
-                    return;
-                }
-
-                final KFCacheSerializer serializer = serializerForKey(key);
-                if (serializer == null) {
-                    KFLog.d(LOG_TAG, String.format(Locale.GERMAN, "Serializer for key %s not found", key));
-                    completionHandler.loaded(null);
-                    return;
-                }
-
-                Object object = null;
+            while (lockedFiles.contains(key)) {
                 try {
-                    FileInputStream fileInput = new FileInputStream(file);
-                    object = serializer.fromInputStream(fileInput);
+                    Thread.sleep(200);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
-                completionHandler.loaded(object);
             }
+
+            File file = new File(getFilePath(key));
+            if (!file.exists()) {
+                KFLog.d(LOG_TAG, String.format(Locale.GERMAN, "File for key %s not found", key));
+                completionHandler.loaded(null);
+                return;
+            }
+
+            final KFCacheSerializer serializer = serializerForKey(key);
+            if (serializer == null) {
+                KFLog.d(LOG_TAG, String.format(Locale.GERMAN, "Serializer for key %s not found", key));
+                completionHandler.loaded(null);
+                return;
+            }
+
+            Object object = null;
+            try {
+                FileInputStream fileInput = new FileInputStream(file);
+                object = serializer.fromInputStream(fileInput);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            completionHandler.loaded(object);
         });
     }
 
     @Override
     protected void delete(@NonNull final String key) {
-        ioQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                File f = new File(diskCachePath + key);
-                if (f.exists() && f.isFile()) {
-                    f.delete();
-                }
-                serializerJournal.remove(key);
-                storeJournal();
+        ioQueue.execute(() -> {
+            File f = new File(diskCachePath + key);
+            if (f.exists() && f.isFile()) {
+                f.delete();
             }
+            serializerJournal.remove(key);
+            storeJournal();
         });
     }
 
     @Override
     protected void deleteAll() {
         blockFileAccess();
-        ioQueue.execute(new Runnable() {
-            @Override
-            public void run() {
-                File folder = new File(diskCachePath);
-                for (File file : folder.listFiles()) {
-                    file.delete();
-                }
-                serializerJournal = new HashMap<>();
-                storeJournal();
-                releaseFileAccess();
+        ioQueue.execute(() -> {
+            File folder = new File(diskCachePath);
+            for (File file : folder.listFiles()) {
+                file.delete();
             }
+            serializerJournal = new HashMap<>();
+            storeJournal();
+            releaseFileAccess();
         });
     }
 

@@ -1,6 +1,7 @@
 package com.appverlag.kf.kftools.network;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.appverlag.kf.kftools.images.BitmapSizeEngine;
 
@@ -9,8 +10,17 @@ import java.io.InputStream;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.BufferedSource;
 
 public class ResponseImageSerializer extends ResponseSerializer<Bitmap> {
+
+    private ImageSize desiredSize;
+
+    public ResponseImageSerializer() {}
+
+    public ResponseImageSerializer(ImageSize desiredSize) {
+        this.desiredSize = desiredSize;
+    }
 
     @Override
     public Bitmap serialize(Response response) throws Exception {
@@ -19,16 +29,28 @@ public class ResponseImageSerializer extends ResponseSerializer<Bitmap> {
             throw NetworkException.noDataReceived();
         }
 
-        InputStream is  = body.byteStream();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        while (true) {
-            int r = is.read(buffer);
-            if (r == -1) break;
-            out.write(buffer, 0, r);
+        if (body.contentLength() == 0) {
+            body.close();
+            throw new NetworkException("Received response with 0 content-length header.");
         }
-        byte[] data = out.toByteArray();
 
-        return BitmapSizeEngine.resizeBitmap(data);
+        BufferedSource bufferedSource = body.source();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+
+        if (desiredSize != null) {
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(bufferedSource.peek().inputStream(), null, options);
+            options.inSampleSize = BitmapSizeEngine.calculateInSampleSize(new ImageSize(options), desiredSize);
+            options.inJustDecodeBounds = false;
+        }
+
+        Bitmap bitmap = BitmapFactory.decodeStream(bufferedSource.inputStream(), null, options);
+        bufferedSource.close();
+
+        if (bitmap == null) {
+            throw NetworkException.invalidDataReceived();
+        }
+        return bitmap;
     }
 }

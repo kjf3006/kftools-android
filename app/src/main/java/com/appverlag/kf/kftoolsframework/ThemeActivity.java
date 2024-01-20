@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appverlag.kf.kftools.images.KFImageContainer;
+import com.appverlag.kf.kftools.images.ImageContainer;
 import com.appverlag.kf.kftools.other.KFLog;
 import com.appverlag.kf.kftools.ui.ImagePager;
 import com.appverlag.kf.kftools.ui.formcomponents.controller.KFFormComponentContoller;
@@ -14,9 +14,6 @@ import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDropDownComponent;
 
 import java.util.Arrays;
 import java.util.Date;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 public class ThemeActivity extends AppCompatActivity {
 
@@ -28,9 +25,9 @@ public class ThemeActivity extends AppCompatActivity {
 
         ImagePager imagePager = findViewById(R.id.imagePager);
         imagePager.setImages(Arrays.asList(
-                KFImageContainer.url("https://media.idownloadblog.com/wp-content/uploads/2021/09/Apple-September-Event-California-Streaming-BasicAppleGuy-iDownloadBlog-6K.png"),
-                KFImageContainer.url("https://restado.de/wp-content/uploads/test.jpg"),
-                KFImageContainer.url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/1200px-SMPTE_Color_Bars.svg.png")));
+                ImageContainer.url("https://media.idownloadblog.com/wp-content/uploads/2021/09/Apple-September-Event-California-Streaming-BasicAppleGuy-iDownloadBlog-6K.png"),
+                ImageContainer.url("https://restado.de/wp-content/uploads/test.jpg"),
+                ImageContainer.url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/1200px-SMPTE_Color_Bars.svg.png")));
 
         KFFormDropDownComponent dropDownComponent = findViewById(R.id.dropDownComponent);
         dropDownComponent.getDropDownView().setOptions(Arrays.asList("A", "B", "C", "D"));

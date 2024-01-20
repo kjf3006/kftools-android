@@ -10,9 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-import com.appverlag.kf.kftools.images.KFImageContainer;
+import com.appverlag.kf.kftools.images.ImageManager;
+import com.appverlag.kf.kftools.images.ImageContainer;
 import com.appverlag.kf.kftools.images.KFImageManager;
 import com.appverlag.kf.kftools.images.KFImageManagerCompletionHandler;
+
+import okhttp3.Request;
 
 
 /**
@@ -168,29 +171,44 @@ public class KFImageView extends AppCompatImageView {
 
     }
 
+//    public void setImageRequest(final Request request, final Bitmap placeholder) {
+//        if (placeholder == null) {
+//            setImageBitmap(getPlaceholderImage());
+//        }
+//        else setImageBitmap(placeholder);
+//
+//        final String identifier = Integer.toString(request.toString().hashCode());
+//        savedURL = identifier;
+//
+//        ImageManager.getInstance().image(request, null, response -> {
+//            if (identifier.equals(savedURL) && response.success() && response.value != null) {
+//                setImageBitmap(response.value);
+//                imageDidChange();
+//            }
+//        });
+//    }
+
 
     /*
     container
      */
 
-    public void setImage(@NonNull KFImageContainer container) {
+    public void setImage(@NonNull ImageContainer container) {
         boolean useBitmapPlaceholder = container.getPlaceholderBitmap() != null;
 
         switch (container.getType()) {
-            case KEY:
-                if (useBitmapPlaceholder) setImageWithKey(container.getKey(), container.getPlaceholderBitmap());
-                else setImageWithKey(container.getKey(), container.getPlaceholder());
-                break;
-            case URL:
-                if (useBitmapPlaceholder) setImageWithURL(container.getUrl(), container.getPlaceholderBitmap());
-                else setImageWithURL(container.getUrl(), container.getPlaceholder());
-                break;
-            case RES:
-                setImageResource(container.getResId());
-                break;
-            case BMP:
-                setImageBitmap(container.getBitmap());
-                break;
+            case KEY -> {
+                if (useBitmapPlaceholder)
+                    setImageWithKey(container.getKey(), container.getPlaceholderBitmap());
+                else setImageWithKey(container.getKey(), container.getPlaceholderRes());
+            }
+            case URL -> {
+                if (useBitmapPlaceholder)
+                    setImageWithURL(container.getUrl(), container.getPlaceholderBitmap());
+                else setImageWithURL(container.getUrl(), container.getPlaceholderRes());
+            }
+            case RES -> setImageResource(container.getResId());
+            case BMP -> setImageBitmap(container.getBitmap());
         }
     }
 

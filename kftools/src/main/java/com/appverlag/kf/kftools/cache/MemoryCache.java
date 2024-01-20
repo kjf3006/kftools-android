@@ -13,11 +13,11 @@ import java.util.Locale;
  * Proprietary and confidential
  * Created by kevinflachsmann on 26.07.20.
  */
-public class KFMemoryCache extends KFCache {
+public class MemoryCache extends KFCache {
 
-    private LruCache<String, Object> cache;
+    private final LruCache<String, Object> cache;
 
-    public KFMemoryCache() {
+    public MemoryCache() {
         cache = new LruCache<>(30);
     }
 

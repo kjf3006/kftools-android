@@ -22,20 +22,20 @@ public abstract class KFCache {
     private static final String DEFAULT_PERSISTENT_CACHE_NAME = "KF_CACHE_DEFAULT_PERSISTENT_NAME";
 
     //default cache
-    public static KFCache defaultCache(Context context) {
+    public static KFCache defaultCache() {
         if (KFCache.defaultCache == null) {
-            defaultCache = new KFMemoryCache();
-            defaultCache.setChainedCache(new KFDiskCache(context, DEFAULT_CACHE_NAME, DEFAULT_MAX_CACHE_AGE));
+            defaultCache = new MemoryCache();
+            defaultCache.setChainedCache(new DiskCache(DEFAULT_CACHE_NAME, DEFAULT_MAX_CACHE_AGE));
         }
         return KFCache.defaultCache;
     }
 
-    public static KFCache defaultPersistentCache(Context context) {
-        if (KFCache.defaultCache == null) {
-            defaultCache = new KFMemoryCache();
-            defaultCache.setChainedCache(new KFDiskCache(context, DEFAULT_PERSISTENT_CACHE_NAME, 0));
+    public static KFCache defaultPersistentCache() {
+        if (KFCache.defaultPersistentCache == null) {
+            defaultPersistentCache = new MemoryCache();
+            defaultPersistentCache.setChainedCache(new DiskCache(DEFAULT_PERSISTENT_CACHE_NAME, 0));
         }
-        return KFCache.defaultCache;
+        return KFCache.defaultPersistentCache;
     }
 
     //default access
@@ -49,26 +49,20 @@ public abstract class KFCache {
 
     public void get(@NonNull final String key, @NonNull final KFCacheCompletionHandler<Object> completionHandler) {
         final String accessKey = cacheIdentifierForKey(key);
-        load(accessKey, new KFCacheCompletionHandler<Object>() {
-            @Override
-            public void loaded(Object object) {
-                if (object != null) {
-                    completionHandler.loaded(object);
-                }
-                else if (chainedCache != null) {
-                    chainedCache.get(key, new KFCacheCompletionHandler<Object>() {
-                        @Override
-                        public void loaded(Object object) {
-                            completionHandler.loaded(object);
-                            if (object != null) {
-                                store(accessKey, object);
-                            }
-                        }
-                    });
-                }
-                else {
-                    completionHandler.loaded(object);
-                }
+        load(accessKey, object -> {
+            if (object != null) {
+                completionHandler.loaded(object);
+            }
+            else if (chainedCache != null) {
+                chainedCache.get(key, object1 -> {
+                    completionHandler.loaded(object1);
+                    if (object1 != null) {
+                        store(accessKey, object1);
+                    }
+                });
+            }
+            else {
+                completionHandler.loaded(object);
             }
         });
     }
@@ -92,15 +86,12 @@ public abstract class KFCache {
 
     //convenience access
     public <T> void get(@NonNull String key, final Class<T> clazz, @NonNull final KFCacheCompletionHandler<T> completionHandler) {
-        get(key, new KFCacheCompletionHandler<Object>() {
-            @Override
-            public void loaded(Object object) {
-                if (clazz.isInstance(object)) {
-                    completionHandler.loaded(clazz.cast(object));
-                }
-                else {
-                    completionHandler.loaded(null);
-                }
+        get(key, object -> {
+            if (clazz.isInstance(object)) {
+                completionHandler.loaded(clazz.cast(object));
+            }
+            else {
+                completionHandler.loaded(null);
             }
         });
     }

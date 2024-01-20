@@ -7,6 +7,7 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.appverlag.kf.kftools.framework.ContextProvider;
 import com.appverlag.kf.kftools.other.KFLog;
 
 import java.io.File;
@@ -54,13 +55,22 @@ public class ConnectionManager {
     }
 
     protected static OkHttpClient defaultClient() {
-        return new OkHttpClient();
+        return new OkHttpClient.Builder()
+                .cache(defaultCache())
+                .build();
+    }
+
+    protected static Cache defaultCache() {
+        File httpCacheDirectory = new File(ContextProvider.getApplicationContext().getCacheDir(), "http-cache");
+        int cacheSize = 1_000_000_000;
+        return new Cache(httpCacheDirectory, cacheSize);
     }
 
     /**
      * Set default 1GB file cache
      * @param context Context for getting the applications cache directory
      */
+    @Deprecated(forRemoval = true)
     public void setupDefaultCache(@NonNull Context context) {
         File httpCacheDirectory = new File(context.getCacheDir(), "http-cache");
         int cacheSize = 1_000_000_000;
