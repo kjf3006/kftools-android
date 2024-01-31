@@ -124,27 +124,35 @@ public class ConnectionManager {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) {
+                NetworkException error = null;
+                T value = null;
                 try {
-
-                    NetworkException interceptionError = null;
-                    try {
-                        for (ResponseInterceptor interceptor : responseInterceptors) {
-                            interceptor.intercept(response, finalRequest);
-                        }
+                    for (ResponseInterceptor interceptor : responseInterceptors) {
+                        interceptor.intercept(response, finalRequest);
                     }
-                    catch (NetworkException e) {
-                        interceptionError = e;
-                    }
-                    catch (Exception e) {
-                        interceptionError = new NetworkException(e);
-                    }
-
-                    T value = serializer.serialize(response);
-
-                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value, interceptionError));
-                } catch (Exception e) {
-                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, null, new NetworkException(e)));
                 }
+                catch (NetworkException e) {
+                    error = e;
+                }
+                catch (Exception e) {
+                    error = new NetworkException(e);
+                }
+
+                try {
+                    value = serializer.serialize(response);
+                }
+                catch (NetworkException e) {
+                    if (error == null) {
+                        error = e;
+                    }
+                }
+                catch (Exception e) {
+                    if (error == null) {
+                        error = new NetworkException(e);
+                    }
+                }
+
+                runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value, error));
             }
         });
         return call;
