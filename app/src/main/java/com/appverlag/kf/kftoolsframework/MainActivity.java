@@ -3,6 +3,7 @@ package com.appverlag.kf.kftoolsframework;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.appverlag.kf.kftools.images.ImageContainer;
 import com.appverlag.kf.kftools.network.ConnectionManager;
 import com.appverlag.kf.kftools.network.HTTPStatusCodeResponseInterceptor;
-import com.appverlag.kf.kftools.network.ImageSize;
 import com.appverlag.kf.kftools.network.ResponseFileSerializer;
 import com.appverlag.kf.kftools.network.ResponseImageSerializer;
 import com.appverlag.kf.kftools.network.ResponseJSONSerializer;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Request imageRequest = new Request.Builder().url("https://media.istockphoto.com/id/952696392/de/vektor/tv-test-karte.jpg?s=612x612&w=0&k=20&c=2H27UPACVlrYcQ9jX1cSWUmk95thrEyUUrOR5DfiXcs=").build();
-        ConnectionManager.shared().send(imageRequest, new ResponseImageSerializer(new ImageSize(100, 100)), response -> {
+        ConnectionManager.shared().send(imageRequest, new ResponseImageSerializer(new Size(100, 100)), response -> {
             if (response.success()) {
                 KFLog.d("NETWORK_TEST", "Did load image with size: " + response.value.getWidth() + " / " + response.value.getHeight());
             }

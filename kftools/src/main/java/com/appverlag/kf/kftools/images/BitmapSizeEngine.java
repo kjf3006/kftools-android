@@ -2,10 +2,9 @@ package com.appverlag.kf.kftools.images;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Size;
 
 import androidx.annotation.NonNull;
-
-import com.appverlag.kf.kftools.network.ImageSize;
 
 import java.io.File;
 import java.io.InputStream;
@@ -59,8 +58,8 @@ public class BitmapSizeEngine {
         return BitmapFactory.decodeStream(inputStream, null, options);
     }
 
-    public static int calculateInSampleSize(@NonNull final ImageSize size, @NonNull final ImageSize desiredSize) {
-        return calculateInSampleSize(size.width, size.height, desiredSize.width, desiredSize.height);
+    public static int calculateInSampleSize(@NonNull final Size size, @NonNull final Size desiredSize) {
+        return calculateInSampleSize(size.getWidth(), size.getHeight(), desiredSize.getWidth(), desiredSize.getHeight());
     }
 
     private static int calculateInSampleSize(final int width, final int height, final int desiredWidth, final int desiredHeight) {

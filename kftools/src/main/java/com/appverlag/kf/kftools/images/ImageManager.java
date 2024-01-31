@@ -1,12 +1,12 @@
 package com.appverlag.kf.kftools.images;
 
 import android.graphics.Bitmap;
+import android.util.Size;
 
 import androidx.annotation.NonNull;
 
 import com.appverlag.kf.kftools.cache.MemoryCache;
 import com.appverlag.kf.kftools.network.ConnectionManager;
-import com.appverlag.kf.kftools.network.ImageSize;
 import com.appverlag.kf.kftools.network.Response;
 import com.appverlag.kf.kftools.network.ResponseImageSerializer;
 
@@ -32,12 +32,30 @@ public class ImageManager {
 
     }
 
-    public void image(@NonNull String url, final ImageSize imageSize, final CompletionHandler completionHandler) {
+    public void mapSnapshot(@NonNull MapSnapshotOptions options, final CompletionHandler completionHandler) {
+        String style;
+        switch (options.getMapType()) {
+            case HYBRID -> style = "satellite-streets-v12";
+            case SATTELITE -> style = "satellite-v9";
+            case STANDARD -> style = "streets-v12";
+            default -> style = "streets-v12";
+        }
+        String url = "https://api.mapbox.com/styles/v1/mapbox/"
+                + style +"/static/"
+                + options.getLongitude() + "," + options.getLatitude() + ","
+                + options.getZoom() + ",0,0/"
+                + options.getSize().getWidth() + "x" + options.getSize().getHeight()
+                + "@2x?access_token=pk.eyJ1Ijoia2V2aW5mbGFjaHNtYW5uIiwiYSI6ImNqbTk3dW1nYjA2ZzYzcHMza2JxM3dmZXEifQ.6e4p7rwneugs1j4uv5qB4Q";
+
+        image(url, null, completionHandler);
+    }
+
+    public void image(@NonNull String url, final Size imageSize, final CompletionHandler completionHandler) {
         Request request = new Request.Builder().url(url).build();
         image(request, imageSize, completionHandler);
     }
 
-    public void image(@NonNull Request request, final ImageSize imageSize, final CompletionHandler completionHandler) {
+    public void image(@NonNull Request request, final Size imageSize, final CompletionHandler completionHandler) {
         final String cacheKey = createCacheKey(request, imageSize);
 
         memoryCache.get(cacheKey, Bitmap.class, image -> {
@@ -60,8 +78,11 @@ public class ImageManager {
         });
     }
 
-    private String createCacheKey(Request request, ImageSize imageSize) {
-        String name = request.toString() + "_" + imageSize.toString();
+    private String createCacheKey(Request request, Size imageSize) {
+        String name = request.toString();
+        if (imageSize != null) {
+            name += imageSize;
+        }
         return Integer.toString(name.hashCode());
     }
 

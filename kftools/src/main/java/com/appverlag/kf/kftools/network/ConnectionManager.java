@@ -33,7 +33,7 @@ public class ConnectionManager {
     private static ConnectionManager shared;
     public static ConnectionManager shared() {
         if (ConnectionManager.shared == null) {
-            ConnectionManager.shared = new ConnectionManager();
+            ConnectionManager.shared = new ConnectionManager(defaultClient());
         }
         return ConnectionManager.shared;
     }
@@ -51,16 +51,16 @@ public class ConnectionManager {
     }
 
     public ConnectionManager() {
-        this.client = defaultClient();
+        this.client = new OkHttpClient();
     }
 
-    protected static OkHttpClient defaultClient() {
+    public static OkHttpClient defaultClient() {
         return new OkHttpClient.Builder()
                 .cache(defaultCache())
                 .build();
     }
 
-    protected static Cache defaultCache() {
+    public static Cache defaultCache() {
         File httpCacheDirectory = new File(ContextProvider.getApplicationContext().getCacheDir(), "http-cache");
         int cacheSize = 1_000_000_000;
         return new Cache(httpCacheDirectory, cacheSize);
@@ -126,13 +126,22 @@ public class ConnectionManager {
             public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) {
                 try {
 
-                    for (ResponseInterceptor interceptor : responseInterceptors) {
-                        interceptor.intercept(response, finalRequest);
+                    NetworkException interceptionError = null;
+                    try {
+                        for (ResponseInterceptor interceptor : responseInterceptors) {
+                            interceptor.intercept(response, finalRequest);
+                        }
+                    }
+                    catch (NetworkException e) {
+                        interceptionError = e;
+                    }
+                    catch (Exception e) {
+                        interceptionError = new NetworkException(e);
                     }
 
                     T value = serializer.serialize(response);
 
-                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value));
+                    runCompletionHandler(completionHandler, new Response<>(finalRequest, response, value, interceptionError));
                 } catch (Exception e) {
                     runCompletionHandler(completionHandler, new Response<>(finalRequest, response, null, new NetworkException(e)));
                 }

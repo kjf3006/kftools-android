@@ -20,8 +20,7 @@ import okhttp3.Request;
  */
 public class ImageContainer implements Serializable {
 
-    public enum Type { KEY, URL, RES, BMP }
-//    public enum Size {SMALL, MEDIUM, LARGE, ORIGINAL}; //100x100 500x500 1000x1000 0x0
+    public enum Type { KEY, URL, RES, BMP, MAP }
 
 
     private String key, url, youtubeID;
@@ -30,6 +29,8 @@ public class ImageContainer implements Serializable {
     private Bitmap placeholderBitmap, bitmap;
     private @DrawableRes int resId;
     private Request request;
+
+    private MapSnapshotOptions mapOptions;
 
     /*
     res

@@ -16,6 +16,8 @@
 
     <color name="systemGray5Color">#FFE5E5EA</color>
 
+    <color name="separatorColor">#4A3C3C43</color>
+
     <color name="systemRedColor">#FFFF3B30</color>
     <color name="systemOrangeColor">#FFFF9500</color>
     <color name="systemYellowColor">#FFFFCC00</color>

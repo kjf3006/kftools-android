@@ -5,12 +5,14 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appverlag.kf.kftools.images.ImageContainer;
+import com.appverlag.kf.kftools.images.MapSnapshotOptions;
 import com.appverlag.kf.kftools.other.KFLog;
 import com.appverlag.kf.kftools.ui.ImagePager;
 import com.appverlag.kf.kftools.ui.formcomponents.controller.KFFormComponentContoller;
 import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormComponent;
 import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDateTimeComponent;
 import com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDropDownComponent;
+import com.appverlag.kf.kftools.ui.widgets.MapPreview;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -28,6 +30,9 @@ public class ThemeActivity extends AppCompatActivity {
                 ImageContainer.url("https://media.idownloadblog.com/wp-content/uploads/2021/09/Apple-September-Event-California-Streaming-BasicAppleGuy-iDownloadBlog-6K.png"),
                 ImageContainer.url("https://restado.de/wp-content/uploads/test.jpg"),
                 ImageContainer.url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/1200px-SMPTE_Color_Bars.svg.png")));
+
+        MapPreview mapPreview = findViewById(R.id.mapPreview);
+        mapPreview.setOptions(new MapSnapshotOptions(52.520008, 13.404954, MapSnapshotOptions.MapType.HYBRID));
 
         KFFormDropDownComponent dropDownComponent = findViewById(R.id.dropDownComponent);
         dropDownComponent.getDropDownView().setOptions(Arrays.asList("A", "B", "C", "D"));

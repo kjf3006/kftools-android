@@ -2,11 +2,10 @@ package com.appverlag.kf.kftools.network;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Size;
 
 import com.appverlag.kf.kftools.images.BitmapSizeEngine;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -14,11 +13,11 @@ import okio.BufferedSource;
 
 public class ResponseImageSerializer extends ResponseSerializer<Bitmap> {
 
-    private ImageSize desiredSize;
+    private Size desiredSize;
 
     public ResponseImageSerializer() {}
 
-    public ResponseImageSerializer(ImageSize desiredSize) {
+    public ResponseImageSerializer(Size desiredSize) {
         this.desiredSize = desiredSize;
     }
 
@@ -41,7 +40,7 @@ public class ResponseImageSerializer extends ResponseSerializer<Bitmap> {
         if (desiredSize != null) {
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(bufferedSource.peek().inputStream(), null, options);
-            options.inSampleSize = BitmapSizeEngine.calculateInSampleSize(new ImageSize(options), desiredSize);
+            options.inSampleSize = BitmapSizeEngine.calculateInSampleSize(new Size(options.outWidth, options.outHeight), desiredSize);
             options.inJustDecodeBounds = false;
         }
 
