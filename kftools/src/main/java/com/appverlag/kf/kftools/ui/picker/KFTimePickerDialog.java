@@ -4,7 +4,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.content.DialogInterface.OnClickListener;
@@ -146,18 +145,16 @@ public class KFTimePickerDialog extends AlertDialog implements OnClickListener, 
     @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
-            case BUTTON_POSITIVE:
+            case BUTTON_POSITIVE -> {
                 // Note this skips input validation and just uses the last valid time and hour
                 // entry. This will only be invoked programmatically. User clicks on BUTTON_POSITIVE
                 // are handled in show().
                 if (mTimeSetListener != null) {
                     mTimeSetListener.onTimeSet(mTimePicker, mTimePicker.getCurrentHour(),
-                            mTimePicker.getCurrentMinute()*mMinuteInterval);
+                            mTimePicker.getCurrentMinute() * mMinuteInterval);
                 }
-                break;
-            case BUTTON_NEGATIVE:
-                cancel();
-                break;
+            }
+            case BUTTON_NEGATIVE -> cancel();
         }
     }
 

@@ -8,9 +8,10 @@ import androidx.annotation.Nullable;
 
 import com.appverlag.kf.kftools.ui.widgets.KFDateTimeView;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-public class KFFormDateTimeComponent extends KFFormComponent<Date> {
+public class KFFormDateTimeComponent extends KFFormComponent<LocalDateTime> {
 
     private KFDateTimeView dateTimeView;
 
@@ -30,13 +31,13 @@ public class KFFormDateTimeComponent extends KFFormComponent<Date> {
     }
 
     @Override
-    public Date getValue() {
-        return dateTimeView.getDate();
+    public LocalDateTime getValue() {
+        return dateTimeView.getLocalDateTime();
     }
 
     @Override
-    public void setValue(Date value) {
-        dateTimeView.setDate(value);
+    public void setValue(LocalDateTime value) {
+        dateTimeView.setLocalDateTime(value);
     }
 
     public KFDateTimeView getDateTimeView() {

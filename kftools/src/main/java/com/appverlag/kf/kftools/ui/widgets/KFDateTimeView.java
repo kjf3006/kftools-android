@@ -21,6 +21,11 @@ import com.appverlag.kf.kftools.ui.picker.KFTimePickerDialog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,7 +40,8 @@ public class KFDateTimeView extends TextView {
     }
 
     private DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
-    private Date date;
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+    private LocalDateTime localDateTime;
     private String title;
     private DatePickerMode datePickerMode;
 
@@ -45,21 +51,21 @@ public class KFDateTimeView extends TextView {
 
     public KFDateTimeView(@NonNull Context context) {
         super(context, null, 0, R.style.KFTools_TextView_Action);
-        setupView(context);
+        setupView();
     }
 
     public KFDateTimeView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs, 0, R.style.KFTools_TextView_Action);
-        setupView(context);
+        setupView();
 
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.KFDateTimeView, 0, 0);
         title = a.getString(R.styleable.KFDateTimeView_android_title);
         setDatePickerMode(DatePickerMode.values()[a.getInt(R.styleable.KFDateTimeView_datePickerMode, 0)]);
     }
 
-    private void setupView(@NonNull Context context) {
+    private void setupView() {
         setSaveEnabled(true);
-        setDate(new Date());
+        setLocalDateTime(LocalDateTime.now());
         setDatePickerMode(DatePickerMode.DatePickerModeDateAndTime);
         setOnClickListener(v -> showPicker());
     }
@@ -74,22 +80,17 @@ public class KFDateTimeView extends TextView {
     }
 
     private void showDatePicker() {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
 
         DatePickerDialog dialog = new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            date = calendar.getTime();
+            localDateTime = localDateTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
+
             if (datePickerMode !=  DatePickerMode.DatePickerModeDate) {
                 showTimePicker();
             }
             else {
                 didSelectDate();
             }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-//        dialog.setTitle(title);
+        }, localDateTime.getYear(), localDateTime.getMonthValue(), localDateTime.getDayOfMonth());
 
         if (onShowDatePickerListener != null) {
             onShowDatePickerListener.willShowDatePicker(dialog.getDatePicker());
@@ -99,16 +100,10 @@ public class KFDateTimeView extends TextView {
     }
 
     private void showTimePicker() {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-
         KFTimePickerDialog dialog = new KFTimePickerDialog(getContext(), (view, hourOfDay, minute) -> {
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            calendar.set(Calendar.MINUTE, minute);
-            date = calendar.getTime();
+            localDateTime = localDateTime.withHour(hourOfDay).withMinute(minute);
             didSelectDate();
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-//        dialog.setTitle(title);
+        }, localDateTime.getHour(), localDateTime.getMinute(), true);
 
         if (onShowTimePickerDialogListener != null) {
             onShowTimePickerDialogListener.willShowTimePickerDialog(dialog);
@@ -117,9 +112,9 @@ public class KFDateTimeView extends TextView {
     }
 
     private void didSelectDate() {
-        setText(dateFormat.format(date));
+        updateText();
         if (onSelectionListener != null) {
-            onSelectionListener.onSelection(date);
+            onSelectionListener.onSelection(localDateTime);
         }
     }
 
@@ -128,7 +123,7 @@ public class KFDateTimeView extends TextView {
      */
 
     public interface OnSelectionListener {
-        void onSelection(Date selectedDate);
+        void onSelection(LocalDateTime selectedDate);
     }
 
     public interface OnShowDatePickerListener {
@@ -175,7 +170,11 @@ public class KFDateTimeView extends TextView {
             setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_watch_later_24, 0);
         }
 
-        setText(dateFormat.format(date));
+        updateText();
+    }
+
+    private void updateText() {
+        setText(localDateTime.format(dateTimeFormatter));
     }
 
     public DateFormat getDateFormat() {
@@ -186,18 +185,31 @@ public class KFDateTimeView extends TextView {
         this.dateFormat = dateFormat;
     }
 
+    public DateTimeFormatter getDateTimeFormatter() {
+        return dateTimeFormatter;
+    }
+
+    public void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
+        this.dateTimeFormatter = dateTimeFormatter;
+    }
+
+
+
     public Date getDate() {
-        return date;
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public void setDate(Date date) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        setLocalDateTime(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()));
+    }
 
-        this.date = calendar.getTime();
-        setText(dateFormat.format(this.date));
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime.truncatedTo(ChronoUnit.MINUTES);
+        updateText();
     }
 
     public String getTitle() {
@@ -216,27 +228,29 @@ public class KFDateTimeView extends TextView {
     public Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
         final SavedState customViewSavedState = new SavedState(superState);
-        customViewSavedState.date = date;
+        customViewSavedState.localDateTime = localDateTime;
         return customViewSavedState;
     }
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         final SavedState customViewSavedState = (SavedState) state;
-        setDate(customViewSavedState.date);
+        setLocalDateTime(customViewSavedState.localDateTime);
         super.onRestoreInstanceState(customViewSavedState.getSuperState());
     }
 
     private static class SavedState extends BaseSavedState {
 
-        Date date;
+        LocalDateTime localDateTime;
 
-        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
-            @Override public SavedState createFromParcel(Parcel source) {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<>() {
+            @Override
+            public SavedState createFromParcel(Parcel source) {
                 return new SavedState(source);
             }
 
-            @Override public SavedState[] newArray(int size) {
+            @Override
+            public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }
         };
@@ -247,12 +261,12 @@ public class KFDateTimeView extends TextView {
 
         private SavedState(Parcel source) {
             super(source);
-            date = (Date) source.readSerializable();
+            localDateTime = (LocalDateTime) source.readSerializable();
         }
 
         @Override public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
-            out.writeSerializable(date);
+            out.writeSerializable(localDateTime);
         }
     }
 }
