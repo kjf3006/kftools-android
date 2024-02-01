@@ -89,7 +89,7 @@ public class KFDateTimeView extends TextView {
             else {
                 didSelectDate();
             }
-        }, localDateTime.getYear(), localDateTime.getMonthValue(), localDateTime.getDayOfMonth());
+        }, localDateTime.getYear(), localDateTime.getMonthValue()-1, localDateTime.getDayOfMonth());
 
         if (onShowDatePickerListener != null) {
             onShowDatePickerListener.willShowDatePicker(dialog.getDatePicker());
