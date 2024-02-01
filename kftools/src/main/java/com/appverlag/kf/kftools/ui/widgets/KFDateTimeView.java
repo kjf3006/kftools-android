@@ -81,7 +81,7 @@ public class KFDateTimeView extends TextView {
     private void showDatePicker() {
 
         DatePickerDialog dialog = new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
-            localDateTime = localDateTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
+            localDateTime = localDateTime.withYear(year).withMonth(month+1).withDayOfMonth(dayOfMonth);
 
             if (datePickerMode !=  DatePickerMode.DatePickerModeDate) {
                 showTimePicker();
