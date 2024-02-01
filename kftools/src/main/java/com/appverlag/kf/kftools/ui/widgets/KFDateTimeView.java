@@ -39,7 +39,6 @@ public class KFDateTimeView extends TextView {
         DatePickerModeDateAndTime
     }
 
-    private DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
     private LocalDateTime localDateTime;
     private String title;
@@ -158,15 +157,15 @@ public class KFDateTimeView extends TextView {
         this.datePickerMode = datePickerMode;
 
         if (datePickerMode == DatePickerMode.DatePickerModeDateAndTime) {
-            dateFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT);
+            dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
             setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_calendar_today_24, 0);
         }
         else if (datePickerMode == DatePickerMode.DatePickerModeDate) {
-            dateFormat = SimpleDateFormat.getDateInstance(DateFormat.DEFAULT);
+            dateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
             setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_calendar_today_24, 0);
         }
         else if (datePickerMode ==  DatePickerMode.DatePickerModeTime) {
-            dateFormat = SimpleDateFormat.getTimeInstance(DateFormat.SHORT);
+            dateTimeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
             setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_watch_later_24, 0);
         }
 
@@ -175,14 +174,6 @@ public class KFDateTimeView extends TextView {
 
     private void updateText() {
         setText(localDateTime.format(dateTimeFormatter));
-    }
-
-    public DateFormat getDateFormat() {
-        return dateFormat;
-    }
-
-    public void setDateFormat(DateFormat dateFormat) {
-        this.dateFormat = dateFormat;
     }
 
     public DateTimeFormatter getDateTimeFormatter() {
