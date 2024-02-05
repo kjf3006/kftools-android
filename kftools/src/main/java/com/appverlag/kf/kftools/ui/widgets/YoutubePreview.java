@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Size;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +19,7 @@ import com.appverlag.kf.kftools.images.ImageManager;
 import com.appverlag.kf.kftools.other.KFDensityTool;
 import com.appverlag.kf.kftools.other.youtube.YoutubeVideo;
 
-public class YoutubePreview extends CardView {
+public class YoutubePreview extends FrameLayout {
 
     private YoutubeVideo mYoutubeVideo;
 
@@ -44,9 +45,12 @@ public class YoutubePreview extends CardView {
 
     private void init() {
         View.inflate(getContext(), R.layout.kftools_youtube_preview, this);
+
+        setBackgroundResource(R.drawable.kftools_widget_default_background);
+        setClipToOutline(true);
+
         mThumbnailImageView = findViewById(R.id.thumbnailImageView);
         mTextViewTitle = findViewById(R.id.textViewTitle);
-        setRadius(getResources().getDimension(R.dimen.primaryCornerRadius));
     }
 
     private void loadVideo() {

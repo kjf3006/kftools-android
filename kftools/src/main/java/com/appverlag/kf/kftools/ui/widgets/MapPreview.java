@@ -19,7 +19,7 @@ import com.appverlag.kf.kftools.other.KFDensityTool;
 
 import java.util.Locale;
 
-public class MapPreview extends CardView {
+public class MapPreview extends FrameLayout {
 
     private ImageView mMapImageView;
     private ImageView mAnnotationImageView;
@@ -47,10 +47,12 @@ public class MapPreview extends CardView {
 
     private void init() {
         View.inflate(getContext(), R.layout.kftools_map_preview, this);
+
+        setBackgroundResource(R.drawable.kftools_widget_default_background);
+        setClipToOutline(true);
+
         mMapImageView = findViewById(R.id.mapImageView);
         mAnnotationImageView = findViewById(R.id.annotationImageView);
-
-        setRadius(getResources().getDimension(R.dimen.primaryCornerRadius));
 
         super.setOnClickListener(v -> {
             if (mOpensMapOnSelection) {
