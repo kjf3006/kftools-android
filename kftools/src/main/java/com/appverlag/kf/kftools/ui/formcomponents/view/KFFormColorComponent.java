@@ -3,6 +3,7 @@ package com.appverlag.kf.kftools.ui.formcomponents.view;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -13,7 +14,7 @@ import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.other.KFDensityTool;
 import com.appverlag.kf.kftools.ui.picker.KFColorPickerDialog;
 
-public class KFFormColorComponent extends KFFormComponent<Integer>{
+public class KFFormColorComponent extends KFFormComponent<Integer, View>{
 
     private Button button;
     private int selectedColor;
@@ -45,6 +46,11 @@ public class KFFormColorComponent extends KFFormComponent<Integer>{
     public void setValue(Integer value) {
         selectedColor = value;
         button.setBackgroundTintList(ColorStateList.valueOf(value));
+    }
+
+    @Override
+    public View getControl() {
+        return button;
     }
 
     private void showPicker(Context context) {

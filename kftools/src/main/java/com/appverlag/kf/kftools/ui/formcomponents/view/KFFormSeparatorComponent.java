@@ -15,8 +15,8 @@ import com.appverlag.kf.kftools.other.KFDensityTool;
  *
  * @deprecated Use plain View with KFTools.Separator style
  */
-@Deprecated
-public class KFFormSeparatorComponent extends KFFormComponent<Object> {
+@Deprecated(forRemoval = true)
+public class KFFormSeparatorComponent extends KFFormComponent<Object, View> {
 
     View separator;
 
@@ -43,5 +43,10 @@ public class KFFormSeparatorComponent extends KFFormComponent<Object> {
     @Override
     public void setValue(Object value) {
 
+    }
+
+    @Override
+    public View getControl() {
+        return separator;
     }
 }

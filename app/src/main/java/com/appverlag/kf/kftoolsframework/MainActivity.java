@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             data = new ArrayList<>();
 
             data.add(new Section("UI-Components", Arrays.asList("KFThemes", "ImageGallery", "KFFormComponents", "KFYoutube", "KFLoadingView")));
-            data.add(new Section("Data-Handling", Arrays.asList("KFCache", "KFManagedObjects")));
+            data.add(new Section("Data-Handling", Arrays.asList("Cache", "KFManagedObjects")));
             data.add(new Section("Network", Arrays.asList("ConnectionManager")));
             notifyAllSectionsDataSetChanged();
         }

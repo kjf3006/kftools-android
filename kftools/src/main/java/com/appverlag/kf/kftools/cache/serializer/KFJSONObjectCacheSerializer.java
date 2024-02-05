@@ -24,7 +24,7 @@ public class KFJSONObjectCacheSerializer extends  KFSerializableCacheSerlializer
 
     @Override
     public void toOutputStream(@NonNull OutputStream outputStream, @NonNull Object object) {
-        String objectString = ((JSONObject) object).toString();
+        String objectString = object.toString();
         super.toOutputStream(outputStream, objectString);
     }
 

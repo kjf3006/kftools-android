@@ -13,7 +13,7 @@ import java.util.Locale;
  * Proprietary and confidential
  * Created by kevinflachsmann on 26.07.20.
  */
-public class MemoryCache extends KFCache {
+public class MemoryCache extends Cache {
 
     private final LruCache<String, Object> cache;
 

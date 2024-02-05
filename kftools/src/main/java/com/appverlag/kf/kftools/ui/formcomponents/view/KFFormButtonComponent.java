@@ -14,8 +14,8 @@ import com.appverlag.kf.kftools.R;
  *
  * @deprecated Use plain Button with KFTools.Button style
  */
-@Deprecated
-public class KFFormButtonComponent extends KFFormComponent<Object> {
+@Deprecated(forRemoval = true)
+public class KFFormButtonComponent extends KFFormComponent<Object, Button> {
 
     private Button button;
 
@@ -42,5 +42,10 @@ public class KFFormButtonComponent extends KFFormComponent<Object> {
     @Override
     public void setValue(Object value) {
 
+    }
+
+    @Override
+    public Button getControl() {
+        return button;
     }
 }

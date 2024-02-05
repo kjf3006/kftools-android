@@ -1,6 +1,8 @@
 package com.appverlag.kf.kftools.ui.widgets;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -8,16 +10,24 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.images.ImageManager;
 import com.appverlag.kf.kftools.images.MapSnapshotOptions;
+import com.appverlag.kf.kftools.other.KFDensityTool;
 
-public class MapPreview extends FrameLayout {
+import java.util.Locale;
+
+public class MapPreview extends CardView {
 
     private ImageView mMapImageView;
     private ImageView mAnnotationImageView;
     private MapSnapshotOptions mOptions;
+
+    private boolean mOpensMapOnSelection = true;
+    private String mTitle;
+    private OnClickListener mOnClickListener;
 
     public MapPreview(@NonNull Context context) {
         super(context);
@@ -34,18 +44,22 @@ public class MapPreview extends FrameLayout {
         init();
     }
 
-    public MapPreview(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init();
-    }
 
     private void init() {
         View.inflate(getContext(), R.layout.kftools_map_preview, this);
         mMapImageView = findViewById(R.id.mapImageView);
         mAnnotationImageView = findViewById(R.id.annotationImageView);
 
-        setBackgroundResource(R.drawable.kftools_widget_default_background);
-        setClipToOutline(true);
+        setRadius(getResources().getDimension(R.dimen.primaryCornerRadius));
+
+        super.setOnClickListener(v -> {
+            if (mOpensMapOnSelection) {
+                openGoogleMaps();
+            }
+            if (mOnClickListener != null) {
+                mOnClickListener.onClick(v);
+            }
+        });
     }
 
     private void loadMapSnapShot() {
@@ -58,6 +72,45 @@ public class MapPreview extends FrameLayout {
                 mMapImageView.setImageBitmap(response.value);
             }
         });
+    }
+
+    public void openGoogleMaps() {
+        String uriString = String.format(Locale.US, "geo:0,0?q=%f,%f", mOptions.getLatitude(), mOptions.getLongitude());
+        if (mTitle != null) {
+            uriString += String.format("(%s)", mTitle);
+        }
+        Uri mapUri = Uri.parse(uriString);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        getContext().startActivity(mapIntent);
+    }
+
+    @Override
+    public void setOnClickListener(@Nullable OnClickListener onClickListener) {
+        mOnClickListener = onClickListener;
+    }
+
+    public boolean isOpensMapOnSelection() {
+        return mOpensMapOnSelection;
+    }
+
+    /**
+     * If true, the google maps app is opened on selection.
+     */
+    public void setOpensMapOnSelection(boolean opensMapOnSelection) {
+        mOpensMapOnSelection = opensMapOnSelection;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    /**
+     * The descriptive title associated with the coordinate.
+     * The title will be used when constructing the map-link for opening the google maps when {@link #setOpensMapOnSelection() setOpensMapOnSelection()} is set to true.
+     */
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     public ImageView getMapImageView() {

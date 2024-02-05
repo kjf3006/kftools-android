@@ -30,16 +30,16 @@ import java.util.concurrent.Executors;
  * Proprietary and confidential
  * Created by kevinflachsmann on 26.07.20.
  */
-public class DiskCache extends KFCache {
+public class DiskCache extends Cache {
 
     private static final String KFDiskCacheSerializerJournalKey = "KFDiskCacheSerializerJournalKey";
 
     private final long maxCacheAge;
     private final String diskCachePath;
-    private ExecutorService ioQueue = Executors.newCachedThreadPool();
-    private Set<String> lockedFiles;
+    private final ExecutorService ioQueue = Executors.newCachedThreadPool();
+    private final Set<String> lockedFiles;
 
-    private Map<Class<?>, KFCacheSerializer> serializerPool = new HashMap<>();
+    private final Map<Class<?>, KFCacheSerializer> serializerPool = new HashMap<>();
     private Map<String, Class<?>> serializerJournal = new HashMap<>();
 
     private boolean fileAccessBlocked;

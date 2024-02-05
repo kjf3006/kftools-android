@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
@@ -32,7 +33,7 @@ public class ImageGalleryFragment extends DialogFragment {
     protected Toolbar toolbar;
     protected ViewPager2 viewPager;
 
-//    protected ImageGalleryViewModel viewModel;
+//    private ImageGalleryViewModel viewModel;
 
     public List<ImageContainer> images;
     public int position;
@@ -51,7 +52,6 @@ public class ImageGalleryFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.kftools_image_gallery_fragment, container, false);
-
         return rootView;
     }
 
@@ -67,7 +67,7 @@ public class ImageGalleryFragment extends DialogFragment {
         adapter.setImages(images);
 
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(position);
+        viewPager.setCurrentItem(position, false);
         viewPager.setPageTransformer(new MarginPageTransformer(KFDensityTool.dpToPx(30)));
     }
 

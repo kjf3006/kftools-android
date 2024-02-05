@@ -20,6 +20,18 @@
     <style name="KFTools.AlertDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="android:colorPrimary">?colorPrimary</item>
         <item name="android:colorAccent">?colorAccent</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/KFTools.AlertDialog.NegativeButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/KFTools.AlertDialog.PositiveButtonStyle</item>
+    </style>
+
+    <style name="KFTools.AlertDialog.NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/systemRedColor</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="KFTools.AlertDialog.PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/secondaryLabelColor</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="KFTools.DatePickerDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">

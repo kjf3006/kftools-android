@@ -18,7 +18,7 @@ import okhttp3.FormBody;
 
 public class KFFormComponentContoller {
 
-    private List<KFFormComponent<?>> components;
+    private List<KFFormComponent<?,?>> components;
 
     public KFFormComponentContoller () {
         components = new ArrayList<>();
@@ -31,7 +31,7 @@ public class KFFormComponentContoller {
 
     public void addComponentsFromView(ViewGroup viewGroup) {
         if (viewGroup instanceof KFFormComponent) {
-            components.add((KFFormComponent<?>) viewGroup);
+            components.add((KFFormComponent<?,?>) viewGroup);
         }
         else {
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
@@ -48,8 +48,8 @@ public class KFFormComponentContoller {
      */
 
     @Nullable
-    public KFFormComponent<?> getComponent(String identifier) {
-        for (KFFormComponent<?> component : components) {
+    public KFFormComponent<?,?> getComponent(String identifier) {
+        for (KFFormComponent<?,?> component : components) {
             String key = component.getIdentifier();
             if (key != null && !key.isEmpty() && key.equals(identifier)) {
                 return component;
@@ -60,7 +60,7 @@ public class KFFormComponentContoller {
 
     public Map<String, Object> getData() {
         Map<String, Object> data = new HashMap<>();
-        for (KFFormComponent<?> component : components) {
+        for (KFFormComponent<?,?> component : components) {
             data.put(component.getIdentifier(), component.getValue());
         }
         return data;
@@ -72,7 +72,7 @@ public class KFFormComponentContoller {
 
     public Map<String, String> getSerializedData(KFFormComponentSerializer serializer) {
         Map<String, String> data = new HashMap<>();
-        for (KFFormComponent<?> component : components) {
+        for (KFFormComponent<?,?> component : components) {
             Object value = component.getValue();
             String identifier = component.getIdentifier();
             if (identifier != null && value != null) {
@@ -120,19 +120,19 @@ public class KFFormComponentContoller {
     getter & setter
      */
 
-    public void addComponent(KFFormComponent<?> component) {
+    public void addComponent(KFFormComponent<?,?> component) {
         components.add(component);
     }
 
-    public void addComponents(KFFormComponent<?> ... components) {
+    public void addComponents(KFFormComponent<?,?> ... components) {
         this.components.addAll(Arrays.asList(components));
     }
 
-    public List<KFFormComponent<?>> getComponents() {
+    public List<KFFormComponent<?,?>> getComponents() {
         return components;
     }
 
-    public void setComponents(List<KFFormComponent<?>> components) {
+    public void setComponents(List<KFFormComponent<?,?>> components) {
         this.components = components;
     }
 }

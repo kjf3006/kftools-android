@@ -81,7 +81,7 @@ public class KFImagePager extends ViewPager {
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            View itemView = layoutInflater.inflate(R.layout.kftools_pager_item, container, false);
+            View itemView = layoutInflater.inflate(R.layout.kftools_image_pager_item, container, false);
 
             KFImageView imageView = (KFImageView) itemView.findViewById(R.id.imageView);
 

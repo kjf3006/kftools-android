@@ -11,7 +11,7 @@ import com.appverlag.kf.kftools.ui.widgets.KFDateTimeView;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class KFFormDateTimeComponent extends KFFormComponent<LocalDateTime> {
+public class KFFormDateTimeComponent extends KFFormComponent<LocalDateTime, KFDateTimeView> {
 
     private KFDateTimeView dateTimeView;
 
@@ -40,6 +40,17 @@ public class KFFormDateTimeComponent extends KFFormComponent<LocalDateTime> {
         dateTimeView.setLocalDateTime(value);
     }
 
+    @Override
+    public KFDateTimeView getControl() {
+        return dateTimeView;
+    }
+
+    /**
+     *
+     * @return dateTimeView
+     * @Deprecated Use {@link #getControl() getControl()} instead.
+     */
+    @Deprecated(forRemoval = true)
     public KFDateTimeView getDateTimeView() {
         return dateTimeView;
     }

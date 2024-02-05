@@ -86,11 +86,7 @@ public class ConnectionManager {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public <T> Call send(@NonNull final Request request, @NonNull final ResponseSerializer<T> serializer, @NonNull final CompletionHandler<T> completionHandler) {
-
-        if (client.cache() == null) {
-            KFLog.w(LOG_TAG, "No cache setup for client. Consider calling setupDefaultCache(@NonNull Context) before sending requests.");
-        }
+    public <T> Call send(@NonNull final Request request, @NonNull final ResponseSerializer<T> serializer, @Nullable final CompletionHandler<T> completionHandler) {
 
         Request _request = request;
 
@@ -158,8 +154,10 @@ public class ConnectionManager {
         return call;
     }
 
-    private <T> void runCompletionHandler(final CompletionHandler<T> completionHandler, final Response<T> response) {
-        handler.post(() -> completionHandler.onResponse(response));
+    private <T> void runCompletionHandler(@Nullable final CompletionHandler<T> completionHandler, final Response<T> response) {
+        if (completionHandler != null) {
+            handler.post(() -> completionHandler.onResponse(response));
+        }
     }
 
     public interface CompletionHandler<T> {

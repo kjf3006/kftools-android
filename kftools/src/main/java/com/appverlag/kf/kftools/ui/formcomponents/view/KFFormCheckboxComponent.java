@@ -7,7 +7,7 @@ import android.widget.CheckBox;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class KFFormCheckboxComponent extends KFFormComponent<Boolean> {
+public class KFFormCheckboxComponent extends KFFormComponent<Boolean, CheckBox> {
 
     private CheckBox checkBox;
 
@@ -36,6 +36,12 @@ public class KFFormCheckboxComponent extends KFFormComponent<Boolean> {
         checkBox.setChecked(value);
     }
 
+    @Override
+    public CheckBox getControl() {
+        return checkBox;
+    }
+
+    @Deprecated(forRemoval = true)
     public CheckBox getCheckBox() {
         return checkBox;
     }

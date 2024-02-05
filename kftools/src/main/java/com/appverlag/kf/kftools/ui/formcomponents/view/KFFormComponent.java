@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.ui.widgets.KFEmptyHiddenTextView;
 
-public abstract class KFFormComponent <T> extends LinearLayout {
+public abstract class KFFormComponent <T,C extends View> extends LinearLayout {
 
     private TextView textViewTitle, textViewDescription;
     private FrameLayout contentView;
@@ -74,6 +74,18 @@ public abstract class KFFormComponent <T> extends LinearLayout {
     public abstract T getValue();
 
     public abstract void setValue(T value);
+
+    public abstract C getControl();
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        getControl().setEnabled(enabled);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return getControl().isEnabled();
+    }
 
     /*
     getter and setter

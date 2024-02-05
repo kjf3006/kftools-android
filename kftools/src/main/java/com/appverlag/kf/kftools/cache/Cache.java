@@ -1,6 +1,5 @@
 package com.appverlag.kf.kftools.cache;
 
-import android.content.Context;
 import androidx.annotation.NonNull;
 
 /**
@@ -9,33 +8,33 @@ import androidx.annotation.NonNull;
  * Proprietary and confidential
  * Created by kevinflachsmann on 24.07.20.
  */
-public abstract class KFCache {
+public abstract class Cache {
 
-    protected static final String LOG_TAG = "KFCache";
+    protected static final String LOG_TAG = "Cache";
 
-    private KFCache chainedCache;
+    private Cache chainedCache;
 
-    private static KFCache defaultCache;
-    private static KFCache defaultPersistentCache;
+    private static Cache defaultCache;
+    private static Cache defaultPersistentCache;
     private static final int DEFAULT_MAX_CACHE_AGE = 60 * 60 * 24 * 7 * 3;
     private static final String DEFAULT_CACHE_NAME = "KF_CACHE_DEFAULT_NAME";
     private static final String DEFAULT_PERSISTENT_CACHE_NAME = "KF_CACHE_DEFAULT_PERSISTENT_NAME";
 
     //default cache
-    public static KFCache defaultCache() {
-        if (KFCache.defaultCache == null) {
+    public static Cache defaultCache() {
+        if (Cache.defaultCache == null) {
             defaultCache = new MemoryCache();
             defaultCache.setChainedCache(new DiskCache(DEFAULT_CACHE_NAME, DEFAULT_MAX_CACHE_AGE));
         }
-        return KFCache.defaultCache;
+        return Cache.defaultCache;
     }
 
-    public static KFCache defaultPersistentCache() {
-        if (KFCache.defaultPersistentCache == null) {
+    public static Cache defaultPersistentCache() {
+        if (Cache.defaultPersistentCache == null) {
             defaultPersistentCache = new MemoryCache();
             defaultPersistentCache.setChainedCache(new DiskCache(DEFAULT_PERSISTENT_CACHE_NAME, 0));
         }
-        return KFCache.defaultPersistentCache;
+        return Cache.defaultPersistentCache;
     }
 
     //default access
@@ -111,11 +110,11 @@ public abstract class KFCache {
     public abstract void trimCache();
 
     //chain
-    public KFCache getChainedCache() {
+    public Cache getChainedCache() {
         return chainedCache;
     }
 
-    public void setChainedCache(KFCache chainedCache) {
+    public void setChainedCache(Cache chainedCache) {
         this.chainedCache = chainedCache;
     }
 

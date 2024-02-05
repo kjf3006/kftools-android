@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 
-public class KFFormSwitchComponent extends KFFormComponent<Boolean> {
+public class KFFormSwitchComponent extends KFFormComponent<Boolean, SwitchCompat> {
 
     private SwitchCompat aSwitch;
 
@@ -36,6 +36,12 @@ public class KFFormSwitchComponent extends KFFormComponent<Boolean> {
         aSwitch.setChecked(value);
     }
 
+    @Override
+    public SwitchCompat getControl() {
+        return aSwitch;
+    }
+
+    @Deprecated(forRemoval = true)
     public SwitchCompat getSwitch() {
         return aSwitch;
     }

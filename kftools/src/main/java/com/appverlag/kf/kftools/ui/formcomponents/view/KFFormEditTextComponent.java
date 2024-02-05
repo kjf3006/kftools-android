@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.other.KFDensityTool;
 
-public class KFFormEditTextComponent extends KFFormComponent<String>{
+public class KFFormEditTextComponent extends KFFormComponent<String, EditText>{
 
     private EditText editText;
 
@@ -46,6 +46,12 @@ public class KFFormEditTextComponent extends KFFormComponent<String>{
         editText.setText(value);
     }
 
+    @Override
+    public EditText getControl() {
+        return editText;
+    }
+
+    @Deprecated(forRemoval = true)
     public EditText getEditText() {
         return editText;
     }

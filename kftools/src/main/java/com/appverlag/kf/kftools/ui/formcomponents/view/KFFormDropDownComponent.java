@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.appverlag.kf.kftools.ui.widgets.KFDropDownView;
 
-public class KFFormDropDownComponent extends KFFormComponent<String> {
+public class KFFormDropDownComponent extends KFFormComponent<String, KFDropDownView> {
 
     private KFDropDownView dropDownView;
 
@@ -37,6 +37,12 @@ public class KFFormDropDownComponent extends KFFormComponent<String> {
         dropDownView.setSelectedValue(value);
     }
 
+    @Override
+    public KFDropDownView getControl() {
+        return dropDownView;
+    }
+
+    @Deprecated(forRemoval = true)
     public KFDropDownView getDropDownView() {
         return dropDownView;
     }

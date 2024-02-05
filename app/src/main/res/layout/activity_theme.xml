@@ -14,6 +14,11 @@
         android:divider="@drawable/kftools_space_default"
         android:showDividers="middle">
 
+        <com.appverlag.kf.kftools.ui.widgets.YoutubePreview
+            android:id="@+id/youtubePreview"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"/>
+
         <com.appverlag.kf.kftools.ui.widgets.MapPreview
             android:id="@+id/mapPreview"
             android:layout_width="match_parent"
