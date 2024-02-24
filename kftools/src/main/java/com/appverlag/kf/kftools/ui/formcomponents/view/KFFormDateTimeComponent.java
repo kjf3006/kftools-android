@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.appverlag.kf.kftools.other.DateTimeUtils;
 import com.appverlag.kf.kftools.ui.widgets.KFDateTimeView;
 
 import java.time.LocalDateTime;
@@ -38,6 +39,11 @@ public class KFFormDateTimeComponent extends KFFormComponent<LocalDateTime, KFDa
     @Override
     public void setValue(LocalDateTime value) {
         dateTimeView.setLocalDateTime(value);
+    }
+
+    @Deprecated(forRemoval = true)
+    public void setValue(Date value) {
+        dateTimeView.setLocalDateTime(DateTimeUtils.fromDate(value));
     }
 
     @Override
