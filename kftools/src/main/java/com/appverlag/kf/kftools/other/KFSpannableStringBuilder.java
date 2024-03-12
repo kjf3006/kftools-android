@@ -59,6 +59,14 @@ public class KFSpannableStringBuilder extends SpannableStringBuilder {
         return this;
     }
 
+    public KFSpannableStringBuilder append(CharSequence text, SpanBuilder spanBuilder) {
+        append(text);
+        for (Object span : spanBuilder.getSpans()) {
+            setSpan(span, length() - text.length(), length());
+        }
+        return this;
+    }
+
     public KFSpannableStringBuilder append(CharSequence text, Object span) {
         append(text);
         setSpan(span, length() - text.length(), length());
