@@ -1,10 +1,15 @@
 package com.appverlag.kf.kftools.other;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.BulletSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TextAppearanceSpan;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 
 import androidx.annotation.ColorInt;
 
@@ -60,6 +65,16 @@ public class SpanBuilder {
         return this;
     }
 
+    public SpanBuilder backgroundColor(@ColorInt int color) {
+        spans.add(new BackgroundColorSpan(color));
+        return this;
+    }
+
+    public SpanBuilder backgroundColor(SystemColor color) {
+        spans.add(new BackgroundColorSpan(color.getValue()));
+        return this;
+    }
+
     public SpanBuilder textAppearance(int appearance) {
         spans.add(new TextAppearanceSpan(ContextProvider.getApplicationContext(), appearance));
         return this;
@@ -67,5 +82,30 @@ public class SpanBuilder {
 
     public SpanBuilder textAppearance(TextAppereance appearance) {
         return textAppearance(appearance.getValue());
+    }
+
+    public SpanBuilder relativeSize(float relativeSize) {
+        spans.add(new RelativeSizeSpan(relativeSize));
+        return this;
+    }
+
+    public SpanBuilder strikethrough() {
+        spans.add(new StrikethroughSpan());
+        return this;
+    }
+
+    public SpanBuilder underline() {
+        spans.add(new UnderlineSpan());
+        return this;
+    }
+
+    public SpanBuilder url(String url) {
+        spans.add(new URLSpan(url));
+        return this;
+    }
+
+    public SpanBuilder bullet() {
+        spans.add(new BulletSpan());
+        return this;
     }
 }

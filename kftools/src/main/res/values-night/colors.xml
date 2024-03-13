@@ -6,17 +6,32 @@
     <color name="tertiaryLabelColor">#4CEBEBF5</color>
     <color name="quaternaryLabelColor">#28EBEBF5</color>
 
-    <color name="systemBackgroundColor">#FF000000</color>
-    <color name="secondarySystemBackgroundColor">#FF2C2C2E</color>
-    <color name="tertiarySystemBackgroundColor">#FF3A3A3C</color>
+    <color name="placeholderTextColor">#3FFFFFFF</color>
 
-    <color name="systemGroupedBackgroundColor">#FF1C1C1E</color>
-    <color name="secondarySystemGroupedBackgroundColor">#FF2C2C2E</color>
-    <color name="tertiarySystemGroupedBackgroundColor">#FF3A3A3C</color>
+    <color name="systemFillColor">#5C787880</color>
+    <color name="secondarySystemFillColor">#52787880</color>
+    <color name="tertiarySystemFillColor">#3D767680</color>
+    <color name="quarernarySystemFillColor">#2E767680</color>
 
+    <color name="systemBackgroundColor">#FF1E1E1E</color>
+    <color name="secondarySystemBackgroundColor">#FF323232</color>
+    <color name="tertiarySystemBackgroundColor">#FF464646</color>
+
+    <color name="systemGroupedBackgroundColor">#FF1E1E1E</color>
+    <color name="secondarySystemGroupedBackgroundColor">#FF323232</color>
+    <color name="tertiarySystemGroupedBackgroundColor">#FF464646</color>
+
+    <color name="systemGrayColor">#FF98989D</color>
+    <color name="systemGray2Color">#FF636366</color>
+    <color name="systemGray3Color">#FF48484A</color>
+    <color name="systemGray4Color">#FF3A3A3C</color>
     <color name="systemGray5Color">#FF2C2C2E</color>
+    <color name="systemGray6Color">#FF1C1C1E</color>
 
-    <color name="separatorColor">#99545458</color>
+    <color name="separatorColor">#19FFFFFF</color>
+    <color name="opaqueSeparatorColor">#FF38383A</color>
+
+    <color name="linkColor">#FF0984FF</color>
 
     <color name="systemRedColor">#FFFF453A</color>
     <color name="systemOrangeColor">#FFFF9F0A</color>

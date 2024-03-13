@@ -10,12 +10,10 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.images.ImageManager;
 import com.appverlag.kf.kftools.images.MapSnapshotOptions;
-import com.appverlag.kf.kftools.other.KFDensityTool;
 
 import java.util.Locale;
 

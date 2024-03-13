@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appverlag.kf.kftools.R;
-import com.appverlag.kf.kftools.other.KFDensityTool;
+import com.appverlag.kf.kftools.other.DensityUtils;
 
 public class KFFormEditTextComponent extends KFFormComponent<String, EditText>{
 
@@ -32,7 +32,7 @@ public class KFFormEditTextComponent extends KFFormComponent<String, EditText>{
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.KFFormEditTextComponent, 0, 0);
         boolean singleLine = a.getBoolean(R.styleable.KFFormEditTextComponent_android_singleLine, false);
         if (!singleLine) {
-            editText.setMinHeight(KFDensityTool.dpToPx(150));
+            editText.setMinHeight(DensityUtils.dpToPx(150));
         }
     }
 

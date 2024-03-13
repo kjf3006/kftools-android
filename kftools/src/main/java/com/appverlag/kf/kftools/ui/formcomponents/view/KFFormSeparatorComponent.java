@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appverlag.kf.kftools.R;
-import com.appverlag.kf.kftools.other.KFDensityTool;
+import com.appverlag.kf.kftools.other.DensityUtils;
 
 /**
  *
@@ -32,7 +32,7 @@ public class KFFormSeparatorComponent extends KFFormComponent<Object, View> {
 
     private void setupView(@NonNull Context context) {
         separator = new View(context, null, 0, R.style.KFTools_Separator);
-        addView(separator, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, KFDensityTool.dpToPx(2)));
+        addView(separator, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtils.dpToPx(2)));
     }
 
     @Override

@@ -14,14 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.images.ImageContainer;
-import com.appverlag.kf.kftools.other.KFDensityTool;
+import com.appverlag.kf.kftools.other.DensityUtils;
 import com.appverlag.kf.kftools.ui.KFImageView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
@@ -68,7 +67,7 @@ public class ImageGalleryFragment extends DialogFragment {
 
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position, false);
-        viewPager.setPageTransformer(new MarginPageTransformer(KFDensityTool.dpToPx(30)));
+        viewPager.setPageTransformer(new MarginPageTransformer(DensityUtils.dpToPx(30)));
     }
 
     @Override

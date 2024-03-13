@@ -14,14 +14,14 @@ import java.util.regex.Pattern;
 
 import okhttp3.Request;
 
-public class YoutubeVideo {
+public final class YoutubeVideo {
 
-    private final String mYoutubeId;
+    private final String youtubeId;
 
-    private Data mData;
+    private Data data;
 
     public YoutubeVideo(@NonNull String youtubeId) {
-        mYoutubeId = youtubeId;
+        this.youtubeId = youtubeId;
     }
 
     public static YoutubeVideo fromUrl(@NonNull String url) {
@@ -42,36 +42,36 @@ public class YoutubeVideo {
     }
 
     public String getYoutubeId() {
-        return mYoutubeId;
+        return youtubeId;
     }
 
     public String getYoutubeUrl() {
-        return "https://youtu.be/" + mYoutubeId;
+        return "https://youtu.be/" + youtubeId;
     }
 
     public String getThumbnailUrl() {
-        return "https://i.ytimg.com/vi/" + mYoutubeId + "/hqdefault.jpg";
+        return "https://i.ytimg.com/vi/" + youtubeId + "/hqdefault.jpg";
     }
 
     public void getData(@NonNull DataCallback callback) {
-        if (mData != null) {
-            callback.onResult(mData);
+        if (data != null) {
+            callback.onResult(data);
             return;
         }
-        final String cacheKey = "YoutubeVideo.Data." + mYoutubeId;
+        final String cacheKey = "YoutubeVideo.Data." + youtubeId;
         Cache.defaultCache().get(cacheKey, JSONObject.class, object -> {
             if (object != null) {
-                mData = new Data(object);
-                callback.onResult(mData);
+                data = new Data(object);
+                callback.onResult(data);
             }
             else {
                 Request request = new Request.Builder()
-                        .url("https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=" + mYoutubeId + "&format=json")
+                        .url("https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=" + youtubeId + "&format=json")
                         .build();
                 ConnectionManager.shared().send(request, new ResponseJSONSerializer(), response -> {
                     if (response.success()) {
-                        mData = new Data(response.value);
-                        callback.onResult(mData);
+                        data = new Data(response.value);
+                        callback.onResult(data);
                         Cache.defaultCache().put(cacheKey, response.value);
                     }
                     else {
@@ -87,8 +87,8 @@ public class YoutubeVideo {
         void onResult(@Nullable Data data);
     }
 
-    public static class Data {
-        private JSONObject mData;
+    public static final class Data {
+        private final JSONObject mData;
 
         public Data(JSONObject data) {
             mData = data;

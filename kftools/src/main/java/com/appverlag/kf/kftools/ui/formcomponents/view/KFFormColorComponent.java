@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appverlag.kf.kftools.R;
-import com.appverlag.kf.kftools.other.KFDensityTool;
+import com.appverlag.kf.kftools.other.DensityUtils;
 import com.appverlag.kf.kftools.ui.picker.KFColorPickerDialog;
 
 public class KFFormColorComponent extends KFFormComponent<Integer, View>{
@@ -31,7 +31,7 @@ public class KFFormColorComponent extends KFFormComponent<Integer, View>{
 
     private void setupView(@NonNull Context context, @Nullable AttributeSet attrs) {
         button = new Button(context, attrs, 0, R.style.KFTools_Button_ColorPicker);
-        int size = KFDensityTool.dpToPx(50);
+        int size = DensityUtils.dpToPx(50);
         addView(button, new ViewGroup.LayoutParams(size, size));
 
         button.setOnClickListener(v -> showPicker(v.getContext()));

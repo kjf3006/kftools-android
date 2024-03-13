@@ -12,11 +12,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.images.ImageManager;
-import com.appverlag.kf.kftools.other.KFDensityTool;
+import com.appverlag.kf.kftools.other.DensityUtils;
 import com.appverlag.kf.kftools.other.youtube.YoutubeVideo;
 
 public class YoutubePreview extends FrameLayout {
@@ -60,7 +59,7 @@ public class YoutubePreview extends FrameLayout {
             return;
         }
 
-        int imageSize = KFDensityTool.dpToPx(500);
+        int imageSize = DensityUtils.dpToPx(500);
         ImageManager.getInstance().image(mYoutubeVideo.getThumbnailUrl(), new Size(imageSize, imageSize), response -> {
             if (response.success()) {
                 mThumbnailImageView.setImageBitmap(response.value);

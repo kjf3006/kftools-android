@@ -41,8 +41,21 @@ public class KFSpannableStringBuilder extends SpannableStringBuilder {
         setSpan(span, 0, text.length());
     }
 
+    @Deprecated(forRemoval = true)
     public KFSpannableStringBuilder appendNewline() {
+        return newline();
+    }
+    public KFSpannableStringBuilder newline() {
         return append("\n");
+    }
+    public KFSpannableStringBuilder newline(float relativeSize) {
+        return append("\n", new SpanBuilder().relativeSize(relativeSize));
+    }
+    public KFSpannableStringBuilder newline(int count) {
+        for (int i = 0; i < count; i++) {
+            newline();
+        }
+        return this;
     }
 
     /**
