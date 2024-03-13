@@ -2,7 +2,6 @@ package com.appverlag.kf.kftoolsframework;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.util.Size;
 import android.view.LayoutInflater;
@@ -20,7 +19,8 @@ import com.appverlag.kf.kftools.network.ResponseImageSerializer;
 import com.appverlag.kf.kftools.network.ResponseJSONSerializer;
 import com.appverlag.kf.kftools.other.KFLog;
 import com.appverlag.kf.kftools.ui.KFLoadingView;
-import com.appverlag.kf.kftools.ui.LoadingView;
+import com.appverlag.kf.kftools.ui.loading.LoadingState;
+import com.appverlag.kf.kftools.ui.loading.LoadingView;
 import com.appverlag.kf.kftools.ui.images.ImageGalleryFragment;
 import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
 import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
@@ -77,16 +77,16 @@ public class MainActivity extends AppCompatActivity {
         LoadingView loadingView = new LoadingView(this);
         loadingView.showInView(recyclerView);
         loadingView.bindTo(findViewById(R.id.recyclerView));
-        loadingView.setLoadingState(LoadingView.LoadingState.LOADING);
+        loadingView.setLoadingState(LoadingState.LOADING);
 
         loadingView.setOnRetryClickListener(loadingView1 -> {
-            loadingView.setLoadingState(LoadingView.LoadingState.NONE);
+            loadingView.setLoadingState(LoadingState.NONE);
         });
 
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(() -> loadingView.setLoadingState(LoadingView.LoadingState.ERROR(new Exception("ABCDE Fehler!"))));
+                runOnUiThread(() -> loadingView.setLoadingState(LoadingState.ERROR(new Exception("ABCDE Fehler!"))));
             }
         }, 2000);
 

@@ -1,9 +1,6 @@
-package com.appverlag.kf.kftools.ui;
+package com.appverlag.kf.kftools.ui.loading;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
@@ -25,8 +22,6 @@ import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.other.DensityUtils;
 import com.appverlag.kf.kftools.other.SystemColor;
 import com.appverlag.kf.kftools.other.TextAppereance;
-
-import java.util.Objects;
 
 public class LoadingView extends FrameLayout {
 
@@ -170,37 +165,6 @@ public class LoadingView extends FrameLayout {
 
     public interface OnRetryClickListener {
         void onRetryClick(LoadingView loadingView);
-    }
-
-    public enum LoadingState {
-        NONE, LOADING, PROGRESS, ERROR;
-
-        private Exception error;
-        private long progress;
-
-        public static LoadingState ERROR(String errorMessage) {
-            return ERROR(new Exception(errorMessage));
-        }
-
-        public static LoadingState ERROR(Exception error) {
-            LoadingState loadingState = LoadingState.ERROR;
-            loadingState.error = error;
-            return loadingState;
-        }
-
-        public static LoadingState PROGRESS(long progress) {
-            LoadingState loadingState = LoadingState.PROGRESS;
-            loadingState.progress = progress;
-            return loadingState;
-        }
-
-        public Exception getError() {
-            return error;
-        }
-
-        public long getProgress() {
-            return progress;
-        }
     }
 
     public final static class LoadingStateView extends FrameLayout {
