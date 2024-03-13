@@ -51,14 +51,14 @@ public enum SystemColor {
     CLEAR(R.color.clearColor),
     RED(R.color.redColor);
 
-    private final @ColorInt int value;
+    private final @ColorRes int value;
 
     SystemColor(@ColorRes int value) {
-        this.value = ContextProvider.getApplicationContext().getResources().getColor(value);
+        this.value = value;
     }
 
     @ColorInt
     public int getValue() {
-        return value;
+        return ContextProvider.getApplicationContext().getResources().getColor(value);
     }
 }
