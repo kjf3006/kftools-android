@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         LoadingView loadingView = new LoadingView(this);
         loadingView.showInView(recyclerView);
-        loadingView.bindTo(findViewById(R.id.recyclerView));
+//        loadingView.bindTo(recyclerView);
         loadingView.setLoadingState(LoadingState.LOADING);
 
         loadingView.setOnRetryClickListener(loadingView1 -> {

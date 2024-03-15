@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.other.DensityUtils;
@@ -161,6 +162,20 @@ public class LoadingView extends FrameLayout {
 
     public void bindTo(ViewGroup bondView) {
         this.bondView = bondView;
+    }
+
+    public void bindTo(View view) {
+        if (!(view instanceof ViewGroup)) {
+            throw new RuntimeException("ViewBinding getRoot() must return a ViewGroup instance.");
+        }
+        bindTo((ViewGroup) view);
+    }
+
+    public void bindTo(ViewBinding viewBinding) {
+        if (!(viewBinding.getRoot() instanceof ViewGroup)) {
+            throw new RuntimeException("ViewBinding getRoot() must return a ViewGroup instance.");
+        }
+        bindTo((ViewGroup) viewBinding.getRoot());
     }
 
     public interface OnRetryClickListener {
