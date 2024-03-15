@@ -1,5 +1,6 @@
 package com.appverlag.kf.kftools.other;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.BulletSpan;
@@ -22,8 +23,10 @@ public class SpanBuilder {
 
     private final List<Object> spans = new ArrayList<>();
 
-    public SpanBuilder() {
+    private final Context context;
 
+    public SpanBuilder(Context context) {
+        this.context = context;
     }
 
     public List<Object> getSpans() {
@@ -61,7 +64,7 @@ public class SpanBuilder {
     }
 
     public SpanBuilder foregroundColor(SystemColor color) {
-        spans.add(new ForegroundColorSpan(color.getValue()));
+        spans.add(new ForegroundColorSpan(color.getValue(context)));
         return this;
     }
 
@@ -71,7 +74,7 @@ public class SpanBuilder {
     }
 
     public SpanBuilder backgroundColor(SystemColor color) {
-        spans.add(new BackgroundColorSpan(color.getValue()));
+        spans.add(new BackgroundColorSpan(color.getValue(context)));
         return this;
     }
 

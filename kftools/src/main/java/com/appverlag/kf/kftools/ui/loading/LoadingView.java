@@ -56,7 +56,7 @@ public class LoadingView extends FrameLayout {
             }
         });
 
-        setBackgroundColor(SystemColor.SYSTEM_BACKGROUND.getValue());
+        setBackgroundColor(SystemColor.SYSTEM_BACKGROUND.getValue(context));
 
         updateForState();
     }
@@ -194,7 +194,7 @@ public class LoadingView extends FrameLayout {
             textView = new TextView(context);
             textView.setText("Laden ...");
             textView.setTextAppearance(context, TextAppereance.CAPTION1.getValue());
-            textView.setTextColor(SystemColor.SECONDARY_LABEL.getValue());
+            textView.setTextColor(SystemColor.SECONDARY_LABEL.getValue(context));
             textView.setGravity(Gravity.CENTER);
 
             progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyle);
@@ -202,7 +202,7 @@ public class LoadingView extends FrameLayout {
             progressBar.setPadding(0,0,0, DensityUtils.dpToPx(8));
 
             Drawable moddedDrawable = progressBar.getIndeterminateDrawable().mutate();
-            moddedDrawable.setColorFilter(SystemColor.SYSTEM_GRAY2.getValue(), android.graphics.PorterDuff.Mode.MULTIPLY);
+            moddedDrawable.setColorFilter(SystemColor.SYSTEM_GRAY2.getValue(context), android.graphics.PorterDuff.Mode.MULTIPLY);
             progressBar.setIndeterminateDrawable(moddedDrawable);
 
             LinearLayout linearLayout = new LinearLayout(context);
@@ -236,18 +236,18 @@ public class LoadingView extends FrameLayout {
 
             textView = new TextView(context);
             textView.setTextAppearance(context, TextAppereance.BODY.getValue());
-            textView.setTextColor(SystemColor.SECONDARY_LABEL.getValue());
+            textView.setTextColor(SystemColor.SECONDARY_LABEL.getValue(context));
             textView.setGravity(Gravity.CENTER);
 
             textViewTitle = new TextView(context);
             textViewTitle.setText("Vorgang nicht möglich");
             textViewTitle.setTypeface(null, Typeface.BOLD);
             textViewTitle.setTextAppearance(context, TextAppereance.TITLE2.getValue());
-            textViewTitle.setTextColor(SystemColor.SECONDARY_LABEL.getValue());
+            textViewTitle.setTextColor(SystemColor.SECONDARY_LABEL.getValue(context));
             textViewTitle.setGravity(Gravity.CENTER);
 
             retryButton = new Button(context, null, 0, 0);
-            retryButton.setTextColor(SystemColor.LINK.getValue());
+            retryButton.setTextColor(SystemColor.LINK.getValue(context));
             retryButton.setPadding(0, DensityUtils.dpToPx(8), 0, 0);
             retryButton.setCompoundDrawablePadding(DensityUtils.dpToPx(8));
             retryButton.setText("Erneut versuchen");
@@ -255,7 +255,7 @@ public class LoadingView extends FrameLayout {
 
             Drawable retryButtonImage = ContextCompat.getDrawable(context, R.drawable.sf_arrow_counterclockwise_24);
             retryButtonImage = DrawableCompat.wrap(retryButtonImage);
-            DrawableCompat.setTint(retryButtonImage.mutate(), SystemColor.LINK.getValue());
+            DrawableCompat.setTint(retryButtonImage.mutate(), SystemColor.LINK.getValue(context));
             retryButtonImage.setBounds(0, 0, 16, 16);
 
             retryButton.setCompoundDrawablesWithIntrinsicBounds(retryButtonImage, null, null, null);

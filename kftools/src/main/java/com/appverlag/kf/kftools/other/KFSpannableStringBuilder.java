@@ -48,9 +48,10 @@ public class KFSpannableStringBuilder extends SpannableStringBuilder {
     public KFSpannableStringBuilder newline() {
         return append("\n");
     }
-    public KFSpannableStringBuilder newline(float relativeSize) {
-        return append("\n", new SpanBuilder().relativeSize(relativeSize));
-    }
+
+//    public KFSpannableStringBuilder newline(float relativeSize) {
+//        return append("\n", new SpanBuilder().relativeSize(relativeSize));
+//    }
     public KFSpannableStringBuilder newline(int count) {
         for (int i = 0; i < count; i++) {
             newline();
