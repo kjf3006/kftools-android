@@ -17,9 +17,9 @@
     <color name="secondarySystemBackgroundColor">#FF323232</color>
     <color name="tertiarySystemBackgroundColor">#FF464646</color>
 
-    <color name="systemGroupedBackgroundColor">#FF1E1E1E</color>
-    <color name="secondarySystemGroupedBackgroundColor">#FF323232</color>
-    <color name="tertiarySystemGroupedBackgroundColor">#FF464646</color>
+    <color name="systemGroupedBackgroundColor">#FF1C1C1E</color>
+    <color name="secondarySystemGroupedBackgroundColor">#FF2C2C2E</color>
+    <color name="tertiarySystemGroupedBackgroundColor">#FF3A3A3C</color>
 
     <color name="systemGrayColor">#FF98989D</color>
     <color name="systemGray2Color">#FF636366</color>

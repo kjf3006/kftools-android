@@ -13,6 +13,7 @@ import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.appverlag.kf.kftools.framework.ContextProvider;
 
@@ -64,8 +65,11 @@ public class SpanBuilder {
     }
 
     public SpanBuilder foregroundColor(SystemColor color) {
-        spans.add(new ForegroundColorSpan(color.getValue(context)));
-        return this;
+        return foregroundColor(color.getValue(context));
+    }
+
+    public SpanBuilder foregroundColorRes(@ColorRes int color) {
+        return foregroundColor(context.getResources().getColor(color));
     }
 
     public SpanBuilder backgroundColor(@ColorInt int color) {
@@ -73,9 +77,12 @@ public class SpanBuilder {
         return this;
     }
 
+    public SpanBuilder backgroundColorRes(@ColorRes int color) {
+        return backgroundColor(context.getResources().getColor(color));
+    }
+
     public SpanBuilder backgroundColor(SystemColor color) {
-        spans.add(new BackgroundColorSpan(color.getValue(context)));
-        return this;
+        return backgroundColor(color.getValue(context));
     }
 
     public SpanBuilder textAppearance(int appearance) {
