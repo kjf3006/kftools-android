@@ -34,7 +34,6 @@ public class LoadingView extends FrameLayout {
     private ErrorStateView errorStateView;
     private ProgressStateView progressStateView;
     private View noneStateView;
-
     private View currentStateView;
 
     private ViewGroup bondView;
