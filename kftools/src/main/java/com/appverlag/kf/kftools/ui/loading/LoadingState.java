@@ -26,7 +26,6 @@ public enum LoadingState {
     public Exception getError() {
         return error;
     }
-
     public long getProgress() {
         return progress;
     }
