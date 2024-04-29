@@ -44,6 +44,13 @@ public class AttributedStringBuilder {
         return append("\n");
     }
 
+    public AttributedStringBuilder newline(int count) {
+        for (int i = 0; i < count; i++) {
+            newline();
+        }
+        return this;
+    }
+
     public CharSequence getText(Context context) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
         for (AttributedString attributedString : attributedStrings) {

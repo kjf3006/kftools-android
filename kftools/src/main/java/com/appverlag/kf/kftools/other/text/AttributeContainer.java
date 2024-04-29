@@ -141,84 +141,96 @@ public class AttributeContainer {
         private boolean url;
         private int typeface = -1;
 
-        public void foregroundColor(int foregroundColor) {
+        public Builder foregroundColor(int foregroundColor) {
             this.foregroundColor = foregroundColor;
+            return this;
         }
 
-        public void foregroundColor(SystemColor foregroundColor) {
+        public Builder foregroundColor(SystemColor foregroundColor) {
             this.foregroundColor = foregroundColor.getValue();
+            return this;
         }
 
-        public void backgroundColor(int backgroundColor) {
+        public Builder backgroundColor(int backgroundColor) {
             this.backgroundColor = backgroundColor;
+            return this;
         }
 
-        public void backgroundColor(SystemColor backgroundColor) {
+        public Builder backgroundColor(SystemColor backgroundColor) {
             this.backgroundColor = backgroundColor.getValue();
+            return this;
         }
 
-        public void textAppearance(int textAppearance) {
+        public Builder textAppearance(int textAppearance) {
             this.textAppearance = textAppearance;
+            return this;
         }
 
-        public void textAppearance(TextAppereance textAppearance) {
+        public Builder textAppearance(TextAppereance textAppearance) {
             this.textAppearance = textAppearance.getValue();
+            return this;
         }
 
-        public void relativeSize(float relativeSize) {
+        public Builder relativeSize(float relativeSize) {
             this.relativeSize = relativeSize;
+            return this;
         }
 
-        public void strikethrough(boolean strikethrough) {
+        public Builder strikethrough(boolean strikethrough) {
             this.strikethrough = strikethrough;
+            return this;
         }
 
-        public void strikethrough() {
-            strikethrough(true);
+        public Builder strikethrough() {
+            return strikethrough(true);
         }
 
-        public void underline(boolean underline) {
+        public Builder underline(boolean underline) {
             this.underline = underline;
+            return this;
         }
 
-        public void underline() {
-            underline(true);
+        public Builder underline() {
+            return underline(true);
         }
 
-        public void bullet(boolean bullet) {
+        public Builder bullet(boolean bullet) {
             this.bullet = bullet;
+            return this;
         }
 
-        public void bullet() {
-            bullet(true);
+        public Builder bullet() {
+            return bullet(true);
         }
 
-        public void url(boolean url) {
+        public Builder url(boolean url) {
             this.url = url;
+            return this;
         }
 
-        public void url() {
-            url(true);
+        public Builder url() {
+            return url(true);
         }
 
-        public void typeface(int typeface) {
+        public Builder typeface(int typeface) {
             this.typeface = typeface;
+            return this;
         }
 
-        public void bold() {
-            typeface(Typeface.BOLD);
+        public Builder bold() {
+            return typeface(Typeface.BOLD);
         }
 
-        public void italic() {
-            typeface(Typeface.ITALIC);
+        public Builder italic() {
+            return typeface(Typeface.ITALIC);
         }
 
-        public void boldItalic() {
-            typeface(Typeface.BOLD_ITALIC);
+        public Builder boldItalic() {
+            return typeface(Typeface.BOLD_ITALIC);
         }
 
-        public void normal() {
-            typeface(Typeface.NORMAL);
+        public Builder normal() {
+            return typeface(Typeface.NORMAL);
         }
 
         public Builder() {
