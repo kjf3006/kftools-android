@@ -21,8 +21,8 @@ import androidx.viewbinding.ViewBinding;
 
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.other.DensityUtils;
-import com.appverlag.kf.kftools.other.SystemColor;
-import com.appverlag.kf.kftools.other.TextAppereance;
+import com.appverlag.kf.kftools.other.text.SystemColor;
+import com.appverlag.kf.kftools.other.text.TextAppereance;
 
 public class LoadingView extends FrameLayout {
 
@@ -54,7 +54,7 @@ public class LoadingView extends FrameLayout {
             }
         });
 
-        setBackgroundColor(SystemColor.SYSTEM_BACKGROUND.getValue(context));
+        setBackgroundColor(SystemColor.SYSTEM_BACKGROUND.resolveValue(context));
 
         updateForState();
     }
@@ -192,7 +192,7 @@ public class LoadingView extends FrameLayout {
             textView = new TextView(context);
             textView.setText("Laden ...");
             textView.setTextAppearance(context, TextAppereance.CAPTION1.getValue());
-            textView.setTextColor(SystemColor.SECONDARY_LABEL.getValue(context));
+            textView.setTextColor(context.getResources().getColor(SystemColor.SECONDARY_LABEL.getValue()));
             textView.setGravity(Gravity.CENTER);
 
             progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyle);
@@ -200,7 +200,7 @@ public class LoadingView extends FrameLayout {
             progressBar.setPadding(0,0,0, DensityUtils.dpToPx(8));
 
             Drawable moddedDrawable = progressBar.getIndeterminateDrawable().mutate();
-            moddedDrawable.setColorFilter(SystemColor.SYSTEM_GRAY2.getValue(context), android.graphics.PorterDuff.Mode.MULTIPLY);
+            moddedDrawable.setColorFilter(SystemColor.SYSTEM_GRAY2.resolveValue(context), android.graphics.PorterDuff.Mode.MULTIPLY);
             progressBar.setIndeterminateDrawable(moddedDrawable);
 
             LinearLayout linearLayout = new LinearLayout(context);
@@ -234,18 +234,18 @@ public class LoadingView extends FrameLayout {
 
             textView = new TextView(context);
             textView.setTextAppearance(context, TextAppereance.BODY.getValue());
-            textView.setTextColor(SystemColor.SECONDARY_LABEL.getValue(context));
+            textView.setTextColor(SystemColor.SECONDARY_LABEL.resolveValue(context));
             textView.setGravity(Gravity.CENTER);
 
             textViewTitle = new TextView(context);
             textViewTitle.setText("Vorgang nicht möglich");
             textViewTitle.setTypeface(null, Typeface.BOLD);
             textViewTitle.setTextAppearance(context, TextAppereance.TITLE2.getValue());
-            textViewTitle.setTextColor(SystemColor.SECONDARY_LABEL.getValue(context));
+            textViewTitle.setTextColor(SystemColor.SECONDARY_LABEL.resolveValue(context));
             textViewTitle.setGravity(Gravity.CENTER);
 
             retryButton = new Button(context, null, 0, 0);
-            retryButton.setTextColor(SystemColor.LINK.getValue(context));
+            retryButton.setTextColor(SystemColor.LINK.resolveValue(context));
             retryButton.setPadding(0, DensityUtils.dpToPx(8), 0, 0);
             retryButton.setCompoundDrawablePadding(DensityUtils.dpToPx(8));
             retryButton.setText("Erneut versuchen");
@@ -253,7 +253,7 @@ public class LoadingView extends FrameLayout {
 
             Drawable retryButtonImage = ContextCompat.getDrawable(context, R.drawable.sf_arrow_counterclockwise_24);
             retryButtonImage = DrawableCompat.wrap(retryButtonImage);
-            DrawableCompat.setTint(retryButtonImage.mutate(), SystemColor.LINK.getValue(context));
+            DrawableCompat.setTint(retryButtonImage.mutate(), SystemColor.LINK.resolveValue(context));
             retryButtonImage.setBounds(0, 0, 16, 16);
 
             retryButton.setCompoundDrawablesWithIntrinsicBounds(retryButtonImage, null, null, null);

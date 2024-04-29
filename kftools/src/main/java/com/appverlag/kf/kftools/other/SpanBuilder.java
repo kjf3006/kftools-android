@@ -16,6 +16,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 
 import com.appverlag.kf.kftools.framework.ContextProvider;
+import com.appverlag.kf.kftools.other.text.SystemColor;
+import com.appverlag.kf.kftools.other.text.TextAppereance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,7 @@ public class SpanBuilder {
     }
 
     public SpanBuilder foregroundColor(SystemColor color) {
-        return foregroundColor(color.getValue(context));
+        return foregroundColorRes(color.getValue());
     }
 
     public SpanBuilder foregroundColorRes(@ColorRes int color) {
@@ -82,7 +84,7 @@ public class SpanBuilder {
     }
 
     public SpanBuilder backgroundColor(SystemColor color) {
-        return backgroundColor(color.getValue(context));
+        return backgroundColorRes(color.getValue());
     }
 
     public SpanBuilder textAppearance(int appearance) {

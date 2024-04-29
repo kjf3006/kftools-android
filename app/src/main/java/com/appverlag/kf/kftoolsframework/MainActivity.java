@@ -1,6 +1,7 @@
 package com.appverlag.kf.kftoolsframework;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.appverlag.kf.kftools.images.ImageContainer;
 import com.appverlag.kf.kftools.network.ConnectionManager;
 import com.appverlag.kf.kftools.network.HTTPStatusCodeResponseInterceptor;
+import com.appverlag.kf.kftools.network.Response;
 import com.appverlag.kf.kftools.network.ResponseFileSerializer;
 import com.appverlag.kf.kftools.network.ResponseImageSerializer;
 import com.appverlag.kf.kftools.network.ResponseJSONSerializer;
@@ -22,8 +24,8 @@ import com.appverlag.kf.kftools.ui.KFLoadingView;
 import com.appverlag.kf.kftools.ui.loading.LoadingState;
 import com.appverlag.kf.kftools.ui.loading.LoadingView;
 import com.appverlag.kf.kftools.ui.images.ImageGalleryFragment;
-import com.codewaves.stickyheadergrid.StickyHeaderGridAdapter;
-import com.codewaves.stickyheadergrid.StickyHeaderGridLayoutManager;
+import com.appverlag.kf.kftools.ui.stickyheadergrid.StickyHeaderGridAdapter;
+import com.appverlag.kf.kftools.ui.stickyheadergrid.StickyHeaderGridLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -74,21 +76,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        LoadingView loadingView = new LoadingView(this);
-        loadingView.showInView(recyclerView);
-//        loadingView.bindTo(recyclerView);
-        loadingView.setLoadingState(LoadingState.LOADING);
+//        LoadingView loadingView = new LoadingView(this);
+//        loadingView.showInView(recyclerView);
+////        loadingView.bindTo(recyclerView);
+//        loadingView.setLoadingState(LoadingState.LOADING);
+//
+//        loadingView.setOnRetryClickListener(loadingView1 -> {
+//            loadingView.setLoadingState(LoadingState.NONE);
+//        });
+//
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                runOnUiThread(() -> loadingView.setLoadingState(LoadingState.ERROR(new Exception("ABCDE Fehler!"))));
+//            }
+//        }, 2000);
 
-        loadingView.setOnRetryClickListener(loadingView1 -> {
-            loadingView.setLoadingState(LoadingState.NONE);
-        });
-
-        new Timer().schedule(new TimerTask() {
+        String url = "https://www.mbr-sha.de/files/inhalte/aktuelles/Nachrichten/2023-06-02_neuer_Mietschlepper/2023_06_02_Mietschlepper_724.jpg";
+        ConnectionManager.shared().send(new Request.Builder().url(url).addHeader("User-Agent", "PostmanRuntime/7.37.3").build(), new ResponseImageSerializer(), new ConnectionManager.CompletionHandler<Bitmap>() {
             @Override
-            public void run() {
-                runOnUiThread(() -> loadingView.setLoadingState(LoadingState.ERROR(new Exception("ABCDE Fehler!"))));
+            public void onResponse(Response<Bitmap> response) {
+                KFLog.d("TEST", response.toString());
             }
-        }, 2000);
+        });
 
     }
 

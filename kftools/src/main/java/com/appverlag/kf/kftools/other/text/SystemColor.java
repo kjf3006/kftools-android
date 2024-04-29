@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools.other;
+package com.appverlag.kf.kftools.other.text;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 
 import com.appverlag.kf.kftools.R;
-import com.appverlag.kf.kftools.framework.ContextProvider;
 
 public enum SystemColor {
 
@@ -59,8 +58,13 @@ public enum SystemColor {
         this.value = value;
     }
 
+    @ColorRes
+    public int getValue() {
+        return value;
+    }
+
     @ColorInt
-    public int getValue(Context context) {
+    public int resolveValue(Context context) {
         return context.getResources().getColor(value);
     }
 }

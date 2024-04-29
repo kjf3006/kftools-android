@@ -1,4 +1,4 @@
-package com.appverlag.kf.kftools.other;
+package com.appverlag.kf.kftools.other.text;
 
 import com.appverlag.kf.kftools.R;
 
