@@ -51,7 +51,7 @@ public class AttributeContainer {
         if (textAppearance != 0) {
             spans.add(new TextAppearanceSpan(context, textAppearance));
         }
-        if (relativeSize != 1) {
+        if (relativeSize != 0) {
             spans.add(new RelativeSizeSpan(relativeSize));
         }
         if (typeface != -1) {
