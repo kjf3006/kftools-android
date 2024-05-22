@@ -18,9 +18,11 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
+        android:background="@color/clearColor"
         android:layout_height="15dp"
         android:layout_gravity="bottom"
         app:tabBackground="@drawable/kftools_image_pager_tab_selector"
+        app:tabIndicator="@null"
         app:tabGravity="center"
         app:tabIndicatorHeight="0dp"
         app:tabPaddingStart="10dp"

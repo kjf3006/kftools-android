@@ -26,6 +26,7 @@ import com.appverlag.kf.kftools.ui.loading.LoadingView;
 import com.appverlag.kf.kftools.ui.images.ImageGalleryFragment;
 import com.appverlag.kf.kftools.ui.stickyheadergrid.StickyHeaderGridAdapter;
 import com.appverlag.kf.kftools.ui.stickyheadergrid.StickyHeaderGridLayoutManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         private void setupData() {
             data = new ArrayList<>();
 
-            data.add(new Section("UI-Components", Arrays.asList("KFThemes", "ImageGallery", "KFFormComponents", "KFYoutube", "KFLoadingView")));
+            data.add(new Section("UI-Components", Arrays.asList("KFThemes", "Alert", "ImageGallery", "KFFormComponents", "KFYoutube", "KFLoadingView")));
             data.add(new Section("Data-Handling", Arrays.asList("Cache", "KFManagedObjects")));
             data.add(new Section("Network", Arrays.asList("ConnectionManager")));
             notifyAllSectionsDataSetChanged();
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        private class Section {
+        private static class Section {
 
             public Section(String title, List<String>rows) {
                 this.title = title;
@@ -205,6 +206,15 @@ public class MainActivity extends AppCompatActivity {
                         ImageContainer.url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/1200px-SMPTE_Color_Bars.svg.png")
                 ), 0);
                 fragment.show(getSupportFragmentManager(), null);
+            }
+            else if (id.equals("Alert")) {
+                new MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle("Title")
+                        .setMessage("Message")
+                        .setPositiveButton("Ok", null)
+                        .setNegativeButton("Abbrechen", null)
+                        .setNeutralButton("Neutral", null)
+                        .show();
             }
         }
 

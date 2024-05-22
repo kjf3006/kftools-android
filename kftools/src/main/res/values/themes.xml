@@ -12,8 +12,9 @@
 
         <item name="snackbarStyle">@style/KFTools.Snackbar</item>
 
-        <item name="alertDialogTheme">@style/KFTools.AlertDialog</item>
+<!--        <item name="alertDialogTheme">@style/KFTools.AlertDialog</item>-->
         <item name="android:alertDialogTheme">@style/KFTools.AlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/KFTools.AlertDialog</item>
         <item name="android:datePickerDialogTheme">@style/KFTools.DatePickerDialog</item>
         <item name="android:timePickerDialogTheme">@style/KFTools.AlertDialog</item>
 
