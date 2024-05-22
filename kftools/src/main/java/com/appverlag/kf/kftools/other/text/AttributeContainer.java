@@ -9,11 +9,17 @@ package com.appverlag.kf.kftools.other.text;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TextAppearanceSpan;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.FloatRange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +28,7 @@ public class AttributeContainer {
     @ColorRes private int foregroundColor;
     @ColorRes private int backgroundColor;
     private int textAppearance;
-    private float relativeSize;
+    @FloatRange(from = 0) private float relativeSize;
     private boolean strikethrough;
     private boolean underline;
     private boolean bullet;
@@ -39,11 +45,23 @@ public class AttributeContainer {
         if (foregroundColor != 0) {
             spans.add(new ForegroundColorSpan(context.getResources().getColor(foregroundColor)));
         }
+        if (backgroundColor != 0) {
+            spans.add(new BackgroundColorSpan(context.getResources().getColor(backgroundColor)));
+        }
         if (textAppearance != 0) {
             spans.add(new TextAppearanceSpan(context, textAppearance));
         }
+        if (relativeSize != 1) {
+            spans.add(new RelativeSizeSpan(relativeSize));
+        }
         if (typeface != -1) {
             spans.add(new StyleSpan(typeface));
+        }
+        if (underline) {
+            spans.add(new UnderlineSpan());
+        }
+        if (strikethrough) {
+            spans.add(new StrikethroughSpan());
         }
         return spans;
     }
@@ -84,7 +102,7 @@ public class AttributeContainer {
         return relativeSize;
     }
 
-    public void setRelativeSize(float relativeSize) {
+    public void setRelativeSize(@FloatRange(from = 0) float relativeSize) {
         this.relativeSize = relativeSize;
     }
 
@@ -134,7 +152,7 @@ public class AttributeContainer {
         private int foregroundColor;
         @ColorRes private int backgroundColor;
         private int textAppearance;
-        private float relativeSize;
+        @FloatRange(from = 0) private float relativeSize;
         private boolean strikethrough;
         private boolean underline;
         private boolean bullet;
@@ -171,7 +189,7 @@ public class AttributeContainer {
             return this;
         }
 
-        public Builder relativeSize(float relativeSize) {
+        public Builder relativeSize(@FloatRange(from = 0) float relativeSize) {
             this.relativeSize = relativeSize;
             return this;
         }

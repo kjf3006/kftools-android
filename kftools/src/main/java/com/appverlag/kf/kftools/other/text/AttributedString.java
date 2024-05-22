@@ -30,6 +30,11 @@ public class AttributedString {
         this.attributeContainer = attributeContainer;
     }
 
+    public AttributedString(CharSequence text, @NonNull AttributeContainer.Builder builder) {
+        this.text = text;
+        this.attributeContainer = builder.build();
+    }
+
     @NonNull
     public AttributeContainer getAttributeContainer() {
         return attributeContainer;
