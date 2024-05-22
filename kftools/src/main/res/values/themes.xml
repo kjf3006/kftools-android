@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.KFTools" parent="@style/Theme.AppCompat.DayNight">
+    <style name="Theme.KFTools" parent="Theme.MaterialComponents.DayNight">
 
         <item name="android:windowBackground">@color/systemBackgroundColor</item>
 
         <item name="editTextStyle">@style/KFTools.EditText</item>
         <item name="android:textViewStyle">@style/KFTools.TextView</item>
         <item name="android:buttonStyle">@style/KFTools.Button</item>
+        <item name="materialButtonStyle">@style/KFTools.Button</item>
 
         <item name="snackbarStyle">@style/KFTools.Snackbar</item>
 
