@@ -28,7 +28,7 @@
         android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/KFTools.TextTextAppearance.Headline"
+        style="@style/KFTools.TextAppearance.Headline"
         android:textColor="@color/whiteColor"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"/>

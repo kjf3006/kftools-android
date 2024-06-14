@@ -14,6 +14,14 @@
         android:divider="@drawable/kftools_space_default"
         android:showDividers="middle">
 
+        <com.appverlag.kf.kftools.ui.formcomponents.view.KFFormDateTimeComponent
+            android:id="@+id/dateTimeComponentTest"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:title="KFFormDateTimeComponentTitle"
+            app:description="KFFormDateTimeComponentDescription"
+            />
+
         <com.appverlag.kf.kftools.ui.widgets.YoutubePreview
             android:id="@+id/youtubePreview"
             android:layout_width="match_parent"
@@ -33,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nur ein Test"
-            android:textAppearance="@style/KFTools.TextTextAppearance.Body"/>
+            android:textAppearance="@style/KFTools.TextAppearance.Body"/>
         <Button
             style="@style/KFTools.Button"
             android:layout_width="match_parent"

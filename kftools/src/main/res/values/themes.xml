@@ -7,16 +7,18 @@
 
         <item name="editTextStyle">@style/KFTools.EditText</item>
         <item name="android:textViewStyle">@style/KFTools.TextView</item>
+
         <item name="android:buttonStyle">@style/KFTools.Button</item>
         <item name="materialButtonStyle">@style/KFTools.Button</item>
 
+        <item name="textAppearanceButton">@style/KFTools.TextAppearance.Button</item>
+
         <item name="snackbarStyle">@style/KFTools.Snackbar</item>
 
-<!--        <item name="alertDialogTheme">@style/KFTools.AlertDialog</item>-->
         <item name="android:alertDialogTheme">@style/KFTools.AlertDialog</item>
         <item name="materialAlertDialogTheme">@style/KFTools.AlertDialog</item>
-        <item name="android:datePickerDialogTheme">@style/KFTools.DatePickerDialog</item>
         <item name="android:timePickerDialogTheme">@style/KFTools.AlertDialog</item>
+        <item name="android:datePickerDialogTheme">@style/KFTools.DatePickerDialog</item>
 
     </style>
 

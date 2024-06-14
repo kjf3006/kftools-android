@@ -8,62 +8,62 @@
     android:showDividers="middle">
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Title1"
-        android:text="TextTextAppearance.Title1"
+        style="@style/KFTools.TextAppearance.Title1"
+        android:text="TextAppearance.Title1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Title2"
-        android:text="TextTextAppearance.Title2"
+        style="@style/KFTools.TextAppearance.Title2"
+        android:text="TextAppearance.Title2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Title3"
-        android:text="TextTextAppearance.Title3"
+        style="@style/KFTools.TextAppearance.Title3"
+        android:text="TextAppearance.Title3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Headline"
-        android:text="TextTextAppearance.Headline"
+        style="@style/KFTools.TextAppearance.Headline"
+        android:text="TextAppearance.Headline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Body"
-        android:text="TextTextAppearance.Body"
+        style="@style/KFTools.TextAppearance.Body"
+        android:text="TextAppearance.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Callout"
-        android:text="TextTextAppearance.Callout"
+        style="@style/KFTools.TextAppearance.Callout"
+        android:text="TextAppearance.Callout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Subheadline"
-        android:text="TextTextAppearance.Subheadline"
+        style="@style/KFTools.TextAppearance.Subheadline"
+        android:text="TextAppearance.Subheadline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Footnote"
-        android:text="TextTextAppearance.Footnote"
+        style="@style/KFTools.TextAppearance.Footnote"
+        android:text="TextAppearance.Footnote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Caption1"
-        android:text="TextTextAppearance.Caption1"
+        style="@style/KFTools.TextAppearance.Caption1"
+        android:text="TextAppearance.Caption1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        style="@style/KFTools.TextTextAppearance.Caption2"
-        android:text="TextTextAppearance.Caption2"
+        style="@style/KFTools.TextAppearance.Caption2"
+        android:text="TextAppearance.Caption2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

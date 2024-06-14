@@ -4,7 +4,6 @@
     <style name="KFTools"/>
 
     <style name="KFTools.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="android:textAllCaps">false</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">8dp</item>
         <item name="iconTint">@color/whiteColor</item>
@@ -17,9 +16,15 @@
         <item name="android:insetBottom">0dp</item>
     </style>
 
+    <style name="KFTools.Button.Plain" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/labelColor</item>
+        <item name="iconTint">@color/labelColor</item>
+        <item name="iconPadding">8dp</item>
+        <item name="android:padding">0dp</item>
+    </style>
+
     <style name="KFTools.AlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
-        <item name="android:colorPrimary">?colorPrimary</item>
-        <item name="android:colorAccent">?colorAccent</item>
+        <item name="textAppearanceButton">@style/KFTools.TextAppearance.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/KFTools.AlertDialog.NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/KFTools.AlertDialog.PositiveButtonStyle</item>
         <item name="buttonBarNeutralButtonStyle">@style/KFTools.AlertDialog.NeutralButtonStyle</item>
@@ -28,28 +33,28 @@
     <style name="KFTools.AlertDialog.NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/systemBlueColor</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="KFTools.AlertDialog.PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+    <style name="KFTools.AlertDialog.PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/systemBlueColor</item>
-        <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="KFTools.AlertDialog.NeutralButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+    <style name="KFTools.AlertDialog.NeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/systemBlueColor</item>
-        <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="KFTools.DatePickerDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="android:colorPrimary">?colorPrimary</item>
-        <item name="android:colorAccent">?colorAccent</item>
+    <style name="KFTools.DatePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorAccent">@color/systemBlueColor</item>
+        <item name="android:datePickerStyle">@style/KFTools.DatePickerStyle</item>
+        <item name="android:headerBackground">@color/systemFillColor</item>
+        <item name="buttonBarNegativeButtonStyle">@style/KFTools.AlertDialog.NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/KFTools.AlertDialog.PositiveButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/KFTools.AlertDialog.NegativeButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/KFTools.AlertDialog.PositiveButtonStyle</item>
     </style>
 
-    <style name="KFTools.Button.Plain" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/labelColor</item>
-        <item name="iconTint">@color/labelColor</item>
-        <item name="android:padding">0dp</item>
+    <style name="KFTools.DatePickerStyle" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:headerBackground">@color/systemBackgroundColor</item>
     </style>
 
     <style name="KFTools.Button.ColorPicker" parent="KFTools.Button">
@@ -67,7 +72,7 @@
     </style>
 
     <style name="KFTools.TextView" parent="Widget.AppCompat.TextView">
-        <item name="android:textAppearance">@style/KFTools.TextTextAppearance.Body</item>
+        <item name="android:textAppearance">@style/KFTools.TextAppearance.Body</item>
         <item name="android:textColor">@color/labelColor</item>
     </style>
 

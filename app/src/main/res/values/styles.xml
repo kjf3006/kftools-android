@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.KFTools">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/systemGreenColor</item>
+        <item name="colorPrimaryDark">@color/systemOrangeColor</item>
+        <item name="colorAccent">@color/systemYellowColor</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
 
     </style>

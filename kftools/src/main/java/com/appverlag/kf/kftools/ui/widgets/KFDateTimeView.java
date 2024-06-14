@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.appverlag.kf.kftools.R;
 import com.appverlag.kf.kftools.ui.picker.KFTimePickerDialog;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -79,6 +80,8 @@ public class KFDateTimeView extends TextView {
     }
 
     private void showDatePicker() {
+
+//        MaterialDatePicker.Builder.datePicker().build().show(XXX, null);
 
         DatePickerDialog dialog = new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
             localDateTime = localDateTime.withYear(year).withMonth(month+1).withDayOfMonth(dayOfMonth);
