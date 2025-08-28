@@ -4,14 +4,14 @@ public enum LoadingState {
 
     NONE, LOADING, PROGRESS, ERROR;
 
-    private Exception error;
+    private Throwable error;
     private long progress;
 
     public static LoadingState ERROR(String errorMessage) {
         return ERROR(new Exception(errorMessage));
     }
 
-    public static LoadingState ERROR(Exception error) {
+    public static LoadingState ERROR(Throwable error) {
         LoadingState loadingState = LoadingState.ERROR;
         loadingState.error = error;
         return loadingState;
@@ -23,7 +23,7 @@ public enum LoadingState {
         return loadingState;
     }
 
-    public Exception getError() {
+    public Throwable getError() {
         return error;
     }
     public long getProgress() {
