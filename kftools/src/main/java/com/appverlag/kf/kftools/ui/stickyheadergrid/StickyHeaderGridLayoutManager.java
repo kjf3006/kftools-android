@@ -28,7 +28,7 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
 
    private static final int DEFAULT_ROW_COUNT = 16;
 
-   private int mSpanCount;
+   private final int mSpanCount;
    private SpanSizeLookup mSpanSizeLookup = new DefaultSpanSizeLookup();
 
    private StickyHeaderGridAdapter mAdapter;
@@ -46,15 +46,15 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
    private View mStickyHeaderView;
    private HeaderState mStickyHeadeState;
 
-   private View mFillViewSet[];
+   private final View[] mFillViewSet;
 
    private SavedState mPendingSavedState;
    private int mPendingScrollPosition = NO_POSITION;
    private int mPendingScrollPositionOffset;
-   private AnchorPosition mAnchor = new AnchorPosition();
+   private final AnchorPosition mAnchor = new AnchorPosition();
 
    private final FillResult mFillResult = new FillResult();
-   private ArrayList<LayoutRow> mLayoutRows = new ArrayList<>(DEFAULT_ROW_COUNT);
+   private final ArrayList<LayoutRow> mLayoutRows = new ArrayList<>(DEFAULT_ROW_COUNT);
 
    public enum HeaderState {
       NORMAL,
@@ -150,6 +150,14 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
     */
    public void setHeaderBottomOverlapMargin(int bottomMargin) {
       mHeaderOverlapMargin = bottomMargin;
+   }
+
+   private int getViewportTop() {
+      return getClipToPadding() ? getPaddingTop() : 0;
+   }
+
+   private int getViewportBottom() {
+      return getClipToPadding() ? (getHeight() - getPaddingBottom()) : getHeight();
    }
 
    @Override
@@ -286,8 +294,8 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
             final int topOffset = getPositionSectionHeaderHeight(adapterPosition);
             final int top = layoutManager.getDecoratedTop(view);
             final int bottom = layoutManager.getDecoratedBottom(view);
-            final int start = layoutManager.getPaddingTop() + topOffset;
-            final int end = layoutManager.getHeight() - layoutManager.getPaddingBottom();
+            final int start = getViewportTop() + topOffset;
+            final int end = getViewportBottom();
             return calculateDtToFit(top, bottom, start, end, snapPreference);
          }
       };
@@ -373,11 +381,11 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
 
       int left = getPaddingLeft();
       int right = getWidth() - getPaddingRight();
-      final int recyclerBottom = getHeight() - getPaddingBottom();
+      final int recyclerBottom = getViewportBottom();
       int totalHeight = 0;
 
       int adapterPosition = pendingAdapterPosition;
-      int top = getPaddingTop() + pendingAdapterOffset;
+      int top = getViewportTop() + pendingAdapterOffset;
       while (true) {
          if (adapterPosition >= state.getItemCount()) {
             break;
@@ -614,8 +622,8 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
          return;
       }
 
-      final int recyclerTop = getPaddingTop();
-      final int recyclerBottom = getHeight() - getPaddingBottom();
+      final int recyclerTop = getViewportTop();
+      final int recyclerBottom = getViewportBottom();
 
       if (top) {
          LayoutRow row = getTopRow();
@@ -752,8 +760,8 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
       int scrolled = 0;
       int left = getPaddingLeft();
       int right = getWidth() - getPaddingRight();
-      final int recyclerTop = getPaddingTop();
-      final int recyclerBottom = getHeight() - getPaddingBottom();
+      final int recyclerTop = getViewportTop();
+      final int recyclerBottom = getViewportBottom();
 
       // If we have simple header stick, offset it back
       final int firstHeader = getFirstVisibleSectionHeader();
@@ -853,7 +861,7 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
 
       int viewFrom = type == TYPE_ITEM ? 0 : mHeadersStartPosition;
       int viewTo = type == TYPE_ITEM ? mHeadersStartPosition : getChildCount();
-      final int recyclerTop = getPaddingTop();
+      final int recyclerTop = getViewportTop();
       for (int i = viewFrom; i < viewTo; ++i) {
          final View v = getChildAt(i);
          final int adapterPosition = getPosition(v);
@@ -886,7 +894,7 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
 
       int viewFrom = type == TYPE_ITEM ? mHeadersStartPosition - 1 : getChildCount() - 1;
       int viewTo = type == TYPE_ITEM ? 0 : mHeadersStartPosition;
-      final int recyclerBottom = getHeight() - getPaddingBottom();
+      final int recyclerBottom = getViewportBottom();
       for (int i = viewFrom; i >= viewTo; --i) {
          final View v = getChildAt(i);
          final int top = getDecoratedTop(v);
@@ -900,7 +908,7 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
    }
 
    private LayoutRow getFirstVisibleRow() {
-      final int recyclerTop = getPaddingTop();
+      final int recyclerTop = getViewportTop();
       for (LayoutRow row : mLayoutRows) {
          if (row.bottom > recyclerTop) {
             return row;
@@ -910,7 +918,7 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
    }
 
    private int getFirstVisibleSectionHeader() {
-      final int recyclerTop = getPaddingTop();
+      final int recyclerTop = getViewportTop();
 
       int header = NO_POSITION;
       for (int i = 0, n = mLayoutRows.size(); i < n; ++i) {
@@ -985,7 +993,7 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
 
    private void stickTopHeader(RecyclerView.Recycler recycler) {
       final int firstHeader = getFirstVisibleSectionHeader();
-      final int top = getPaddingTop();
+      final int top = getViewportTop();
       final int left = getPaddingLeft();
       final int right = getWidth() - getPaddingRight();
 
@@ -1067,7 +1075,7 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
       if (firstVisibleRow != null) {
          mAnchor.section = mAdapter.getAdapterPositionSection(firstVisibleRow.adapterPosition);
          mAnchor.item = mAdapter.getItemSectionOffset(mAnchor.section, firstVisibleRow.adapterPosition);
-         mAnchor.offset = Math.min(firstVisibleRow.top - getPaddingTop(), 0);
+         mAnchor.offset = Math.min(firstVisibleRow.top - getViewportTop(), 0);
       }
    }
 
@@ -1124,7 +1132,7 @@ public class StickyHeaderGridLayoutManager extends RecyclerView.LayoutManager im
          return 0;
       }
 
-      final int recyclerTop = getPaddingTop();
+      final int recyclerTop = getViewportTop();
       final LayoutRow topRow = getTopRow();
       final int scrollChunk = Math.max(-topRow.top + recyclerTop, 0);
       if (scrollChunk == 0) {
