@@ -30,8 +30,24 @@ public class KFRunntimePermissionManagerActivity extends Activity implements Act
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        String [] permissions = getIntent().getStringArrayExtra("permissions");
-        requestID = getIntent().getStringExtra("requestID");
+        Intent intent = getIntent();
+        requestID = intent != null
+                ? intent.getStringExtra("requestID") : null;
+        String[] permissions = intent != null
+                ? intent.getStringArrayExtra("permissions") : null;
+
+        if (permissions == null || permissions.length == 0
+                || requestID == null || requestID.isEmpty()) {
+            finishWithResult(false);
+            return;
+        }
+
+        for (String permission : permissions) {
+            if (permission == null || permission.isEmpty()) {
+                finishWithResult(false);
+                return;
+            }
+        }
 
         ActivityCompat.requestPermissions(this, permissions, 100);
     }
@@ -60,19 +76,31 @@ public class KFRunntimePermissionManagerActivity extends Activity implements Act
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != 100) return;
 
-        boolean success = true;
+        boolean success = permissions.length > 0
+                && grantResults.length == permissions.length;
 
         for (int result : grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) success = false;
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                success = false;
+            }
         }
 
-        Intent broadcast = new Intent();
-        broadcast.setAction(requestID);
-        broadcast.putExtra("success", success);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
+        finishWithResult(success);
+    }
 
+    private void finishWithResult(boolean success) {
+        if (requestID != null && !requestID.isEmpty()) {
+            Intent broadcast = new Intent(requestID);
+            broadcast.putExtra("success", success);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
+        }
         finish();
     }
 }

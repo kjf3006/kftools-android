@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import androidx.annotation.RequiresPermission;
 import androidx.core.content.ContextCompat;
 
@@ -111,8 +112,30 @@ public class KFLocationManager implements LocationListener {
             return;
         }
 
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, currentRequestDistanceFilter, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, currentRequestDistanceFilter, this);
+        boolean registered = false;
+        List<String> providers = locationManager.getAllProviders();
+
+        for (String provider : new String[]{
+                LocationManager.NETWORK_PROVIDER,
+                LocationManager.GPS_PROVIDER
+        }) {
+            if (!providers.contains(provider)) continue;
+
+            try {
+                locationManager.requestLocationUpdates(
+                        provider, 1000, currentRequestDistanceFilter, this);
+                registered = true;
+            } catch (IllegalArgumentException | SecurityException exception) {
+                // Provider oder Berechtigung können zwischen Prüfung und Aufruf entfallen.
+                Log.w("KFLocationManager",
+                        "Location provider unavailable: " + provider, exception);
+            }
+        }
+
+        if (!registered) {
+            // Spätere Anforderungen dürfen die Registrierung erneut versuchen.
+            currentRequestType = KFLocationManagerRequest.TYPE_NONE;
+        }
     }
 
 
